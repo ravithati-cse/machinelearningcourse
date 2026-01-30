@@ -64,7 +64,7 @@ A comprehensive, visual-first machine learning course that teaches you from abso
 
 ---
 
-### 🔹 Part 2: Classification Algorithms (81% Complete)
+### 🔹 Part 2: Classification Algorithms ✅ **100% COMPLETE!**
 
 **Learn to predict categories (spam/not spam, disease/healthy)**
 
@@ -82,12 +82,12 @@ A comprehensive, visual-first machine learning course that teaches you from abso
 - [Random Forests](classification_algorithms/algorithms/random_forests.py) - Ensemble methods ✅
 - [Metrics Deep Dive](classification_algorithms/algorithms/metrics_deep_dive.py) - ROC, AUC, Precision-Recall ✅
 
-#### Week 3: Projects (1/3 modules)
+#### Week 3: Capstone Projects (3/3 modules) ✅
 - [Spam Email Classifier](classification_algorithms/projects/spam_classifier.py) - Text classification ✅
-- Customer Churn Prediction (coming soon)
-- Model Comparison Project (coming soon)
+- [Customer Churn Prediction](classification_algorithms/projects/churn_prediction.py) - Business ML application ✅
+- [Model Comparison Project](classification_algorithms/projects/model_comparison.py) - Algorithm selection guide ✅
 
-**Progress: 13/16 modules (81%)**
+**Progress: 16/16 modules (100%)** 🎉
 
 ---
 
@@ -190,8 +190,11 @@ python3 classification_algorithms/algorithms/logistic_regression_intro.py
 - ✅ Confusion matrix - foundation of all metrics
 - ✅ Precision, Recall, F1 Score, Accuracy
 - ✅ Decision boundaries and visualization
-- 🚧 Tree-based methods (coming soon)
-- 🚧 Ensemble methods (coming soon)
+- ✅ KNN, Decision Trees, Random Forests
+- ✅ ROC curves, AUC, Precision-Recall
+- ✅ Text classification (spam detection)
+- ✅ Business ML (churn prediction)
+- ✅ Algorithm comparison and selection
 
 ### Essential Math (No Prerequisites!)
 - ✅ Algebra: y = mx + b
@@ -206,11 +209,11 @@ python3 classification_algorithms/algorithms/logistic_regression_intro.py
 
 | Feature | Description |
 |---------|-------------|
-| **Modules** | 18+ complete Python modules |
-| **Visualizations** | 80+ auto-generated PNG files |
+| **Modules** | 28 complete Python modules |
+| **Visualizations** | 90+ auto-generated PNG files |
 | **YouTube Videos** | 50+ curated video links |
 | **Implementations** | From-scratch + scikit-learn |
-| **Projects** | 3 real-world capstone projects |
+| **Projects** | 5 real-world capstone projects |
 | **Code Comments** | Extensive explanations |
 | **Learning Time** | ~40-50 hours total |
 
@@ -368,21 +371,18 @@ Questions? Open an issue or start a discussion!
 
 ### Current Status (January 2026)
 - ✅ Regression math foundations (100%)
-- ✅ Regression algorithms (83%)
+- ✅ Regression algorithms (100%)
+- ✅ Regression projects (100%)
 - ✅ Classification math foundations (100%)
-- ✅ Logistic regression (100%)
-- 🚧 Additional classification algorithms (in progress)
-- 🚧 Capstone projects (in progress)
+- ✅ Classification algorithms (100%)
+- ✅ Classification projects (100%)
 
-### Coming Soon
-- 🔜 KNN Classifier
-- 🔜 Decision Trees
-- 🔜 Random Forests
-- 🔜 Complete project templates
-- 🔜 Jupyter notebook versions
-- 🔜 Video walkthroughs
+### 🎉 COURSE COMPLETE! 🎉
+Both Regression and Classification modules are now 100% complete!
 
 ### Future Plans
+- 🔜 Jupyter notebook versions
+- 🔜 Video walkthroughs
 - Neural Networks course
 - Deep Learning fundamentals
 - Computer Vision basics
@@ -402,12 +402,13 @@ It helps others discover this resource and motivates continued development.
 ## 📊 Course Statistics
 
 ```
-Total Modules: 18 complete, 7 in progress
-Total Lines of Code: ~15,000+
-Total Visualizations: 80+
+Total Modules: 28 complete (100%)
+Total Lines of Code: ~20,000+
+Total Visualizations: 90+
 YouTube Videos Curated: 50+
 Math Concepts Covered: 30+
-ML Algorithms: 3 complete, 4 in progress
+ML Algorithms: 7 complete (Linear/Multiple Regression, Logistic Regression, KNN, Decision Trees, Random Forests, Naive Bayes)
+Capstone Projects: 5 (Housing Analysis, House Price Prediction, Spam Classifier, Churn Prediction, Model Comparison)
 Learning Hours: 40-50 hours
 ```
 
