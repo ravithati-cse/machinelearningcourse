@@ -46,7 +46,7 @@
    - 3 comprehensive visualizations
    - **Time: 45 minutes**
 
-### 🤖 Algorithms (Week 2) - **3/5 COMPLETE**
+### 🤖 Algorithms (Week 2) - **4/5 COMPLETE**
 
 1. **[logistic_regression_intro.py](algorithms/logistic_regression_intro.py)** ✅ **READY!** 🌟 **MAIN ALGORITHM!**
    - Complete implementation from scratch
@@ -74,12 +74,20 @@
    - 2 comprehensive visualizations
    - **Time: 60-75 minutes**
 
+4. **[random_forests.py](algorithms/random_forests.py)** ✅ **READY!** 🌟 **ENSEMBLE METHOD!**
+   - Random Forests from scratch with bagging
+   - Bootstrap sampling and feature randomness
+   - OOB (Out-of-Bag) error estimation
+   - Feature importance explained
+   - Hyperparameter tuning guide
+   - 3 comprehensive visualizations
+   - **Time: 75-90 minutes**
+
 ---
 
 ## 🚧 COMING SOON
 
-### Week 2 Algorithms (2 more modules)
-- `random_forests.py` - Ensemble methods
+### Week 2 Algorithms (1 more module)
 - `metrics_deep_dive.py` - ROC, AUC, and advanced metrics
 
 ### Week 3 Projects (3 modules)
@@ -87,7 +95,7 @@
 - `churn_prediction.py` - Customer churn prediction
 - `model_comparison.py` - Compare all algorithms
 
-**Total remaining: 5 modules**
+**Total remaining: 4 modules**
 
 ---
 
@@ -97,10 +105,10 @@
 Classification Course Progress:
 ├── Documentation: 3/3 ✅ COMPLETE (100%)
 ├── Week 1 Math: 5/5 ✅ COMPLETE (100%)
-├── Week 2 Algorithms: 3/5 modules (60%)
+├── Week 2 Algorithms: 4/5 modules (80%)
 └── Week 3 Projects: 0/3 modules (0%)
 
-Total: 11/16 complete (68.75%)
+Total: 12/16 complete (75%)
 ```
 
 **Major Milestone: All math foundations + main algorithm DONE!** 🎉
@@ -282,8 +290,8 @@ Each completed module has:
 - **Complete Course**: ~15-20 hours (when finished)
 
 ### Files Generated:
-- **Python modules**: 11/16 (68.75%)
-- **Visualizations**: 24+ (auto-generated when you run modules)
+- **Python modules**: 12/16 (75%)
+- **Visualizations**: 27+ (auto-generated when you run modules)
 - **Documentation**: 3/3 (100%)
 
 ---
@@ -310,4 +318,4 @@ open ../visuals/01_sigmoid/
 *Status: Math foundations COMPLETE ✅ | Main algorithm COMPLETE ✅*
 *Next: Additional algorithms and projects*
 
-🚀 **68.75% Complete - Over two-thirds done!** 🚀
+🚀 **75% Complete - Three-quarters done!** 🚀
