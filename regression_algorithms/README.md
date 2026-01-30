@@ -67,6 +67,15 @@ Work through files in order. Each module:
 - ✅ Includes YouTube video links
 - ✅ Provides hands-on examples
 - ✅ Connects to ML applications
+- ✅ **NEW: Practice Labs** - Hands-on challenges after each module!
+
+### 4. Practice What You Learn! 🧪
+
+Each module has a companion practice lab (e.g., `01_algebra_basics_lab.md`) with:
+- 🎯 Quick win challenges (5 min)
+- 🔥 Level-up challenges (10-15 min)
+- 🏆 Boss challenges for mastery
+- ✅ Checkpoints to confirm you're ready to move on
 
 ---
 
@@ -79,6 +88,7 @@ Work through files in order. Each module:
 **Visuals**: 4 infographics explaining equation anatomy, slope variations, intercept effects
 **Videos**: Khan Academy, 3Blue1Brown, Organic Chemistry Tutor
 **Output**: `visuals/01_algebra/`
+**Practice**: [01_algebra_basics_lab.md](math_foundations/01_algebra_basics_lab.md) 🧪
 **Time**: 30-45 minutes
 
 #### [02_statistics_fundamentals.py](math_foundations/02_statistics_fundamentals.py) ✅
@@ -86,6 +96,7 @@ Work through files in order. Each module:
 **Visuals**: 4 comprehensive diagrams including cheat sheet
 **Videos**: StatQuest (highly recommended!), Khan Academy
 **Output**: `visuals/02_statistics/`
+**Practice**: [02_statistics_fundamentals_lab.md](math_foundations/02_statistics_fundamentals_lab.md) 🧪
 **Time**: 45-60 minutes
 
 #### [03_intro_to_derivatives.py](math_foundations/03_intro_to_derivatives.py)

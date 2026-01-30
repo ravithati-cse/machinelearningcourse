@@ -76,7 +76,15 @@ cd classification_algorithms/math_foundations
 python3 01_sigmoid_function.py
 ```
 
-### 3. View Visualizations
+### 3. Practice What You Learn! 🧪
+
+Each module has a companion practice lab with hands-on challenges:
+- 🎯 Quick wins to build confidence
+- 🔥 Level-up challenges to deepen understanding
+- 🏆 Boss challenges for mastery
+- Example: After `01_sigmoid_function.py`, try `01_sigmoid_function_lab.md`
+
+### 4. View Visualizations
 
 ```bash
 open ../visuals/01_sigmoid/
