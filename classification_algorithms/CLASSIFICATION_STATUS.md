@@ -46,7 +46,7 @@
    - 3 comprehensive visualizations
    - **Time: 45 minutes**
 
-### 🤖 Algorithms (Week 2) - **1/5 COMPLETE**
+### 🤖 Algorithms (Week 2) - **2/5 COMPLETE**
 
 1. **[logistic_regression_intro.py](algorithms/logistic_regression_intro.py)** ✅ **READY!** 🌟 **MAIN ALGORITHM!**
    - Complete implementation from scratch
@@ -57,12 +57,19 @@
    - 2 comprehensive visualizations
    - **Time: 75-90 minutes**
 
+2. **[knn_classifier.py](algorithms/knn_classifier.py)** ✅ **READY!**
+   - K-Nearest Neighbors from scratch
+   - Distance metrics (Euclidean, Manhattan)
+   - K parameter tuning
+   - Comparison with Logistic Regression
+   - 2 comprehensive visualizations
+   - **Time: 60-75 minutes**
+
 ---
 
 ## 🚧 COMING SOON
 
-### Week 2 Algorithms (4 more modules)
-- `knn_classifier.py` - Distance-based classification
+### Week 2 Algorithms (3 more modules)
 - `decision_trees.py` - Tree-based classification
 - `random_forests.py` - Ensemble methods
 - `metrics_deep_dive.py` - ROC, AUC, and advanced metrics
@@ -72,7 +79,7 @@
 - `churn_prediction.py` - Customer churn prediction
 - `model_comparison.py` - Compare all algorithms
 
-**Total remaining: 7 modules**
+**Total remaining: 6 modules**
 
 ---
 
@@ -82,10 +89,10 @@
 Classification Course Progress:
 ├── Documentation: 3/3 ✅ COMPLETE (100%)
 ├── Week 1 Math: 5/5 ✅ COMPLETE (100%)
-├── Week 2 Algorithms: 1/5 modules (20%)
+├── Week 2 Algorithms: 2/5 modules (40%)
 └── Week 3 Projects: 0/3 modules (0%)
 
-Total: 9/16 complete (56%)
+Total: 10/16 complete (62.5%)
 ```
 
 **Major Milestone: All math foundations + main algorithm DONE!** 🎉
