@@ -104,6 +104,7 @@ Each module has a companion practice lab (e.g., `01_algebra_basics_lab.md`) with
 **Visuals**: Animated gradient descent, derivative visualizations
 **Videos**: 3Blue1Brown (MUST WATCH), StatQuest
 **Output**: `visuals/03_derivatives/`
+**Practice**: [03_intro_to_derivatives_lab.md](math_foundations/03_intro_to_derivatives_lab.md) 🧪
 **Time**: 45 minutes
 
 #### [04_linear_algebra_basics.py](math_foundations/04_linear_algebra_basics.py)
@@ -111,6 +112,7 @@ Each module has a companion practice lab (e.g., `01_algebra_basics_lab.md`) with
 **Visuals**: 3D vector plots, matrix operation diagrams
 **Videos**: 3Blue1Brown's Linear Algebra series
 **Output**: `visuals/04_linear_algebra/`
+**Practice**: [04_linear_algebra_basics_lab.md](math_foundations/04_linear_algebra_basics_lab.md) 🧪
 **Time**: 60 minutes
 
 #### [05_probability_basics.py](math_foundations/05_probability_basics.py)
@@ -118,6 +120,7 @@ Each module has a companion practice lab (e.g., `01_algebra_basics_lab.md`) with
 **Visuals**: Bell curves, probability scales, distribution comparisons
 **Videos**: StatQuest, Khan Academy, Crash Course
 **Output**: `visuals/05_probability/`
+**Practice**: [05_probability_basics_lab.md](math_foundations/05_probability_basics_lab.md) 🧪
 **Time**: 30-45 minutes
 
 ---
@@ -129,6 +132,7 @@ Each module has a companion practice lab (e.g., `01_algebra_basics_lab.md`) with
 **Visuals**: Regression line fitting, residuals, cost surface
 **Videos**: StatQuest "Linear Regression Clearly Explained"
 **Output**: `visuals/regression/`
+**Practice**: [linear_regression_intro_lab.md](algorithms/linear_regression_intro_lab.md) 🧪
 **Time**: 60-75 minutes
 **Key Concepts**:
 - Finding best fit line
@@ -140,6 +144,7 @@ Each module has a companion practice lab (e.g., `01_algebra_basics_lab.md`) with
 **Visuals**: 3D regression planes, feature importance charts
 **Videos**: StatQuest "Multiple Regression"
 **Output**: `visuals/regression/`
+**Practice**: [multiple_regression_lab.md](algorithms/multiple_regression_lab.md) 🧪
 **Time**: 60 minutes
 **Key Concepts**:
 - Matrix operations
@@ -156,6 +161,7 @@ Each module has a companion practice lab (e.g., `01_algebra_basics_lab.md`) with
 2. Sales vs Advertising (with noise)
 3. Student grades vs Study hours
 **Visuals**: Annotated plots, residual visualizations
+**Practice**: [simple_examples_lab.md](examples/simple_examples_lab.md) 🧪
 **Time**: 45 minutes
 
 #### [data_exploration.py](examples/data_exploration.py)
@@ -163,12 +169,14 @@ Each module has a companion practice lab (e.g., `01_algebra_basics_lab.md`) with
 **Techniques**: Statistical summaries, correlation analysis, outlier detection
 **Visuals**: Dashboard layouts, heatmaps, distribution plots
 **Videos**: Keith Galli, Krish Naik
+**Practice**: [data_exploration_lab.md](examples/data_exploration_lab.md) 🧪
 **Time**: 60 minutes
 
 #### [model_evaluation.py](examples/model_evaluation.py)
 **Learn**: MAE, MSE, RMSE, R² Score
 **Visuals**: Metric comparison charts, residual plots, train/test splits
 **Videos**: StatQuest "R-squared", "Cross Validation"
+**Practice**: [model_evaluation_lab.md](examples/model_evaluation_lab.md) 🧪
 **Time**: 45-60 minutes
 
 ---
@@ -307,18 +315,18 @@ All visualizations are automatically generated when you run each Python file!
 Track your learning journey:
 
 ### Week 1: Math Foundations
-- [ ] 01_algebra_basics.py
-- [ ] 02_statistics_fundamentals.py
-- [ ] 03_intro_to_derivatives.py
-- [ ] 04_linear_algebra_basics.py
-- [ ] 05_probability_basics.py
+- [ ] 01_algebra_basics.py → [ ] Practice Lab 🧪
+- [ ] 02_statistics_fundamentals.py → [ ] Practice Lab 🧪
+- [ ] 03_intro_to_derivatives.py → [ ] Practice Lab 🧪
+- [ ] 04_linear_algebra_basics.py → [ ] Practice Lab 🧪
+- [ ] 05_probability_basics.py → [ ] Practice Lab 🧪
 
 ### Week 2: Linear Regression
-- [ ] linear_regression_intro.py
-- [ ] multiple_regression.py
-- [ ] simple_examples.py
-- [ ] data_exploration.py
-- [ ] model_evaluation.py
+- [ ] linear_regression_intro.py → [ ] Practice Lab 🧪
+- [ ] multiple_regression.py → [ ] Practice Lab 🧪
+- [ ] simple_examples.py → [ ] Practice Lab 🧪
+- [ ] data_exploration.py → [ ] Practice Lab 🧪
+- [ ] model_evaluation.py → [ ] Practice Lab 🧪
 
 ### Week 3: Capstone Project
 - [ ] housing_analysis.py
@@ -471,20 +479,30 @@ regression_algorithms/
 ├── __init__.py
 │
 ├── math_foundations/          # Week 1
-│   ├── 01_algebra_basics.py   ✅
-│   ├── 02_statistics_fundamentals.py ✅
+│   ├── 01_algebra_basics.py
+│   ├── 01_algebra_basics_lab.md 🧪
+│   ├── 02_statistics_fundamentals.py
+│   ├── 02_statistics_fundamentals_lab.md 🧪
 │   ├── 03_intro_to_derivatives.py
+│   ├── 03_intro_to_derivatives_lab.md 🧪
 │   ├── 04_linear_algebra_basics.py
-│   └── 05_probability_basics.py
+│   ├── 04_linear_algebra_basics_lab.md 🧪
+│   ├── 05_probability_basics.py
+│   └── 05_probability_basics_lab.md 🧪
 │
 ├── algorithms/                # Week 2
 │   ├── linear_regression_intro.py
-│   └── multiple_regression.py
+│   ├── linear_regression_intro_lab.md 🧪
+│   ├── multiple_regression.py
+│   └── multiple_regression_lab.md 🧪
 │
 ├── examples/                  # Week 2
 │   ├── simple_examples.py
+│   ├── simple_examples_lab.md 🧪
 │   ├── data_exploration.py
-│   └── model_evaluation.py
+│   ├── data_exploration_lab.md 🧪
+│   ├── model_evaluation.py
+│   └── model_evaluation_lab.md 🧪
 │
 ├── projects/                  # Week 3
 │   ├── housing_analysis.py
@@ -496,13 +514,7 @@ regression_algorithms/
 └── visuals/                   # Auto-generated
     ├── 01_algebra/
     ├── 02_statistics/
-    ├── 03_derivatives/
-    ├── 04_linear_algebra/
-    ├── 05_probability/
-    ├── regression/
-    ├── evaluation/
-    ├── project/
-    └── master/
+    └── ...
 ```
 
 ---

@@ -101,6 +101,7 @@ open ../visuals/01_sigmoid/
 **Why**: Converts regression outputs to probabilities
 **Visuals**: Sigmoid curve, comparison with linear, saturation effects
 **Videos**: StatQuest "Logistic Regression", 3Blue1Brown
+**Practice**: [01_sigmoid_function_lab.md](math_foundations/01_sigmoid_function_lab.md) 🧪
 **Time**: 30 minutes
 
 #### 02_probability_for_classification.py
@@ -119,6 +120,7 @@ open ../visuals/01_sigmoid/
 **Learn**: TP, FP, TN, FN - the foundation of all metrics
 **Why**: Understand where your model makes mistakes
 **Visuals**: Confusion matrix heatmaps, metric derivations
+**Practice**: [04_confusion_matrix_lab.md](math_foundations/04_confusion_matrix_lab.md) 🧪
 **Time**: 45 minutes
 
 #### 05_decision_boundaries.py
@@ -137,6 +139,7 @@ open ../visuals/01_sigmoid/
 - Log loss optimization
 - Binary classification
 **Visuals**: Decision boundary, probability surface, convergence
+**Practice**: [logistic_regression_intro_lab.md](algorithms/logistic_regression_intro_lab.md) 🧪
 **Time**: 75 minutes
 **Key**: This is LINEAR REGRESSION + SIGMOID!
 
@@ -297,19 +300,17 @@ Actual  Pos  |  TP  |  FN  |
 ## ✅ Progress Tracker
 
 ### Week 1: Math Foundations
-- [ ] 01_sigmoid_function.py
+- [ ] 01_sigmoid_function.py → [ ] Practice Lab 🧪
 - [ ] 02_probability_for_classification.py
 - [ ] 03_log_loss.py
-- [ ] 04_confusion_matrix.py
+- [ ] 04_confusion_matrix.py → [ ] Practice Lab 🧪
 - [ ] 05_decision_boundaries.py
 
 ### Week 2: Algorithms
-- [ ] logistic_regression_intro.py
-- [ ] multiclass_classification.py
+- [ ] logistic_regression_intro.py → [ ] Practice Lab 🧪
 - [ ] knn_classifier.py
 - [ ] decision_trees.py
 - [ ] random_forests.py
-- [ ] simple_examples.py
 - [ ] metrics_deep_dive.py
 
 ### Week 3: Projects
@@ -400,22 +401,20 @@ classification_algorithms/
 │
 ├── math_foundations/          # Week 1
 │   ├── 01_sigmoid_function.py
+│   ├── 01_sigmoid_function_lab.md 🧪
 │   ├── 02_probability_for_classification.py
 │   ├── 03_log_loss.py
 │   ├── 04_confusion_matrix.py
+│   ├── 04_confusion_matrix_lab.md 🧪
 │   └── 05_decision_boundaries.py
 │
 ├── algorithms/                # Week 2
 │   ├── logistic_regression_intro.py
-│   ├── multiclass_classification.py
+│   ├── logistic_regression_intro_lab.md 🧪
 │   ├── knn_classifier.py
 │   ├── decision_trees.py
-│   └── random_forests.py
-│
-├── examples/                  # Week 2
-│   ├── simple_examples.py
-│   ├── metrics_deep_dive.py
-│   └── data_preparation.py
+│   ├── random_forests.py
+│   └── metrics_deep_dive.py
 │
 ├── projects/                  # Week 3
 │   ├── spam_classifier.py
@@ -427,10 +426,7 @@ classification_algorithms/
 │
 └── visuals/                   # Auto-generated
     ├── 01_sigmoid/
-    ├── 02_probability/
-    ├── 03_logloss/
-    ├── 04_confusion/
-    ├── 05_boundaries/
+    ├── confusion_matrix/
     ├── algorithms/
     └── projects/
 ```
