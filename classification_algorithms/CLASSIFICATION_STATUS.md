@@ -46,7 +46,7 @@
    - 3 comprehensive visualizations
    - **Time: 45 minutes**
 
-### 🤖 Algorithms (Week 2) - **2/5 COMPLETE**
+### 🤖 Algorithms (Week 2) - **3/5 COMPLETE**
 
 1. **[logistic_regression_intro.py](algorithms/logistic_regression_intro.py)** ✅ **READY!** 🌟 **MAIN ALGORITHM!**
    - Complete implementation from scratch
@@ -65,12 +65,20 @@
    - 2 comprehensive visualizations
    - **Time: 60-75 minutes**
 
+3. **[decision_trees.py](algorithms/decision_trees.py)** ✅ **READY!**
+   - Decision trees from scratch with Gini impurity
+   - Recursive tree growing algorithm
+   - Splitting criteria (Gini vs Information Gain)
+   - Overfitting prevention strategies
+   - Tree structure and decision boundary visualizations
+   - 2 comprehensive visualizations
+   - **Time: 60-75 minutes**
+
 ---
 
 ## 🚧 COMING SOON
 
-### Week 2 Algorithms (3 more modules)
-- `decision_trees.py` - Tree-based classification
+### Week 2 Algorithms (2 more modules)
 - `random_forests.py` - Ensemble methods
 - `metrics_deep_dive.py` - ROC, AUC, and advanced metrics
 
@@ -79,7 +87,7 @@
 - `churn_prediction.py` - Customer churn prediction
 - `model_comparison.py` - Compare all algorithms
 
-**Total remaining: 6 modules**
+**Total remaining: 5 modules**
 
 ---
 
@@ -89,10 +97,10 @@
 Classification Course Progress:
 ├── Documentation: 3/3 ✅ COMPLETE (100%)
 ├── Week 1 Math: 5/5 ✅ COMPLETE (100%)
-├── Week 2 Algorithms: 2/5 modules (40%)
+├── Week 2 Algorithms: 3/5 modules (60%)
 └── Week 3 Projects: 0/3 modules (0%)
 
-Total: 10/16 complete (62.5%)
+Total: 11/16 complete (68.75%)
 ```
 
 **Major Milestone: All math foundations + main algorithm DONE!** 🎉
@@ -274,8 +282,8 @@ Each completed module has:
 - **Complete Course**: ~15-20 hours (when finished)
 
 ### Files Generated:
-- **Python modules**: 9/16 (56%)
-- **Visualizations**: 20+ (auto-generated when you run modules)
+- **Python modules**: 11/16 (68.75%)
+- **Visualizations**: 24+ (auto-generated when you run modules)
 - **Documentation**: 3/3 (100%)
 
 ---
@@ -302,4 +310,4 @@ open ../visuals/01_sigmoid/
 *Status: Math foundations COMPLETE ✅ | Main algorithm COMPLETE ✅*
 *Next: Additional algorithms and projects*
 
-🚀 **56% Complete - More than halfway there!** 🚀
+🚀 **68.75% Complete - Over two-thirds done!** 🚀
