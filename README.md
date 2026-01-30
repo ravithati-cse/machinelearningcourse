@@ -38,7 +38,7 @@ A comprehensive, visual-first machine learning course that teaches you from abso
 
 ## 📚 Course Structure
 
-### 🔹 Part 1: Regression Algorithms (75% Complete)
+### 🔹 Part 1: Regression Algorithms ✅ **100% COMPLETE!**
 
 **Learn to predict continuous values (prices, temperatures, sales)**
 
@@ -54,17 +54,17 @@ A comprehensive, visual-first machine learning course that teaches you from abso
 - [Multiple Regression](regression_algorithms/algorithms/multiple_regression.py) - Using multiple features
 - [Simple Examples](regression_algorithms/examples/simple_examples.py) - Practice problems
 - [Data Exploration](regression_algorithms/examples/data_exploration.py) - EDA workflow
-- Model Evaluation - Metrics deep dive (coming soon)
+- [Model Evaluation](regression_algorithms/examples/model_evaluation.py) - Metrics deep dive (MAE, MSE, RMSE, R²) ✅
 
-#### Week 3: Capstone Project (in progress)
-- Housing Analysis - Complete EDA
-- **House Price Prediction** - End-to-end ML pipeline
+#### Week 3: Capstone Projects (2/2 modules) ✅
+- [Housing Analysis](regression_algorithms/projects/housing_analysis.py) - Complete EDA ✅
+- [House Price Prediction](regression_algorithms/projects/house_price_prediction.py) - End-to-end ML pipeline ✅
 
-**Progress: 9/12 modules (75%)**
+**Progress: 12/12 modules (100%)** 🎉
 
 ---
 
-### 🔹 Part 2: Classification Algorithms (56% Complete)
+### 🔹 Part 2: Classification Algorithms (81% Complete)
 
 **Learn to predict categories (spam/not spam, disease/healthy)**
 
@@ -75,19 +75,19 @@ A comprehensive, visual-first machine learning course that teaches you from abso
 - [**Confusion Matrix**](classification_algorithms/math_foundations/04_confusion_matrix.py) - TP, FP, TN, FN - CRITICAL! 🌟
 - [Decision Boundaries](classification_algorithms/math_foundations/05_decision_boundaries.py) - Visualizing classifiers
 
-#### Week 2: Classification Algorithms (1/5 modules)
-- [**Logistic Regression**](classification_algorithms/algorithms/logistic_regression_intro.py) - The main algorithm ✅
-- KNN Classifier - Distance-based (coming soon)
-- Decision Trees - Tree-based (coming soon)
-- Random Forests - Ensemble methods (coming soon)
-- Metrics Deep Dive - ROC, AUC (coming soon)
+#### Week 2: Classification Algorithms (5/5 modules) ✅
+- [Logistic Regression](classification_algorithms/algorithms/logistic_regression_intro.py) - The main algorithm ✅
+- [KNN Classifier](classification_algorithms/algorithms/knn_classifier.py) - Distance-based ✅
+- [Decision Trees](classification_algorithms/algorithms/decision_trees.py) - Tree-based ✅
+- [Random Forests](classification_algorithms/algorithms/random_forests.py) - Ensemble methods ✅
+- [Metrics Deep Dive](classification_algorithms/algorithms/metrics_deep_dive.py) - ROC, AUC, Precision-Recall ✅
 
-#### Week 3: Projects (in progress)
-- Spam Email Classifier
-- Customer Churn Prediction
-- Model Comparison Project
+#### Week 3: Projects (1/3 modules)
+- [Spam Email Classifier](classification_algorithms/projects/spam_classifier.py) - Text classification ✅
+- Customer Churn Prediction (coming soon)
+- Model Comparison Project (coming soon)
 
-**Progress: 9/16 modules (56%)**
+**Progress: 13/16 modules (81%)**
 
 ---
 
