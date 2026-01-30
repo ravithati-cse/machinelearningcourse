@@ -1,0 +1,27 @@
+# Requirements for Regression Algorithms Learning Environment
+# Visual, Interactive Machine Learning Course
+
+# Core numerical computing
+numpy>=1.21.0
+
+# Data manipulation and analysis
+pandas>=1.3.0
+
+# Visualization libraries
+matplotlib>=3.4.0
+seaborn>=0.11.0
+plotly>=5.0.0  # for interactive 3D visualizations
+
+# Machine learning
+scikit-learn>=1.0.0
+
+# Image handling
+pillow>=9.0.0
+
+# Optional: Interactive learning (Jupyter notebooks)
+jupyter>=1.0.0
+ipywidgets>=7.6.0  # for interactive widgets in notebooks
+
+# Animation support
+imageio>=2.9.0  # for creating GIF animations
+imageio-ffmpeg>=0.4.0  # for video animations
