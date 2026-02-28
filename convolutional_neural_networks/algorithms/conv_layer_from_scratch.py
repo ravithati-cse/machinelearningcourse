@@ -26,7 +26,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-os.makedirs("../visuals/conv_layer_from_scratch", exist_ok=True)
+VIS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "conv_layer_from_scratch")
+os.makedirs(VIS_DIR, exist_ok=True)
 np.random.seed(42)
 
 print("=" * 70)
@@ -371,7 +372,7 @@ axes[0, 0].set_ylabel("Filters", fontsize=10, fontweight="bold")
 axes[1, 0].set_ylabel("Features", fontsize=10, fontweight="bold")
 
 plt.tight_layout()
-plt.savefig("../visuals/conv_layer_from_scratch/filter_bank.png",
+plt.savefig(f"{VIS_DIR}/filter_bank.png",
             dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: filter_bank.png")
@@ -409,7 +410,7 @@ for i, (name, shape, color) in enumerate(shape_trace):
                     arrowprops=dict(arrowstyle="->", color="black", lw=2))
 
 plt.tight_layout()
-plt.savefig("../visuals/conv_layer_from_scratch/shape_trace.png",
+plt.savefig(f"{VIS_DIR}/shape_trace.png",
             dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: shape_trace.png")
@@ -455,7 +456,7 @@ for f in range(8):
     ax.axis("off")
 
 plt.tight_layout()
-plt.savefig("../visuals/conv_layer_from_scratch/image_to_features.png",
+plt.savefig(f"{VIS_DIR}/image_to_features.png",
             dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: image_to_features.png")

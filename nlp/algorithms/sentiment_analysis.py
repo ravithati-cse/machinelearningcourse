@@ -28,7 +28,8 @@ import re
 from collections import defaultdict
 import os
 
-os.makedirs("../visuals/sentiment_analysis", exist_ok=True)
+_VISUALS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "sentiment_analysis")
+os.makedirs(_VISUALS_DIR, exist_ok=True)
 np.random.seed(42)
 
 print("=" * 70)
@@ -592,7 +593,7 @@ for i, (acc, cost) in enumerate(zip(typical_acc, costs)):
                  fontweight="bold")
 
 plt.tight_layout()
-plt.savefig("../visuals/sentiment_analysis/sentiment_comparison.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(_VISUALS_DIR, "sentiment_comparison.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: sentiment_comparison.png")
 
@@ -650,7 +651,7 @@ axes[1].legend(); axes[1].grid(axis="y", alpha=0.3)
 axes[1].set_ylim(-1.1, 1.1)
 
 plt.tight_layout()
-plt.savefig("../visuals/sentiment_analysis/vader_analysis.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(_VISUALS_DIR, "vader_analysis.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: vader_analysis.png")
 
@@ -690,7 +691,7 @@ for ax_idx, (review, ax) in enumerate(zip(review_examples, axes)):
                 f"{score:+.1f}", va="center", fontsize=9, fontweight="bold")
 
 plt.tight_layout()
-plt.savefig("../visuals/sentiment_analysis/aspect_sentiment.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(_VISUALS_DIR, "aspect_sentiment.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: aspect_sentiment.png")
 

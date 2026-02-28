@@ -26,7 +26,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-os.makedirs("../visuals/cnn_keras", exist_ok=True)
+VIS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "cnn_keras")
+os.makedirs(VIS_DIR, exist_ok=True)
 np.random.seed(42)
 
 print("=" * 70)
@@ -315,7 +316,7 @@ for cls_idx, cls_name in enumerate(CLASS_NAMES):
             ax.set_title(cls_name, fontsize=9, fontweight="bold")
 
 plt.tight_layout()
-plt.savefig("../visuals/cnn_keras/cifar10_samples.png", dpi=300, bbox_inches="tight")
+plt.savefig(f"{VIS_DIR}/cifar10_samples.png", dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: cifar10_samples.png")
 
@@ -342,7 +343,7 @@ if TF_AVAILABLE:
     axes[1].legend(); axes[1].grid(True, alpha=0.3)
 
     plt.tight_layout()
-    plt.savefig("../visuals/cnn_keras/training_history.png", dpi=300, bbox_inches="tight")
+    plt.savefig(f"{VIS_DIR}/training_history.png", dpi=300, bbox_inches="tight")
     plt.close()
     print("   ✅ Saved: training_history.png")
 
@@ -366,7 +367,7 @@ if TF_AVAILABLE:
             c = "white" if cm[i,j] > cm.max()*0.5 else "black"
             ax.text(j, i, str(cm[i,j]), ha="center", va="center", color=c, fontsize=8)
     plt.tight_layout()
-    plt.savefig("../visuals/cnn_keras/confusion_matrix.png", dpi=300, bbox_inches="tight")
+    plt.savefig(f"{VIS_DIR}/confusion_matrix.png", dpi=300, bbox_inches="tight")
     plt.close()
     print("   ✅ Saved: confusion_matrix.png")
 
@@ -397,7 +398,7 @@ if TF_AVAILABLE:
             axes[layer_idx + 1, ch].axis("off")
 
     plt.tight_layout()
-    plt.savefig("../visuals/cnn_keras/feature_maps.png", dpi=300, bbox_inches="tight")
+    plt.savefig(f"{VIS_DIR}/feature_maps.png", dpi=300, bbox_inches="tight")
     plt.close()
     print("   ✅ Saved: feature_maps.png")
 

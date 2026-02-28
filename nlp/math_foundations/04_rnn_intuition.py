@@ -28,7 +28,8 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import os
 
-os.makedirs("../visuals/04_rnn_intuition", exist_ok=True)
+_VISUALS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "04_rnn_intuition")
+os.makedirs(_VISUALS_DIR, exist_ok=True)
 np.random.seed(42)
 
 print("=" * 70)
@@ -191,7 +192,7 @@ print(f"  Hidden states: {len(hidden_states)} (including h_0)")
 print(f"  Each hidden state shape: {hidden_states[0].shape}")
 print()
 print(f"  Hidden state evolution (first 4 dims) across timesteps:")
-print(f"  {'t':>4}  {'char':>6}  {'h[0]:>7}  {'h[1]':>7}  {'h[2]':>7}  {'h[3]':>7}")
+print(f"  {'t':>4}  {'char':>6}  {'h[0]':>7}  {'h[1]':>7}  {'h[2]':>7}  {'h[3]':>7}")
 print(f"  {'─'*4}  {'─'*6}  {'─'*7}  {'─'*7}  {'─'*7}  {'─'*7}")
 for t, (char, h) in enumerate(zip(sentence, hidden_states[1:])):
     print(f"  {t:>4}  {char!r:>6}  {h[0]:>7.4f}  {h[1]:>7.4f}  {h[2]:>7.4f}  {h[3]:>7.4f}")
@@ -518,7 +519,7 @@ axes[2].legend(fontsize=8, loc="upper right"); axes[2].grid(True, alpha=0.3)
 axes[2].set_ylim(0, 1)
 
 plt.tight_layout()
-plt.savefig("../visuals/04_rnn_intuition/vanishing_gradient_and_lstm.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(_VISUALS_DIR, "vanishing_gradient_and_lstm.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: vanishing_gradient_and_lstm.png")
 
@@ -602,7 +603,7 @@ for ax, cfg in zip(axes, arch_configs):
             bbox=dict(boxstyle="round", facecolor="#f5f5f5", alpha=0.8))
 
 plt.tight_layout()
-plt.savefig("../visuals/04_rnn_intuition/architecture_comparison.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(_VISUALS_DIR, "architecture_comparison.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: architecture_comparison.png")
 
@@ -655,7 +656,7 @@ for (title, example, color), y in zip(modes, ys):
              fontsize=9, color="#333")
 
 plt.tight_layout()
-plt.savefig("../visuals/04_rnn_intuition/hidden_state_dynamics.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(_VISUALS_DIR, "hidden_state_dynamics.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: hidden_state_dynamics.png")
 

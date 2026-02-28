@@ -27,7 +27,8 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import os
 
-os.makedirs("../visuals/mnist_classifier", exist_ok=True)
+VIS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "mnist_classifier")
+os.makedirs(VIS_DIR, exist_ok=True)
 np.random.seed(42)
 
 print("=" * 70)
@@ -257,7 +258,7 @@ for digit in range(10):
             ax.set_title(str(digit), fontsize=12, fontweight="bold")
 
 plt.tight_layout()
-plt.savefig("../visuals/mnist_classifier/sample_digits.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(VIS_DIR, "sample_digits.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: sample_digits.png")
 
@@ -282,7 +283,7 @@ if TF_AVAILABLE:
     axes[1].set_ylim(0.8, 1.0); axes[1].legend(); axes[1].grid(True, alpha=0.3)
 
     plt.tight_layout()
-    plt.savefig("../visuals/mnist_classifier/training_history.png", dpi=300, bbox_inches="tight")
+    plt.savefig(os.path.join(VIS_DIR, "training_history.png"), dpi=300, bbox_inches="tight")
     plt.close()
     print("   Saved: training_history.png")
 
@@ -307,7 +308,7 @@ if TF_AVAILABLE:
                     color=color, fontsize=9)
 
     plt.tight_layout()
-    plt.savefig("../visuals/mnist_classifier/confusion_matrix.png", dpi=300, bbox_inches="tight")
+    plt.savefig(os.path.join(VIS_DIR, "confusion_matrix.png"), dpi=300, bbox_inches="tight")
     plt.close()
     print("   Saved: confusion_matrix.png")
 
@@ -346,7 +347,7 @@ if TF_AVAILABLE:
     axes[2, 0].set_ylabel("WRONG", fontsize=11, color="red", fontweight="bold")
 
     plt.tight_layout()
-    plt.savefig("../visuals/mnist_classifier/predictions.png", dpi=300, bbox_inches="tight")
+    plt.savefig(os.path.join(VIS_DIR, "predictions.png"), dpi=300, bbox_inches="tight")
     plt.close()
     print("   Saved: predictions.png")
 

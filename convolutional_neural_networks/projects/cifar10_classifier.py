@@ -27,7 +27,8 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import os
 
-os.makedirs("../visuals/cifar10_classifier", exist_ok=True)
+VIS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "cifar10_classifier")
+os.makedirs(VIS_DIR, exist_ok=True)
 np.random.seed(42)
 
 print("=" * 70)
@@ -506,7 +507,7 @@ for cls_idx in range(10):
             ax.set_title(CIFAR_CLASSES[cls_idx], fontsize=9, fontweight="bold")
 
 plt.tight_layout()
-plt.savefig("../visuals/cifar10_classifier/sample_images.png", dpi=300, bbox_inches="tight")
+plt.savefig(f"{VIS_DIR}/sample_images.png", dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: sample_images.png")
 
@@ -563,7 +564,7 @@ for col, img in enumerate(crop_imgs):
         axes[2, col].set_ylabel("Random Crop", fontsize=9, rotation=90, va="center")
 
 plt.tight_layout()
-plt.savefig("../visuals/cifar10_classifier/data_augmentation.png", dpi=300, bbox_inches="tight")
+plt.savefig(f"{VIS_DIR}/data_augmentation.png", dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: data_augmentation.png")
 
@@ -599,7 +600,7 @@ if TF_AVAILABLE:
             axes[1].text(changes[0] + 0.5, 0.55, "LR reduced", fontsize=8, color="red")
 
     plt.tight_layout()
-    plt.savefig("../visuals/cifar10_classifier/training_history.png", dpi=300, bbox_inches="tight")
+    plt.savefig(f"{VIS_DIR}/training_history.png", dpi=300, bbox_inches="tight")
     plt.close()
     print("   Saved: training_history.png")
 
@@ -625,7 +626,7 @@ if TF_AVAILABLE:
                     color=color, fontsize=8)
 
     plt.tight_layout()
-    plt.savefig("../visuals/cifar10_classifier/confusion_matrix.png", dpi=300, bbox_inches="tight")
+    plt.savefig(f"{VIS_DIR}/confusion_matrix.png", dpi=300, bbox_inches="tight")
     plt.close()
     print("   Saved: confusion_matrix.png")
 
@@ -654,7 +655,7 @@ if TF_AVAILABLE:
                 f"{acc:.1%}", ha="center", va="bottom", fontsize=9, fontweight="bold")
 
     plt.tight_layout()
-    plt.savefig("../visuals/cifar10_classifier/per_class_accuracy.png", dpi=300, bbox_inches="tight")
+    plt.savefig(f"{VIS_DIR}/per_class_accuracy.png", dpi=300, bbox_inches="tight")
     plt.close()
     print("   Saved: per_class_accuracy.png")
 
@@ -693,7 +694,7 @@ if TF_AVAILABLE:
                      f"{p:.0f}K", ha="center", va="bottom", fontsize=11, fontweight="bold")
 
     plt.tight_layout()
-    plt.savefig("../visuals/cifar10_classifier/model_comparison.png", dpi=300, bbox_inches="tight")
+    plt.savefig(f"{VIS_DIR}/model_comparison.png", dpi=300, bbox_inches="tight")
     plt.close()
     print("   Saved: model_comparison.png")
 
@@ -732,7 +733,7 @@ if TF_AVAILABLE:
     axes[2, 0].set_ylabel("WRONG",   fontsize=10, color="red",   fontweight="bold")
 
     plt.tight_layout()
-    plt.savefig("../visuals/cifar10_classifier/predictions.png", dpi=300, bbox_inches="tight")
+    plt.savefig(f"{VIS_DIR}/predictions.png", dpi=300, bbox_inches="tight")
     plt.close()
     print("   Saved: predictions.png")
 

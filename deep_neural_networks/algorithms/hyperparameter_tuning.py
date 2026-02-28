@@ -29,7 +29,8 @@ from sklearn.datasets import make_classification
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, KFold
 
-os.makedirs("../visuals/hyperparameter_tuning", exist_ok=True)
+VIS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "hyperparameter_tuning")
+os.makedirs(VIS_DIR, exist_ok=True)
 np.random.seed(42)
 
 print("=" * 70)
@@ -359,7 +360,7 @@ for ax, ylabel, title in zip(axes,
 axes[0].set_ylim(0, 1.5)
 
 plt.tight_layout()
-plt.savefig("../visuals/hyperparameter_tuning/learning_rate_effect.png",
+plt.savefig(os.path.join(VIS_DIR, "learning_rate_effect.png"),
             dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: learning_rate_effect.png")
@@ -378,7 +379,7 @@ ax.set_title("Learning Rate Schedules: Decay Strategies",
 ax.set_xlabel("Epoch"); ax.set_ylabel("Learning Rate")
 ax.legend(fontsize=11); ax.grid(True, alpha=0.3)
 plt.tight_layout()
-plt.savefig("../visuals/hyperparameter_tuning/lr_schedules.png",
+plt.savefig(os.path.join(VIS_DIR, "lr_schedules.png"),
             dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: lr_schedules.png")
@@ -416,7 +417,7 @@ axes[1].set_title("Parameters vs Accuracy\n(More params != always better)",
 axes[1].grid(True, alpha=0.3)
 
 plt.tight_layout()
-plt.savefig("../visuals/hyperparameter_tuning/architecture_comparison.png",
+plt.savefig(os.path.join(VIS_DIR, "architecture_comparison.png"),
             dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: architecture_comparison.png")

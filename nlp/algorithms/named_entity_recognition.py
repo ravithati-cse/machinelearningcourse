@@ -29,7 +29,8 @@ import re
 from collections import defaultdict, Counter
 import os
 
-os.makedirs("../visuals/named_entity_recognition", exist_ok=True)
+_VISUALS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "named_entity_recognition")
+os.makedirs(_VISUALS_DIR, exist_ok=True)
 np.random.seed(42)
 
 print("=" * 70)
@@ -606,7 +607,7 @@ axes[1].set_title("Typical Entity Distribution in News Corpora\n(CoNLL-2003 styl
                    fontsize=11, fontweight="bold")
 
 plt.tight_layout()
-plt.savefig("../visuals/named_entity_recognition/bio_tagging.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(_VISUALS_DIR, "bio_tagging.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: bio_tagging.png")
 
@@ -661,7 +662,7 @@ axes[1].set_title("NER Approach Comparison\n(typical CoNLL-2003 F1 scores)",
 axes[1].legend(); axes[1].grid(axis="y", alpha=0.3)
 
 plt.tight_layout()
-plt.savefig("../visuals/named_entity_recognition/features_and_comparison.png",
+plt.savefig(os.path.join(_VISUALS_DIR, "features_and_comparison.png"),
             dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: features_and_comparison.png")
@@ -708,7 +709,7 @@ for sent, y_pos in zip(display_sents, y_positions):
                transform=ax.transAxes)
 
 plt.tight_layout()
-plt.savefig("../visuals/named_entity_recognition/entity_predictions.png",
+plt.savefig(os.path.join(_VISUALS_DIR, "entity_predictions.png"),
             dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: entity_predictions.png")

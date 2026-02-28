@@ -28,7 +28,8 @@ import matplotlib.patches as mpatches
 from matplotlib.patches import FancyArrowPatch
 import os
 
-os.makedirs("../visuals/02_forward_propagation", exist_ok=True)
+VIS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "02_forward_propagation")
+os.makedirs(VIS_DIR, exist_ok=True)
 
 np.random.seed(42)
 
@@ -300,7 +301,7 @@ draw_network(axes[0], [3, 4, 2], "Shallow Network: 3 → 4 → 2\n(1 hidden laye
 draw_network(axes[1], [3, 4, 3, 2], "Deep Network: 3 → 4 → 3 → 2\n(2 hidden layers)")
 
 plt.tight_layout()
-plt.savefig("../visuals/02_forward_propagation/network_diagram.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(VIS_DIR, "network_diagram.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: network_diagram.png")
 
@@ -340,7 +341,7 @@ for i, (name, shape, desc, color) in enumerate(shapes):
                     arrowprops=dict(arrowstyle="->", color="black", lw=2))
 
 plt.tight_layout()
-plt.savefig("../visuals/02_forward_propagation/shape_trace.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(VIS_DIR, "shape_trace.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: shape_trace.png")
 
@@ -389,7 +390,7 @@ blue_patch = mpatches.Patch(color="blue", label="Class 1")
 axes[1].legend(handles=[red_patch, blue_patch], fontsize=9)
 
 plt.tight_layout()
-plt.savefig("../visuals/02_forward_propagation/xor_boundary.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(VIS_DIR, "xor_boundary.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: xor_boundary.png")
 
@@ -434,4 +435,4 @@ print("  📊 Always track shapes: (batch, n_inputs) × (n_inputs, n_outputs)")
 print()
 print("Next: Module 3 → Backpropagation (how networks learn from mistakes!)")
 print()
-print("Visualizations saved to: ../visuals/02_forward_propagation/")
+print(f"Visualizations saved to: {VIS_DIR}/")

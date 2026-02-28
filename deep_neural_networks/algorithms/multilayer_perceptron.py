@@ -26,7 +26,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-os.makedirs("../visuals/multilayer_perceptron", exist_ok=True)
+VIS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "multilayer_perceptron")
+os.makedirs(VIS_DIR, exist_ok=True)
 np.random.seed(42)
 
 print("=" * 70)
@@ -359,7 +360,7 @@ for ax, (name, model) in zip(axes, [
     ax.grid(True, alpha=0.2)
 
 plt.tight_layout()
-plt.savefig("../visuals/multilayer_perceptron/decision_boundaries.png",
+plt.savefig(os.path.join(VIS_DIR, "decision_boundaries.png"),
             dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: decision_boundaries.png")
@@ -387,7 +388,7 @@ for ax, ylabel, title in zip(axes,
     ax.legend(fontsize=10); ax.grid(True, alpha=0.3)
 
 plt.tight_layout()
-plt.savefig("../visuals/multilayer_perceptron/training_curves.png",
+plt.savefig(os.path.join(VIS_DIR, "training_curves.png"),
             dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: training_curves.png")
@@ -409,7 +410,7 @@ for ax, model, title in zip(axes,
     plt.colorbar(im, ax=ax)
 
 plt.tight_layout()
-plt.savefig("../visuals/multilayer_perceptron/weight_heatmap.png",
+plt.savefig(os.path.join(VIS_DIR, "weight_heatmap.png"),
             dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: weight_heatmap.png")

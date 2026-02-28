@@ -29,7 +29,8 @@ import re
 from collections import Counter
 import os
 
-os.makedirs("../visuals/01_text_processing", exist_ok=True)
+_VISUALS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "01_text_processing")
+os.makedirs(_VISUALS_DIR, exist_ok=True)
 
 print("=" * 70)
 print("📝 NLP MATH FOUNDATION 1: TEXT PROCESSING")
@@ -739,7 +740,7 @@ ax_freq2.set_title("Top Tokens — AFTER Processing\n(lowercase, stopwords remov
 ax_freq2.set_xlabel("Frequency")
 ax_freq2.grid(axis="x", alpha=0.3)
 
-plt.savefig("../visuals/01_text_processing/pipeline_and_frequency.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(_VISUALS_DIR, "pipeline_and_frequency.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: pipeline_and_frequency.png")
 
@@ -799,7 +800,7 @@ axes[2].text(1.5, sorted_counts[0] * 0.4,
              fontsize=9, color="#9B59B6")
 
 plt.tight_layout()
-plt.savefig("../visuals/01_text_processing/text_statistics.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(_VISUALS_DIR, "text_statistics.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: text_statistics.png")
 
@@ -863,7 +864,7 @@ for ax, (title, tokens, color, note) in zip(axes, tokenizations):
             bbox=dict(boxstyle="round", facecolor="#f0f0f0", alpha=0.8))
 
 plt.tight_layout()
-plt.savefig("../visuals/01_text_processing/tokenization_comparison.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(_VISUALS_DIR, "tokenization_comparison.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: tokenization_comparison.png")
 

@@ -27,7 +27,8 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import os, pathlib, shutil
 
-os.makedirs("../visuals/custom_classifier", exist_ok=True)
+VIS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "custom_classifier")
+os.makedirs(VIS_DIR, exist_ok=True)
 np.random.seed(42)
 
 print("=" * 70)
@@ -625,7 +626,7 @@ for cls_idx, cls_name in enumerate(CLASSES):
                                           fontweight="bold", rotation=90, va="center")
 
 plt.tight_layout()
-plt.savefig("../visuals/custom_classifier/dataset_samples.png", dpi=300, bbox_inches="tight")
+plt.savefig(f"{VIS_DIR}/dataset_samples.png", dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: dataset_samples.png")
 
@@ -683,7 +684,7 @@ for (label, xc, _), sub in zip(pipeline_steps, sub_labels):
             fontsize=8, color="#333", transform=ax.transAxes, multialignment="center")
 
 plt.tight_layout()
-plt.savefig("../visuals/custom_classifier/pipeline_diagram.png", dpi=300, bbox_inches="tight")
+plt.savefig(f"{VIS_DIR}/pipeline_diagram.png", dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: pipeline_diagram.png")
 
@@ -730,7 +731,7 @@ if TF_AVAILABLE:
                 color="darkorange", bbox=dict(boxstyle="round", facecolor="moccasin", alpha=0.4))
 
     plt.tight_layout()
-    plt.savefig("../visuals/custom_classifier/training_history.png", dpi=300, bbox_inches="tight")
+    plt.savefig(f"{VIS_DIR}/training_history.png", dpi=300, bbox_inches="tight")
     plt.close()
     print("   Saved: training_history.png")
 
@@ -782,7 +783,7 @@ if TF_AVAILABLE:
                      ha="center", va="bottom", fontsize=10, fontweight="bold")
 
     plt.tight_layout()
-    plt.savefig("../visuals/custom_classifier/inference_confidence.png", dpi=300, bbox_inches="tight")
+    plt.savefig(f"{VIS_DIR}/inference_confidence.png", dpi=300, bbox_inches="tight")
     plt.close()
     print("   Saved: inference_confidence.png")
 

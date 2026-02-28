@@ -28,7 +28,8 @@ import re
 from collections import Counter
 import os
 
-os.makedirs("../visuals/lstm_text_classifier", exist_ok=True)
+_VISUALS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "lstm_text_classifier")
+os.makedirs(_VISUALS_DIR, exist_ok=True)
 np.random.seed(42)
 
 print("=" * 70)
@@ -520,7 +521,7 @@ for i in range(10):
 
 plt.close(fig_seq)
 plt.tight_layout()
-plt.savefig("../visuals/lstm_text_classifier/data_preparation.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(_VISUALS_DIR, "data_preparation.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: data_preparation.png")
 
@@ -562,7 +563,7 @@ axes[1].set_title("Validation Loss over Training"); axes[1].legend(fontsize=9)
 axes[1].grid(True, alpha=0.3)
 
 plt.tight_layout()
-plt.savefig("../visuals/lstm_text_classifier/training_histories.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(_VISUALS_DIR, "training_histories.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: training_histories.png")
 
@@ -628,7 +629,7 @@ for bar, acc in zip(bars, acc_vals):
                  f"{acc:.1%}", ha="center", va="bottom", fontsize=10, fontweight="bold")
 
 plt.tight_layout()
-plt.savefig("../visuals/lstm_text_classifier/architecture_comparison.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(_VISUALS_DIR, "architecture_comparison.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: architecture_comparison.png")
 

@@ -28,7 +28,8 @@ import matplotlib.patches as mpatches
 from collections import Counter, defaultdict
 import os
 
-os.makedirs("../visuals/03_word_embeddings", exist_ok=True)
+_VISUALS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "03_word_embeddings")
+os.makedirs(_VISUALS_DIR, exist_ok=True)
 np.random.seed(42)
 
 print("=" * 70)
@@ -560,7 +561,7 @@ except ImportError:
                  ha="center", va="center", fontsize=12, transform=axes[2].transAxes)
 
 plt.tight_layout()
-plt.savefig("../visuals/03_word_embeddings/word2vec_training_results.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(_VISUALS_DIR, "word2vec_training_results.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: word2vec_training_results.png")
 
@@ -653,7 +654,7 @@ axes[1].set_title("Cosine Similarity Heatmap\n(Pretrained Demo Embeddings)",
 plt.colorbar(im, ax=axes[1], shrink=0.8, label="Cosine Similarity")
 
 plt.tight_layout()
-plt.savefig("../visuals/03_word_embeddings/semantic_embedding_space.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(_VISUALS_DIR, "semantic_embedding_space.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: semantic_embedding_space.png")
 
@@ -737,7 +738,7 @@ for i in range(4):
                      fontsize=10, color="white" if embed_sim_4x4[i,j] > 0.5 else "black")
 
 plt.tight_layout()
-plt.savefig("../visuals/03_word_embeddings/bow_vs_embeddings.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(_VISUALS_DIR, "bow_vs_embeddings.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: bow_vs_embeddings.png")
 

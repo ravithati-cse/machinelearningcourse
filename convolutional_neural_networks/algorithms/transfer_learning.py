@@ -27,7 +27,8 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import os
 
-os.makedirs("../visuals/transfer_learning", exist_ok=True)
+VIS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "transfer_learning")
+os.makedirs(VIS_DIR, exist_ok=True)
 np.random.seed(42)
 
 print("=" * 70)
@@ -755,7 +756,7 @@ fig.legend(handles=legend_elements, loc="lower center", ncol=3, fontsize=10,
            bbox_to_anchor=(0.5, -0.01))
 
 plt.tight_layout(rect=[0, 0.06, 1, 1])
-plt.savefig("../visuals/transfer_learning/strategies_diagram.png", dpi=300, bbox_inches="tight")
+plt.savefig(f"{VIS_DIR}/strategies_diagram.png", dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: strategies_diagram.png")
 
@@ -819,7 +820,7 @@ for bar, imp in zip(bars2, improvements):
     )
 
 plt.tight_layout()
-plt.savefig("../visuals/transfer_learning/accuracy_comparison.png", dpi=300, bbox_inches="tight")
+plt.savefig(f"{VIS_DIR}/accuracy_comparison.png", dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: accuracy_comparison.png")
 
@@ -890,7 +891,7 @@ else:
                     bbox=dict(boxstyle="round", facecolor="moccasin", alpha=0.5))
 
 plt.tight_layout()
-plt.savefig("../visuals/transfer_learning/finetuning_history.png", dpi=300, bbox_inches="tight")
+plt.savefig(f"{VIS_DIR}/finetuning_history.png", dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: finetuning_history.png")
 

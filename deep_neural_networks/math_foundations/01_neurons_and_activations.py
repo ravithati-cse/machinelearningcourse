@@ -28,7 +28,8 @@ import matplotlib.patches as mpatches
 import os
 
 # Create visuals directory
-os.makedirs("../visuals/01_neurons_activations", exist_ok=True)
+VIS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "01_neurons_activations")
+os.makedirs(VIS_DIR, exist_ok=True)
 
 
 print("=" * 70)
@@ -278,7 +279,7 @@ for ax, (name, (vals, color, formula)) in zip(axes, activations.items()):
     ax.set_xlim(-5, 5)
 
 plt.tight_layout()
-plt.savefig("../visuals/01_neurons_activations/activation_functions.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(VIS_DIR, "activation_functions.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: activation_functions.png")
 
@@ -356,7 +357,7 @@ ax.text(9.5, 4.5, f"ŷ = {output_val:.3f}\n({output_val*100:.0f}% rain)",
         bbox=dict(boxstyle="round", facecolor="#FCE4EC", edgecolor="#E91E63"))
 
 plt.tight_layout()
-plt.savefig("../visuals/01_neurons_activations/neuron_diagram.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(VIS_DIR, "neuron_diagram.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: neuron_diagram.png")
 
@@ -401,7 +402,7 @@ ax.set_xlim(-5, 5); ax.grid(True, alpha=0.3)
 ax.set_xlabel("z")
 
 plt.tight_layout()
-plt.savefig("../visuals/01_neurons_activations/activation_derivatives.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(VIS_DIR, "activation_derivatives.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: activation_derivatives.png")
 
@@ -439,7 +440,7 @@ print("  📊 Softmax for multi-class output, Sigmoid for binary output")
 print()
 print("Next: Module 2 → Forward Propagation (connecting neurons into layers!)")
 print()
-print("Visualizations saved to: ../visuals/01_neurons_activations/")
+print(f"Visualizations saved to: {VIS_DIR}/")
 print("  • activation_functions.png")
 print("  • neuron_diagram.png")
 print("  • activation_derivatives.png")
