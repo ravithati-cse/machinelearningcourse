@@ -26,7 +26,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-os.makedirs("../visuals/classic_architectures", exist_ok=True)
+VIS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "classic_architectures")
+os.makedirs(VIS_DIR, exist_ok=True)
 np.random.seed(42)
 
 print("=" * 70)
@@ -436,7 +437,7 @@ ax.plot([a[0] for a in archs], [a[2] for a in archs],
         "gray", linewidth=1.5, linestyle="--", alpha=0.5)
 ax.grid(True, alpha=0.3)
 plt.tight_layout()
-plt.savefig("../visuals/classic_architectures/architecture_timeline.png",
+plt.savefig(f"{VIS_DIR}/architecture_timeline.png",
             dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: architecture_timeline.png")
@@ -488,7 +489,7 @@ for ax, (title, has_skip) in zip(axes, [
                 color="darkblue", fontweight="bold")
 
 plt.tight_layout()
-plt.savefig("../visuals/classic_architectures/residual_block.png",
+plt.savefig(f"{VIS_DIR}/residual_block.png",
             dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: residual_block.png")
@@ -513,7 +514,7 @@ if TF_AVAILABLE:
     axes[1].set_ylim(0, 1); axes[1].grid(True, alpha=0.3)
 
     plt.tight_layout()
-    plt.savefig("../visuals/classic_architectures/resnet_training.png",
+    plt.savefig(f"{VIS_DIR}/resnet_training.png",
                 dpi=300, bbox_inches="tight")
     plt.close()
     print("   ✅ Saved: resnet_training.png")

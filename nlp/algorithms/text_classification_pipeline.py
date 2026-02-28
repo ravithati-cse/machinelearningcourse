@@ -29,7 +29,8 @@ import re
 import os
 from collections import Counter
 
-os.makedirs("../visuals/text_classification_pipeline", exist_ok=True)
+_VISUALS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "text_classification_pipeline")
+os.makedirs(_VISUALS_DIR, exist_ok=True)
 np.random.seed(42)
 
 print("=" * 70)
@@ -178,8 +179,7 @@ try:
         "TF-IDF + LogReg": Pipeline([
             ("tfidf", TfidfVectorizer(ngram_range=(1, 2), max_features=10000,
                                       sublinear_tf=True, stop_words="english")),
-            ("clf",   LogisticRegression(max_iter=1000, C=10, solver="lbfgs",
-                                         multi_class="multinomial")),
+            ("clf",   LogisticRegression(max_iter=1000, C=10, solver="lbfgs")),
         ]),
         "TF-IDF + ComplementNB": Pipeline([
             ("tfidf", TfidfVectorizer(ngram_range=(1, 2), max_features=10000,
@@ -218,7 +218,7 @@ try:
     cv_pipe = Pipeline([
         ("tfidf", TfidfVectorizer(ngram_range=(1, 2), max_features=10000,
                                   sublinear_tf=True, stop_words="english")),
-        ("clf",   LogisticRegression(max_iter=1000, C=10, multi_class="multinomial")),
+        ("clf",   LogisticRegression(max_iter=1000, C=10)),
     ])
     cv_scores = cross_val_score(cv_pipe,
                                 X_train_raw + X_test_raw,
@@ -495,7 +495,7 @@ else:
     axes[2].axis("off")
 
 plt.tight_layout()
-plt.savefig("../visuals/text_classification_pipeline/model_comparison.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(_VISUALS_DIR, "model_comparison.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: model_comparison.png")
 
@@ -547,7 +547,7 @@ else:
         ax.axis("off")
 
 plt.tight_layout()
-plt.savefig("../visuals/text_classification_pipeline/confusion_matrix.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(_VISUALS_DIR, "confusion_matrix.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: confusion_matrix.png")
 
@@ -595,7 +595,7 @@ ax.text(0.38, 0.83, "sklearn Pipeline (fit_transform → fit)", ha="center",
         fontsize=9, color="#1ABC9C", fontweight="bold")
 
 plt.tight_layout()
-plt.savefig("../visuals/text_classification_pipeline/pipeline_architecture.png",
+plt.savefig(os.path.join(_VISUALS_DIR, "pipeline_architecture.png"),
             dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: pipeline_architecture.png")

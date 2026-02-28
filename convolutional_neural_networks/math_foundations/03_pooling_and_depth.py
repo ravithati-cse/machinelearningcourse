@@ -26,7 +26,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-os.makedirs("../visuals/03_pooling_and_depth", exist_ok=True)
+VIS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "03_pooling_and_depth")
+os.makedirs(VIS_DIR, exist_ok=True)
 np.random.seed(42)
 
 print("=" * 70)
@@ -341,7 +342,7 @@ for ax, data, title, cmap in zip(axes,
     ax.axis("off")
 
 plt.tight_layout()
-plt.savefig("../visuals/03_pooling_and_depth/pooling_comparison.png",
+plt.savefig(f"{VIS_DIR}/pooling_comparison.png",
             dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: pooling_comparison.png")
@@ -392,7 +393,7 @@ ax.text(13.8, 1.5, "Classification\n(makes decision)",
         bbox=dict(boxstyle="round", facecolor="#FFF3E0", edgecolor="#E65100"))
 
 plt.tight_layout()
-plt.savefig("../visuals/03_pooling_and_depth/cnn_pipeline.png",
+plt.savefig(f"{VIS_DIR}/cnn_pipeline.png",
             dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: cnn_pipeline.png")
@@ -410,7 +411,7 @@ examples = [
     # Layer 1: random edge-like filters
     np.array([[0,-1,0],[-1,4,-1],[0,-1,0]], dtype=float),
     # Layer 2: texture-like pattern
-    np.tile(np.array([[1,-1],[−1,1]], dtype=float), (4, 4)) if False
+    np.tile(np.array([[1,-1],[-1,1]], dtype=float), (4, 4)) if False
     else (np.sin(np.linspace(0,4*np.pi,16).reshape(4,4)) * np.cos(np.linspace(0,4*np.pi,16).reshape(4,4).T)),
     # Layer 3: part-like
     np.zeros((8, 8)),
@@ -458,7 +459,7 @@ for ax, name, cmap_name in zip(axes, layer_names, colors_list):
     ax.axis("off")
 
 plt.tight_layout()
-plt.savefig("../visuals/03_pooling_and_depth/feature_hierarchy.png",
+plt.savefig(f"{VIS_DIR}/feature_hierarchy.png",
             dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: feature_hierarchy.png")

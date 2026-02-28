@@ -26,7 +26,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-os.makedirs("../visuals/tabular_deep_learning", exist_ok=True)
+VIS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "tabular_deep_learning")
+os.makedirs(VIS_DIR, exist_ok=True)
 np.random.seed(42)
 
 print("=" * 70)
@@ -303,7 +304,7 @@ ax.set_yticklabels(short_names, fontsize=7)
 ax.set_title("Feature Correlation Heatmap (30 features)", fontsize=13, fontweight="bold")
 plt.colorbar(im, ax=ax)
 plt.tight_layout()
-plt.savefig("../visuals/tabular_deep_learning/feature_correlation.png",
+plt.savefig(os.path.join(VIS_DIR, "feature_correlation.png"),
             dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: feature_correlation.png")
@@ -331,7 +332,7 @@ ax.set_title("Model Comparison: Logistic Regression vs Random Forest vs DNN",
              fontsize=13, fontweight="bold")
 ax.legend(fontsize=11); ax.grid(True, alpha=0.3, axis="y")
 plt.tight_layout()
-plt.savefig("../visuals/tabular_deep_learning/model_comparison.png",
+plt.savefig(os.path.join(VIS_DIR, "model_comparison.png"),
             dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: model_comparison.png")
@@ -355,7 +356,7 @@ ax.set_title("ROC Curves: All 3 Models", fontsize=13, fontweight="bold")
 ax.legend(fontsize=11); ax.grid(True, alpha=0.3)
 ax.set_xlim(-0.02, 1.02); ax.set_ylim(-0.02, 1.05)
 plt.tight_layout()
-plt.savefig("../visuals/tabular_deep_learning/roc_curves.png",
+plt.savefig(os.path.join(VIS_DIR, "roc_curves.png"),
             dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: roc_curves.png")
@@ -380,7 +381,7 @@ if TF_AVAILABLE and history_dnn is not None:
     axes[1].set_ylim(0.8, 1.0); axes[1].grid(True, alpha=0.3)
 
     plt.tight_layout()
-    plt.savefig("../visuals/tabular_deep_learning/dnn_training.png",
+    plt.savefig(os.path.join(VIS_DIR, "dnn_training.png"),
                 dpi=300, bbox_inches="tight")
     plt.close()
     print("   Saved: dnn_training.png")

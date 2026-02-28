@@ -29,7 +29,8 @@ from collections import Counter
 import os
 import re
 
-os.makedirs("../visuals/02_bag_of_words_tfidf", exist_ok=True)
+_VISUALS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "02_bag_of_words_tfidf")
+os.makedirs(_VISUALS_DIR, exist_ok=True)
 
 print("=" * 70)
 print("📊 NLP MATH FOUNDATION 2: BAG OF WORDS & TF-IDF")
@@ -613,7 +614,7 @@ for i in range(tfidf_matrix.shape[0]):
                          fontsize=6, color="white" if tfidf_matrix[i, j] > 0.4 else "black")
 
 plt.tight_layout()
-plt.savefig("../visuals/02_bag_of_words_tfidf/bow_vs_tfidf_heatmap.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(_VISUALS_DIR, "bow_vs_tfidf_heatmap.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: bow_vs_tfidf_heatmap.png")
 
@@ -669,7 +670,7 @@ for i in range(len(documents)):
                      fontsize=7, color="white" if cos_sim[i, j] > 0.5 else "black")
 
 plt.tight_layout()
-plt.savefig("../visuals/02_bag_of_words_tfidf/tfidf_analysis.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(_VISUALS_DIR, "tfidf_analysis.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: tfidf_analysis.png")
 
@@ -756,7 +757,7 @@ axes[2].annotate(f"Best: {ngram_accuracy[best_idx]:.0%}",
                  fontsize=10, color="red", fontweight="bold")
 
 plt.tight_layout()
-plt.savefig("../visuals/02_bag_of_words_tfidf/bow_limitations_ngrams.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(_VISUALS_DIR, "bow_limitations_ngrams.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: bow_limitations_ngrams.png")
 

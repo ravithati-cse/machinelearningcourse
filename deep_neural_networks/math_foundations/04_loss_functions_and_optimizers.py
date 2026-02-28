@@ -26,7 +26,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-os.makedirs("../visuals/04_loss_and_optimizers", exist_ok=True)
+VIS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "04_loss_and_optimizers")
+os.makedirs(VIS_DIR, exist_ok=True)
 np.random.seed(42)
 
 print("=" * 70)
@@ -336,7 +337,7 @@ ax.legend(); ax.grid(True, alpha=0.3)
 ax.scatter([w0], [loss_fn(w0)], color="red", s=150, zorder=5, label="Start")
 
 plt.tight_layout()
-plt.savefig("../visuals/04_loss_and_optimizers/loss_functions.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(VIS_DIR, "loss_functions.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: loss_functions.png")
 
@@ -380,7 +381,7 @@ ax.set_xlabel("Iteration"); ax.set_ylabel("Loss")
 ax.legend(fontsize=9); ax.grid(True, alpha=0.3)
 
 plt.tight_layout()
-plt.savefig("../visuals/04_loss_and_optimizers/optimizer_paths.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(VIS_DIR, "optimizer_paths.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: optimizer_paths.png")
 
@@ -412,7 +413,7 @@ ax.text(40, 5.5, "Too low: converges slowly", color="blue", fontsize=10)
 ax.text(15, optimal_loss + 0.5, "Just right ✅", color="green", fontsize=10)
 
 plt.tight_layout()
-plt.savefig("../visuals/04_loss_and_optimizers/learning_rate_effect.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(VIS_DIR, "learning_rate_effect.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: learning_rate_effect.png")
 

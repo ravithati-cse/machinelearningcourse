@@ -26,7 +26,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-os.makedirs("../visuals/02_convolution_operation", exist_ok=True)
+VIS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "02_convolution_operation")
+os.makedirs(VIS_DIR, exist_ok=True)
 np.random.seed(42)
 
 print("=" * 70)
@@ -302,7 +303,7 @@ axes[0, 0].set_ylabel("Filters", fontsize=11, fontweight="bold")
 axes[1, 0].set_ylabel("Feature Maps", fontsize=11, fontweight="bold")
 
 plt.tight_layout()
-plt.savefig("../visuals/02_convolution_operation/filters_and_features.png",
+plt.savefig(f"{VIS_DIR}/filters_and_features.png",
             dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: filters_and_features.png")
@@ -324,7 +325,7 @@ for ax, stride in zip(axes, [1, 2, 3, 4]):
     ax.axis("off")
 
 plt.tight_layout()
-plt.savefig("../visuals/02_convolution_operation/stride_effect.png",
+plt.savefig(f"{VIS_DIR}/stride_effect.png",
             dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: stride_effect.png")
@@ -359,7 +360,7 @@ for ax, (r, c), label in zip(axes, positions, labels):
     ax.set_xticks([]); ax.set_yticks([])
 
 plt.tight_layout()
-plt.savefig("../visuals/02_convolution_operation/conv_steps.png",
+plt.savefig(f"{VIS_DIR}/conv_steps.png",
             dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: conv_steps.png")

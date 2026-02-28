@@ -26,7 +26,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-os.makedirs("../visuals/05_regularization", exist_ok=True)
+VIS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "05_regularization")
+os.makedirs(VIS_DIR, exist_ok=True)
 np.random.seed(42)
 
 print("=" * 70)
@@ -340,7 +341,7 @@ for ax, (deg, label, color) in zip(axes, [(1, "Degree 1\n(Underfitting)", "blue"
     ax.set_ylim(-2.5, 2.5); ax.grid(True, alpha=0.3); ax.legend(fontsize=9)
 
 plt.tight_layout()
-plt.savefig("../visuals/05_regularization/overfitting_demo.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(VIS_DIR, "overfitting_demo.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: overfitting_demo.png")
 
@@ -372,7 +373,7 @@ for ax, (W, title, color) in zip(axes, [
     ax.grid(True, alpha=0.3)
 
 plt.tight_layout()
-plt.savefig("../visuals/05_regularization/l1_vs_l2_weights.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(VIS_DIR, "l1_vs_l2_weights.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: l1_vs_l2_weights.png")
 
@@ -395,7 +396,7 @@ ax.legend(fontsize=11)
 ax.grid(True, alpha=0.3)
 ax.set_ylim(0, 1.8)
 plt.tight_layout()
-plt.savefig("../visuals/05_regularization/early_stopping.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(VIS_DIR, "early_stopping.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: early_stopping.png")
 

@@ -27,7 +27,8 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import os
 
-os.makedirs("../visuals/01_image_basics", exist_ok=True)
+VIS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "01_image_basics")
+os.makedirs(VIS_DIR, exist_ok=True)
 np.random.seed(42)
 
 print("=" * 70)
@@ -255,7 +256,7 @@ for ax, img, title in zip(axes.flatten(), images, titles):
     ax.axis("off")
 
 plt.tight_layout()
-plt.savefig("../visuals/01_image_basics/grayscale_ops.png", dpi=300, bbox_inches="tight")
+plt.savefig(f"{VIS_DIR}/grayscale_ops.png", dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: grayscale_ops.png")
 
@@ -297,7 +298,7 @@ axes[4].set_title("Grayscale\n(0.299R+0.587G+0.114B)", fontsize=11, fontweight="
 axes[4].axis("off")
 
 plt.tight_layout()
-plt.savefig("../visuals/01_image_basics/rgb_channels.png", dpi=300, bbox_inches="tight")
+plt.savefig(f"{VIS_DIR}/rgb_channels.png", dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: rgb_channels.png")
 
@@ -346,7 +347,7 @@ ax.text(5.5, 4.5, "3×3 filter\n(9 weights shared\nacross whole image!)",
 ax.text(3.0, 0.5, "Input image (7×7 shown)", ha="center", fontsize=9, color="gray")
 
 plt.tight_layout()
-plt.savefig("../visuals/01_image_basics/mlp_vs_cnn.png", dpi=300, bbox_inches="tight")
+plt.savefig(f"{VIS_DIR}/mlp_vs_cnn.png", dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: mlp_vs_cnn.png")
 

@@ -26,7 +26,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-os.makedirs("../visuals/03_backpropagation", exist_ok=True)
+VIS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "03_backpropagation")
+os.makedirs(VIS_DIR, exist_ok=True)
 np.random.seed(42)
 
 print("=" * 70)
@@ -281,7 +282,7 @@ ax.text(6.0, 1.1, "◄ BACKWARD PASS (learning)", ha="center", fontsize=11,
         color="darkred", fontweight="bold")
 
 plt.tight_layout()
-plt.savefig("../visuals/03_backpropagation/chain_rule_graph.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(VIS_DIR, "chain_rule_graph.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: chain_rule_graph.png")
 
@@ -319,7 +320,7 @@ ax.set_xlabel("Feature 1"); ax.set_ylabel("Feature 2")
 ax.grid(True, alpha=0.3)
 
 plt.tight_layout()
-plt.savefig("../visuals/03_backpropagation/loss_and_boundary.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(VIS_DIR, "loss_and_boundary.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: loss_and_boundary.png")
 
@@ -344,7 +345,7 @@ ax.set_xlabel("Hidden Neurons"); ax.set_ylabel("Input Features")
 plt.colorbar(im, ax=ax)
 
 plt.tight_layout()
-plt.savefig("../visuals/03_backpropagation/weight_changes.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(VIS_DIR, "weight_changes.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   ✅ Saved: weight_changes.png")
 

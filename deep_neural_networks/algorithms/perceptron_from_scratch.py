@@ -27,7 +27,8 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import os
 
-os.makedirs("../visuals/perceptron", exist_ok=True)
+VIS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "perceptron")
+os.makedirs(VIS_DIR, exist_ok=True)
 np.random.seed(42)
 
 print("=" * 70)
@@ -280,7 +281,7 @@ for ax, (X, y, model, title, color) in zip(axes, gate_data):
     ax.legend(handles=[blue_p, red_p], fontsize=9)
 
 plt.tight_layout()
-plt.savefig("../visuals/perceptron/logic_gates.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(VIS_DIR, "logic_gates.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: logic_gates.png")
 
@@ -317,7 +318,7 @@ for ax, ep in zip(axes, snapshots):
         ax.legend(fontsize=8)
 
 plt.tight_layout()
-plt.savefig("../visuals/perceptron/boundary_evolution.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(VIS_DIR, "boundary_evolution.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: boundary_evolution.png")
 
@@ -343,7 +344,7 @@ ax.set_xlabel("Epoch"); ax.set_ylabel("Errors")
 ax.legend(); ax.grid(True, alpha=0.3)
 
 plt.tight_layout()
-plt.savefig("../visuals/perceptron/convergence.png", dpi=300, bbox_inches="tight")
+plt.savefig(os.path.join(VIS_DIR, "convergence.png"), dpi=300, bbox_inches="tight")
 plt.close()
 print("   Saved: convergence.png")
 

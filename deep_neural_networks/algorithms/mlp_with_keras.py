@@ -26,7 +26,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-os.makedirs("../visuals/mlp_keras", exist_ok=True)
+VIS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "visuals", "mlp_keras")
+os.makedirs(VIS_DIR, exist_ok=True)
 np.random.seed(42)
 
 print("=" * 70)
@@ -256,7 +257,7 @@ print("  loaded.predict(new_data)")
 print()
 
 if TF_AVAILABLE:
-    save_path = "../visuals/mlp_keras/circles_model.keras"
+    save_path = os.path.join(VIS_DIR, "circles_model.keras")
     model.save(save_path)
     print(f"  Model saved to: {save_path}")
 
@@ -301,7 +302,7 @@ if TF_AVAILABLE:
     ax.set_ylim(0, 1.05); ax.legend(); ax.grid(True, alpha=0.3)
 
     plt.tight_layout()
-    plt.savefig("../visuals/mlp_keras/training_history.png", dpi=300, bbox_inches="tight")
+    plt.savefig(os.path.join(VIS_DIR, "training_history.png"), dpi=300, bbox_inches="tight")
     plt.close()
     print("   Saved: training_history.png")
 
@@ -332,7 +333,7 @@ if TF_AVAILABLE:
         ax.grid(True, alpha=0.2)
 
     plt.tight_layout()
-    plt.savefig("../visuals/mlp_keras/decision_boundary.png", dpi=300, bbox_inches="tight")
+    plt.savefig(os.path.join(VIS_DIR, "decision_boundary.png"), dpi=300, bbox_inches="tight")
     plt.close()
     print("   Saved: decision_boundary.png")
 
