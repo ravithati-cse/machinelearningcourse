@@ -32,6 +32,12 @@ MLForBeginners/
 │   ├── algorithms/                 # conv from scratch, Keras CNN, classic archs, transfer learning
 │   ├── projects/                   # CIFAR-10 classifier, custom image classifier
 │   └── visuals/                    # auto-generated visualizations
+├── nlp/                            # Part 5: NLP (100% complete)
+│   ├── math_foundations/           # 4 modules: text processing → RNN intuition
+│   ├── algorithms/                 # text classification, sentiment, LSTM, NER
+│   ├── projects/                   # movie review sentiment, news article classifier
+│   ├── visuals/                    # auto-generated visualizations
+│   └── README.md
 ├── README.md
 ├── CONTRIBUTING.md
 ├── SETUP_GUIDE.md
@@ -44,21 +50,21 @@ MLForBeginners/
 - **Part 2 - Classification**: 16/16 modules (100%) ✅
 - **Part 3 - Deep Neural Networks**: 11/11 modules (100%) ✅
 - **Part 4 - CNNs**: 9/9 modules (100%) ✅
-- **Part 5 - NLP**: 0/10 modules (planned)
+- **Part 5 - NLP**: 10/10 modules (100%) ✅
 - **Part 6 - Transformers**: 0/9 modules (planned)
 - **Part 7 - LLMs**: 0/9 modules (planned)
 
-## Completed Curriculum (Parts 4) / Planned (Parts 5–7)
+## Completed Curriculum (Parts 1–5) / Planned (Parts 6–7)
 
 ### Part 4: Convolutional Neural Networks (CNNs) ✅
 - Math Foundations (3): 01_image_basics, 02_convolution_operation, 03_pooling_and_depth
 - Algorithms (4): conv_layer_from_scratch, cnn_with_keras, classic_architectures, transfer_learning
 - Projects (2): cifar10_classifier, custom_image_classifier
 
-### Part 5: Natural Language Processing (NLP)
-- Math Foundations (4): text processing, bag-of-words/TF-IDF, word embeddings, RNN intuition
-- Algorithms (4): text classification pipeline, sentiment analysis, LSTM, NER
-- Projects (2): movie review sentiment, news article classifier
+### Part 5: Natural Language Processing (NLP) ✅
+- Math Foundations (4): 01_text_processing, 02_bag_of_words_tfidf, 03_word_embeddings, 04_rnn_intuition
+- Algorithms (4): text_classification_pipeline, sentiment_analysis, lstm_text_classifier, named_entity_recognition
+- Projects (2): movie_review_sentiment, news_article_classifier
 
 ### Part 6: Transformers
 - Math Foundations (4): attention mechanism, multi-head attention, positional encoding, encoder-decoder arch
@@ -147,6 +153,23 @@ python3 custom_image_classifier.py
 
 # View generated visuals
 open visuals/
+
+# Part 5: Natural Language Processing
+cd nlp/math_foundations
+python3 01_text_processing.py
+python3 02_bag_of_words_tfidf.py
+python3 03_word_embeddings.py
+python3 04_rnn_intuition.py
+
+cd ../algorithms
+python3 text_classification_pipeline.py
+python3 sentiment_analysis.py
+python3 lstm_text_classifier.py
+python3 named_entity_recognition.py
+
+cd ../projects
+python3 movie_review_sentiment.py
+python3 news_article_classifier.py
 ```
 
 ## Git Workflow
