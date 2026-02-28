@@ -38,6 +38,12 @@ MLForBeginners/
 │   ├── projects/                   # movie review sentiment, news article classifier
 │   ├── visuals/                    # auto-generated visualizations
 │   └── README.md
+├── transformers/                   # Part 6: Transformers (100% complete)
+│   ├── math_foundations/           # 4 modules: attention → encoder-decoder arch
+│   ├── algorithms/                 # transformer from scratch, BERT, GPT decoder
+│   ├── projects/                   # BERT text classifier, GPT-2 text generator
+│   ├── visuals/                    # auto-generated visualizations
+│   └── README.md
 ├── README.md
 ├── CONTRIBUTING.md
 ├── SETUP_GUIDE.md
@@ -51,10 +57,10 @@ MLForBeginners/
 - **Part 3 - Deep Neural Networks**: 11/11 modules (100%) ✅
 - **Part 4 - CNNs**: 9/9 modules (100%) ✅
 - **Part 5 - NLP**: 10/10 modules (100%) ✅
-- **Part 6 - Transformers**: 0/9 modules (planned)
+- **Part 6 - Transformers**: 9/9 modules (100%) ✅
 - **Part 7 - LLMs**: 0/9 modules (planned)
 
-## Completed Curriculum (Parts 1–5) / Planned (Parts 6–7)
+## Completed Curriculum (Parts 1–6) / Planned (Part 7)
 
 ### Part 4: Convolutional Neural Networks (CNNs) ✅
 - Math Foundations (3): 01_image_basics, 02_convolution_operation, 03_pooling_and_depth
@@ -66,10 +72,10 @@ MLForBeginners/
 - Algorithms (4): text_classification_pipeline, sentiment_analysis, lstm_text_classifier, named_entity_recognition
 - Projects (2): movie_review_sentiment, news_article_classifier
 
-### Part 6: Transformers
-- Math Foundations (4): attention mechanism, multi-head attention, positional encoding, encoder-decoder arch
-- Algorithms (3): transformer from scratch, BERT encoder (HuggingFace), GPT decoder (HuggingFace)
-- Projects (2): text classification with BERT, text generation with GPT-2
+### Part 6: Transformers ✅
+- Math Foundations (4): 01_attention_mechanism, 02_multi_head_attention, 03_positional_encoding, 04_encoder_decoder_arch
+- Algorithms (3): transformer_from_scratch, bert_encoder, gpt_decoder
+- Projects (2): bert_text_classifier, gpt2_text_generator
 
 ### Part 7: LLMs
 - Concepts (4): how LLMs work, prompt engineering, fine-tuning basics, RAG
@@ -170,6 +176,22 @@ python3 named_entity_recognition.py
 cd ../projects
 python3 movie_review_sentiment.py
 python3 news_article_classifier.py
+
+# Part 6: Transformers
+cd transformers/math_foundations
+python3 01_attention_mechanism.py
+python3 02_multi_head_attention.py
+python3 03_positional_encoding.py
+python3 04_encoder_decoder_arch.py
+
+cd ../algorithms
+python3 transformer_from_scratch.py
+python3 bert_encoder.py
+python3 gpt_decoder.py
+
+cd ../projects
+python3 bert_text_classifier.py
+python3 gpt2_text_generator.py
 ```
 
 ## Git Workflow

@@ -28,7 +28,7 @@ import matplotlib.patches as mpatches
 from collections import Counter, defaultdict
 
 # ── Visualization output directory ─────────────────────────────────────────
-VIS_DIR = "../visuals/news_article_classifier"
+VIS_DIR = os.path.join(os.path.dirname(__file__), "..", "visuals", "news_article_classifier")
 os.makedirs(VIS_DIR, exist_ok=True)
 
 print("=" * 70)
