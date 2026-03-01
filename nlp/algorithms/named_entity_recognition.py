@@ -705,8 +705,7 @@ for sent, y_pos in zip(display_sents, y_positions):
                               edgecolor=color, linewidth=1))
             x_ent += len(f"[{label}] {ent_text}") * 0.012 + 0.02
 
-    ax.axhline(y=y_pos - 0.02, xmin=0.01, xmax=0.99, color="#ddd", linewidth=0.8,
-               transform=ax.transAxes)
+    ax.axhline(y=y_pos - 0.02, xmin=0.01, xmax=0.99, color="#ddd", linewidth=0.8)
 
 plt.tight_layout()
 plt.savefig(os.path.join(_VISUALS_DIR, "entity_predictions.png"),

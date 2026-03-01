@@ -518,13 +518,13 @@ try:
         "LogReg (OvR)": Pipeline([
             ("tfidf", TfidfVectorizer(max_features=500, ngram_range=(1, 2),
                                       sublinear_tf=True, min_df=1)),
-            ("clf", LogisticRegression(C=1.0, multi_class="ovr",
+            ("clf", LogisticRegression(C=1.0,
                                        max_iter=1000, random_state=42)),
         ]),
         "LogReg (Multinomial)": Pipeline([
             ("tfidf", TfidfVectorizer(max_features=500, ngram_range=(1, 2),
                                       sublinear_tf=True, min_df=1)),
-            ("clf", LogisticRegression(C=1.0, multi_class="multinomial",
+            ("clf", LogisticRegression(C=1.0,
                                        solver="lbfgs", max_iter=1000, random_state=42)),
         ]),
         "ComplementNB": Pipeline([
@@ -737,7 +737,8 @@ for article in demo_articles:
     result = classify_article(article)
     print(f"\n  Article: {article[:80]}...")
     print(f"  → {result['category']:15s} (confidence={result['confidence']:.1%})")
-    print(f"  Top-3: {', '.join(f\"{p['category']}({p['confidence']:.2f})\" for p in result['top_k_predictions'])}")
+    top3_str = ", ".join(f"{p['category']}({p['confidence']:.2f})" for p in result['top_k_predictions'])
+    print(f"  Top-3: {top3_str}")
     if result["key_signals"]:
         print(f"  Signals: {' | '.join(result['key_signals'][:2])}")
 
