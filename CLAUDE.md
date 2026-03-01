@@ -44,6 +44,17 @@ MLForBeginners/
 │   ├── projects/                   # BERT text classifier, GPT-2 text generator
 │   ├── visuals/                    # auto-generated visualizations
 │   └── README.md
+├── llms/                               # Part 7: LLMs (in progress)
+│   ├── math_foundations/           # 4 modules: how LLMs work → RAG
+│   ├── algorithms/                 # llm from scratch, LoRA, RAG pipeline
+│   ├── projects/                   # Q&A with RAG, LLM-powered classifier
+│   ├── visuals/                    # auto-generated visualizations
+│   └── README.md
+├── mind_maps/                          # Course and module mind maps
+│   ├── generate_mindmaps.py        # Run to regenerate all mind maps
+│   ├── course_overview.png         # Full course radial mind map
+│   ├── part1_regression.png … part7_llms.png
+│   └── modules/                    # Per-concept mind maps (6 PNGs)
 ├── README.md
 ├── CONTRIBUTING.md
 ├── SETUP_GUIDE.md
@@ -58,7 +69,7 @@ MLForBeginners/
 - **Part 4 - CNNs**: 9/9 modules (100%) ✅
 - **Part 5 - NLP**: 10/10 modules (100%) ✅
 - **Part 6 - Transformers**: 9/9 modules (100%) ✅
-- **Part 7 - LLMs**: 0/9 modules (planned)
+- **Part 7 - LLMs**: 9/9 modules (in progress — being written)
 
 ## Completed Curriculum (Parts 1–6) / Planned (Part 7)
 
@@ -77,10 +88,10 @@ MLForBeginners/
 - Algorithms (3): transformer_from_scratch, bert_encoder, gpt_decoder
 - Projects (2): bert_text_classifier, gpt2_text_generator
 
-### Part 7: LLMs
-- Concepts (4): how LLMs work, prompt engineering, fine-tuning basics, RAG
-- Practical (3): using LLM APIs, build a chatbot, LLM evaluation
-- Projects (2): Q&A system with RAG, LLM-powered classifier
+### Part 7: LLMs (in progress)
+- Math Foundations (4): 01_how_llms_work, 02_prompt_engineering, 03_finetuning_basics, 04_retrieval_augmented_generation
+- Algorithms (3): llm_from_scratch, lora_finetuning, rag_pipeline
+- Projects (2): qa_system_with_rag, llm_powered_classifier
 
 ## Tech Stack
 
@@ -192,6 +203,25 @@ python3 gpt_decoder.py
 cd ../projects
 python3 bert_text_classifier.py
 python3 gpt2_text_generator.py
+
+# Part 7: LLMs
+cd llms/math_foundations
+python3 01_how_llms_work.py
+python3 02_prompt_engineering.py
+python3 03_finetuning_basics.py
+python3 04_retrieval_augmented_generation.py
+
+cd ../algorithms
+python3 llm_from_scratch.py
+python3 lora_finetuning.py
+python3 rag_pipeline.py
+
+cd ../projects
+python3 qa_system_with_rag.py
+python3 llm_powered_classifier.py
+
+# Mind maps (regenerate all)
+python3 mind_maps/generate_mindmaps.py
 ```
 
 ## Git Workflow

@@ -159,7 +159,7 @@ class VADERStyle:
             i += 1
 
         if not sentiments:
-            return {"pos": 0.0, "neg": 0.0, "neu": 1.0, "compound": 0.0}
+            return {"pos": 0.0, "neg": 0.0, "neu": 1.0, "compound": 0.0, "label": "Neutral"}
 
         sum_s   = sum(sentiments)
         sum_abs = sum(abs(s) for s in sentiments) + 15  # dampening constant (VADER's α)
