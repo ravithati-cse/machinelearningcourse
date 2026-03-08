@@ -22,12 +22,18 @@ MLForBeginners/
 │   ├── examples/                   # practice examples
 │   ├── projects/                   # spam classifier, churn prediction, model comparison
 │   └── visuals/                    # auto-generated visualizations
-├── deep_neural_networks/           # Part 3: DNNs (100% complete)
+├── unsupervised_learning/          # Part 3: Unsupervised Learning (100% complete)
+│   ├── math_foundations/           # 4 modules: distance metrics → information theory
+│   ├── algorithms/                 # K-Means, hierarchical, DBSCAN, PCA, t-SNE/UMAP
+│   ├── projects/                   # customer segmentation, anomaly detection
+│   ├── visuals/                    # auto-generated visualizations
+│   └── requirements.txt
+├── deep_neural_networks/           # Part 4: DNNs (100% complete)
 │   ├── math_foundations/           # 5 modules: neurons → regularization
 │   ├── algorithms/                 # perceptron, MLP from scratch, Keras MLP, HP tuning
 │   ├── projects/                   # MNIST classifier, tabular deep learning
 │   └── visuals/                    # auto-generated visualizations
-├── convolutional_neural_networks/  # Part 4: CNNs (100% complete)
+├── convolutional_neural_networks/  # Part 5: CNNs (100% complete)
 │   ├── math_foundations/           # 3 modules: image basics, convolution, pooling & depth
 │   ├── algorithms/                 # conv from scratch, Keras CNN, classic archs, transfer learning
 │   ├── projects/                   # CIFAR-10 classifier, custom image classifier
@@ -65,15 +71,21 @@ MLForBeginners/
 
 - **Part 1 - Regression**: 12/12 modules (100%) ✅
 - **Part 2 - Classification**: 16/16 modules (100%) ✅
-- **Part 3 - Deep Neural Networks**: 11/11 modules (100%) ✅
-- **Part 4 - CNNs**: 9/9 modules (100%) ✅
-- **Part 5 - NLP**: 10/10 modules (100%) ✅
-- **Part 6 - Transformers**: 9/9 modules (100%) ✅
-- **Part 7 - LLMs**: 9/9 modules (in progress — being written)
+- **Part 3 - Unsupervised Learning**: 11/11 modules (100%) ✅
+- **Part 4 - Deep Neural Networks**: 11/11 modules (100%) ✅
+- **Part 5 - CNNs**: 9/9 modules (100%) ✅
+- **Part 6 - NLP**: 10/10 modules (100%) ✅
+- **Part 7 - Transformers**: 9/9 modules (100%) ✅
+- **Part 8 - LLMs**: 9/9 modules (in progress — being written)
 
-## Completed Curriculum (Parts 1–6) / Planned (Part 7)
+## Completed Curriculum (Parts 1–7) / Planned (Part 8)
 
-### Part 4: Convolutional Neural Networks (CNNs) ✅
+### Part 3: Unsupervised Learning ✅
+- Math Foundations (4): 01_distance_metrics, 02_variance_and_covariance, 03_eigenvectors_for_pca, 04_information_theory_basics
+- Algorithms (5): kmeans_from_scratch, hierarchical_clustering, dbscan_clustering, pca_from_scratch, dimensionality_reduction
+- Projects (2): customer_segmentation, anomaly_detection
+
+### Part 5: Convolutional Neural Networks (CNNs) ✅
 - Math Foundations (3): 01_image_basics, 02_convolution_operation, 03_pooling_and_depth
 - Algorithms (4): conv_layer_from_scratch, cnn_with_keras, classic_architectures, transfer_learning
 - Projects (2): cifar10_classifier, custom_image_classifier
@@ -98,14 +110,16 @@ MLForBeginners/
 - **Python 3.8+**
 - **Core**: numpy, pandas, scikit-learn
 - **Visualization**: matplotlib, seaborn, plotly
-- **Deep Learning**: tensorflow/keras (Parts 3-7)
-- **NLP** (Part 5+): spacy, nltk, transformers (HuggingFace)
+- **Unsupervised** (Part 3): scipy, umap-learn
+- **Deep Learning**: tensorflow/keras (Parts 4-8)
+- **NLP** (Part 6+): spacy, nltk, transformers (HuggingFace)
 - **Animation**: imageio, imageio-ffmpeg
 - **Interactive**: jupyter, ipywidgets
 
-Install base: `pip install -r regression_algorithms/requirements.txt`
-Install DNN:  `pip install tensorflow`
-Install NLP:  `pip install transformers spacy nltk`
+Install base:          `pip install -r regression_algorithms/requirements.txt`
+Install Unsupervised:  `pip install -r unsupervised_learning/requirements.txt`
+Install DNN:           `pip install tensorflow`
+Install NLP:           `pip install transformers spacy nltk`
 
 ## Development Conventions
 
@@ -130,8 +144,8 @@ Each module saves plots to its own `visuals/` subfolder. Always use `plt.savefig
 
 ### Framework Convention (Parts 3+)
 - Always show "from scratch" numpy version first
-- Then show the Keras/HuggingFace equivalent
-- Use `try/except ImportError` for tensorflow/transformers with a helpful install message
+- Then show the sklearn / Keras / HuggingFace equivalent
+- Use `try/except ImportError` for tensorflow/transformers/umap with a helpful install message
 - Never crash if optional libraries are missing — degrade gracefully
 
 ### Practice Labs
@@ -140,7 +154,25 @@ Lab files (`.md`) accompany key algorithm modules. They provide hands-on exercis
 ## Running Modules
 
 ```bash
-# Part 3: Deep Neural Networks
+# Part 3: Unsupervised Learning
+cd unsupervised_learning/math_foundations
+python3 01_distance_metrics.py
+python3 02_variance_and_covariance.py
+python3 03_eigenvectors_for_pca.py
+python3 04_information_theory_basics.py
+
+cd ../algorithms
+python3 kmeans_from_scratch.py
+python3 hierarchical_clustering.py
+python3 dbscan_clustering.py
+python3 pca_from_scratch.py
+python3 dimensionality_reduction.py
+
+cd ../projects
+python3 customer_segmentation.py
+python3 anomaly_detection.py
+
+# Part 4: Deep Neural Networks
 cd deep_neural_networks/math_foundations
 python3 01_neurons_and_activations.py
 python3 02_forward_propagation.py
