@@ -72,7 +72,7 @@ MLForBeginners/
 - **Part 1 - Regression**: 12/12 modules (100%) ✅
 - **Part 2 - Classification**: 16/16 modules (100%) ✅
 - **Part 3 - Unsupervised Learning**: 11/11 modules (100%) ✅
-- **Part 4 - Deep Neural Networks**: 11/11 modules (100%) ✅
+- **Part 4 - Deep Neural Networks**: 12/12 modules (100%) ✅
 - **Part 5 - CNNs**: 9/9 modules (100%) ✅
 - **Part 6 - NLP**: 10/10 modules (100%) ✅
 - **Part 7 - Transformers**: 9/9 modules (100%) ✅
@@ -84,6 +84,11 @@ MLForBeginners/
 - Math Foundations (4): 01_distance_metrics, 02_variance_and_covariance, 03_eigenvectors_for_pca, 04_information_theory_basics
 - Algorithms (5): kmeans_from_scratch, hierarchical_clustering, dbscan_clustering, pca_from_scratch, dimensionality_reduction
 - Projects (2): customer_segmentation, anomaly_detection
+
+### Part 4: Deep Neural Networks ✅
+- Math Foundations (5): 01_neurons_and_activations, 02_forward_propagation, 03_backpropagation, 04_loss_functions_and_optimizers, 05_regularization
+- Algorithms (5): perceptron_from_scratch, multilayer_perceptron, mlp_with_keras, hyperparameter_tuning, autoencoder
+- Projects (2): mnist_digit_classifier, tabular_deep_learning
 
 ### Part 5: Convolutional Neural Networks (CNNs) ✅
 - Math Foundations (3): 01_image_basics, 02_convolution_operation, 03_pooling_and_depth
