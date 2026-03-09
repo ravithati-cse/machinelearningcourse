@@ -418,7 +418,189 @@ plt.close()
 print("   ✅ Saved: learning_rate_effect.png")
 
 
+
+# ======================================================================
+# SECTION 5: CONCEPTUAL ARCHITECTURE DIAGRAM — Optimizer Comparison
+# ======================================================================
+# Left panel: loss landscape (ellipse contours) with 3 optimizer paths
+#   SGD (red zigzag), SGD+Momentum (orange smoother), Adam (green direct)
+# Right panel: learning rate schedule with warm-up, decay, final phases
+# ======================================================================
+print("📊 Generating: Optimizer comparison architecture diagram...")
+
+from matplotlib.patches import FancyBboxPatch, Ellipse
+from matplotlib.lines import Line2D
+
+fig, axes = plt.subplots(1, 2, figsize=(14, 8))
+fig.patch.set_facecolor('#0f0f1a')
+
+# ---------- LEFT PANEL: Loss Landscape & Optimizer Paths ----------
+ax = axes[0]
+ax.set_facecolor('#0f0f1a')
+ax.set_xlim(0, 14)
+ax.set_ylim(0, 8)
+ax.axis('off')
+ax.set_title('Loss Landscape & Optimizer Paths', color='#e0e0e0',
+             fontsize=12, fontweight='bold', pad=10)
+
+# Draw contour-like ellipses representing the loss surface (light to dark = high to low)
+ellipse_specs = [
+    (7.0, 3.8, 11.5, 5.8, '#1a2a4a', 0.95),   # outermost (high loss)
+    (7.0, 3.8, 9.0,  4.8, '#1a3a5a', 0.92),
+    (7.0, 3.8, 6.5,  3.8, '#1a4a6a', 0.88),
+    (7.0, 3.8, 4.2,  2.8, '#1a5a7a', 0.80),
+    (7.0, 3.8, 2.2,  1.6, '#1a6a8a', 0.70),   # innermost (low loss)
+]
+for cx, cy, w, h, fc, alpha in ellipse_specs:
+    ell = Ellipse((cx, cy), width=w, height=h, angle=18,
+                  facecolor=fc, edgecolor='#3a7aaa', linewidth=0.8,
+                  alpha=alpha, zorder=2)
+    ax.add_patch(ell)
+
+# Minimum marker (gold star)
+min_x, min_y = 7.0, 3.8
+ax.scatter([min_x], [min_y], marker='*', s=320, color='#ffd700',
+           zorder=6, linewidths=0.8, edgecolors='white')
+ax.text(min_x + 0.35, min_y + 0.35, 'minimum', color='#ffd700',
+        fontsize=8, fontweight='bold', zorder=7)
+
+# Common starting point (top-left of landscape)
+start_x, start_y = 2.2, 6.8
+
+# SGD path: zigzag (oscillating) in red
+sgd_path_x = [start_x, 2.8, 2.4, 3.5, 3.0, 4.2, 3.7, 5.0, 4.6, 5.8,
+               5.5, 6.3, 6.1, 6.7, 6.5, 7.0]
+sgd_path_y = [start_y, 5.9, 5.2, 5.4, 4.7, 4.9, 4.3, 4.5, 4.1, 4.3,
+               4.0, 4.1, 3.95, 4.05, 3.88, 3.8]
+ax.plot(sgd_path_x, sgd_path_y, '-o', color='#ff4444', linewidth=1.8,
+        markersize=3, alpha=0.9, zorder=4, label='SGD (zigzag)')
+
+# SGD+Momentum path: smoother arc in orange
+mom_path_x = [start_x, 3.3, 4.5, 5.4, 6.2, 6.8, 7.0]
+mom_path_y = [start_y, 5.6, 4.8, 4.3, 4.0, 3.82, 3.8]
+ax.plot(mom_path_x, mom_path_y, '-o', color='#ff9900', linewidth=2.2,
+        markersize=3.5, alpha=0.9, zorder=4, label='SGD+Momentum (smooth)')
+
+# Adam path: most direct route in green
+adam_path_x = [start_x, 3.8, 5.5, 6.5, 7.0]
+adam_path_y = [start_y, 5.2, 4.4, 3.9, 3.8]
+ax.plot(adam_path_x, adam_path_y, '-o', color='#44cc66', linewidth=2.5,
+        markersize=4, alpha=0.95, zorder=5, label='Adam (direct)')
+
+# Starting point marker
+ax.scatter([start_x], [start_y], marker='o', s=140, color='white',
+           zorder=6, edgecolors='#aaaaaa', linewidths=1.2)
+ax.text(start_x - 0.15, start_y + 0.3, 'start', color='#cccccc',
+        fontsize=8, fontweight='bold', ha='center', zorder=7)
+
+# Legend
+legend_items = [
+    Line2D([0], [0], color='#ff4444', linewidth=2, label='SGD'),
+    Line2D([0], [0], color='#ff9900', linewidth=2, label='SGD + Momentum'),
+    Line2D([0], [0], color='#44cc66', linewidth=2.5, label='Adam'),
+]
+legend = ax.legend(handles=legend_items, loc='lower left',
+                   fontsize=9, framealpha=0.25,
+                   labelcolor='white', facecolor='#111122',
+                   edgecolor='#444466')
+for text in legend.get_texts():
+    text.set_color('white')
+
+# Annotation for zigzag
+ax.annotate('oscillates\nacross valley', xy=(3.5, 5.4), xytext=(1.2, 7.1),
+            fontsize=7.5, color='#ff6666',
+            arrowprops=dict(arrowstyle='->', color='#ff6666', lw=1.2))
+
+# ---------- RIGHT PANEL: Learning Rate Schedule ----------
+ax = axes[1]
+ax.set_facecolor('#0f0f1a')
+ax.set_xlim(0, 14)
+ax.set_ylim(0, 8)
+ax.axis('off')
+ax.set_title('Learning Rate Schedule', color='#e0e0e0',
+             fontsize=12, fontweight='bold', pad=10)
+
+# Phase boxes
+phase_specs = [
+    (1.0, 5.2, 3.2, 1.6, '#1a3a1a', '#66cc66', 'Warm-up\n(lr increases)'),
+    (5.0, 5.2, 3.2, 1.6, '#3a2a0a', '#ffaa33', 'Decay Phase\n(lr decreases)'),
+    (9.0, 5.2, 3.2, 1.6, '#2a1a3a', '#aa66ff', 'Final\n(small lr)'),
+]
+for bx, by, bw, bh, fc, ec, lbl in phase_specs:
+    box = FancyBboxPatch((bx, by), bw, bh,
+                         boxstyle='round,pad=0.15', facecolor=fc,
+                         edgecolor=ec, linewidth=1.8, alpha=0.92, zorder=3)
+    ax.add_patch(box)
+    ax.text(bx + bw / 2, by + bh / 2, lbl, ha='center', va='center',
+            fontsize=9, color=ec, fontweight='bold', zorder=4)
+
+# Arrows connecting the phase boxes
+for x_start, x_end, color in [(4.2, 5.0, '#aaaaaa'), (8.2, 9.0, '#aaaaaa')]:
+    ax.annotate('', xy=(x_end, 6.0), xytext=(x_start, 6.0),
+                arrowprops=dict(arrowstyle='->', color=color, lw=2.0), zorder=3)
+
+# lr curve drawn as a polyline below the boxes
+#   x: 0..14 mapped to a timeline; y: curve shape
+curve_x = [1.0, 1.5, 2.3, 3.3, 4.2,   # warm-up (rising)
+           5.0, 6.0, 7.0, 8.2,          # decay (falling)
+           9.0, 10.5, 12.2]             # final (near-flat low)
+curve_y = [1.4, 1.75, 2.6, 3.5, 4.0,
+           4.0, 3.4, 2.5, 1.6,
+           1.6, 1.35, 1.2]
+
+ax.plot(curve_x, curve_y, color='#66aaff', linewidth=2.8, zorder=5)
+ax.fill_between(curve_x, [1.1] * len(curve_x), curve_y,
+                color='#66aaff', alpha=0.18, zorder=4)
+
+# Phase region shading under curve
+# Warm-up region
+ax.fill_between([1.0, 4.2],
+                [1.1, 1.1], [4.0, 4.0],
+                color='#66cc66', alpha=0.07)
+# Decay region
+ax.fill_between([5.0, 8.2],
+                [1.1, 1.1], [4.0, 1.6],
+                color='#ffaa33', alpha=0.07)
+# Final region
+ax.fill_between([9.0, 12.2],
+                [1.1, 1.1], [1.6, 1.2],
+                color='#aa66ff', alpha=0.10)
+
+# Axis labels for the curve
+ax.text(6.6, 0.75, 'Training Steps  ->', ha='center', fontsize=9,
+        color='#888888')
+ax.text(0.4, 2.7, 'lr', ha='center', fontsize=10,
+        color='#66aaff', fontweight='bold', rotation=90)
+
+# Horizontal dashed line at peak lr
+ax.plot([1.0, 12.2], [4.0, 4.0], '--', color='#888888',
+        linewidth=0.9, alpha=0.5)
+ax.text(12.4, 4.0, 'peak lr', ha='left', va='center',
+        fontsize=7.5, color='#aaaaaa')
+
+# Horizontal dashed line at minimum lr
+ax.plot([1.0, 12.2], [1.2, 1.2], '--', color='#888888',
+        linewidth=0.9, alpha=0.5)
+ax.text(12.4, 1.2, 'min lr', ha='left', va='center',
+        fontsize=7.5, color='#aaaaaa')
+
+# Tip box at bottom right panel
+tip_box = FancyBboxPatch((0.8, 0.15), 12.5, 0.85,
+                         boxstyle='round,pad=0.1', facecolor='#0f1f0f',
+                         edgecolor='#44cc66', linewidth=1.2, alpha=0.90, zorder=3)
+ax.add_patch(tip_box)
+ax.text(7.05, 0.58,
+        'Tip: Adam handles lr internally per-parameter — '
+        'often no schedule needed',
+        ha='center', va='center', fontsize=8.2, color='#88dd88',
+        fontweight='bold', zorder=4)
+
+plt.savefig(os.path.join(VIS_DIR, '04_optimizer_comparison_diagram.png'),
+            dpi=300, bbox_inches='tight', facecolor=fig.get_facecolor())
+plt.close()
+print("   Saved: 04_optimizer_comparison_diagram.png")
 print()
+
 print("=" * 70)
 print("✅ MODULE 4 COMPLETE!")
 print("=" * 70)

@@ -488,7 +488,116 @@ fig.savefig(os.path.join(VIS_DIR, "03_tokenization.png"), dpi=300, bbox_inches="
 plt.close(fig)
 print("  Saved: 03_tokenization.png")
 
-print(f"\nAll 3 visualizations saved to: {VIS_DIR}")
+# ============= CONCEPTUAL DIAGRAM =============
+# Visualization 4: Decoder-Only Transformer Architecture
+os.makedirs(VIS_DIR, exist_ok=True)
+
+fig, ax = plt.subplots(1, 1, figsize=(14, 9))
+fig.patch.set_facecolor('#0f0f1a')
+ax.set_facecolor('#0f0f1a')
+ax.set_xlim(0, 14)
+ax.set_ylim(0, 9)
+ax.axis('off')
+ax.set_title('Decoder-Only Transformer Architecture (GPT-Style LLM)',
+             color='white', fontsize=16, fontweight='bold', pad=15)
+
+from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
+
+# ── Helper functions ──
+def draw_box(ax, x, y, w, h, label, sublabel, facecolor, fontsize=9):
+    rect = FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.1",
+                          facecolor=facecolor, edgecolor='white',
+                          linewidth=1.5, alpha=0.88)
+    ax.add_patch(rect)
+    cx, cy = x + w / 2, y + h / 2
+    ax.text(cx, cy + (0.13 if sublabel else 0), label,
+            color='white', fontsize=fontsize, ha='center', va='center',
+            fontweight='bold')
+    if sublabel:
+        ax.text(cx, cy - 0.20, sublabel, color='#cccccc', fontsize=7.2,
+                ha='center', va='center', style='italic')
+
+def draw_arrow(ax, x1, y1, x2, y2, color='white', lw=1.5):
+    arrow = FancyArrowPatch((x1, y1), (x2, y2), arrowstyle='->',
+                            color=color, mutation_scale=14, linewidth=lw)
+    ax.add_patch(arrow)
+
+# ── Column layout: x=1.0 wide, centered around x=4.5 ──
+bx, bw, bh = 3.2, 4.0, 0.60   # box x-start, width, height
+cx_box = bx + bw / 2           # center-x of all boxes
+
+# ── Stack of components (bottom-up) ──
+# y positions (bottom of each box), building from y=0.35 upward
+components = [
+    # (y_bottom, label, sublabel, color)
+    (0.35,  "Input Tokens",              "e.g. [1423, 892, 5610, ...]",     '#1565C0'),   # blue
+    (1.25,  "Token Embedding",           "Vocab → d_model (e.g. 4096-dim)", '#1976D2'),   # blue
+    (2.15,  "Positional Encoding",       "Learned or RoPE / sinusoidal",    '#1976D2'),   # blue
+    (3.05,  "Transformer Block × N",     "Causal Self-Attention + FFN",     '#2E7D32'),   # green
+    (3.85,  "  ↳ Masked Self-Attention", "Each token attends to past only", '#388E3C'),   # green
+    (4.65,  "  ↳ Feed-Forward Network",  "2× Linear + GELU / SwiGLU",      '#F57F17'),   # orange
+    (5.55,  "Layer Norm (RMSNorm)",      "Stabilises training",             '#1565C0'),   # blue
+    (6.45,  "Linear Projection",         "d_model → vocab_size (e.g. 128K)",'#6A1B9A'),   # purple
+    (7.35,  "Softmax",                   "Next-token probability dist.",    '#7B1FA2'),   # purple
+    (8.15,  "Sampled Next Token",        "Autoregressive output",           '#880E4F'),   # deep purple
+]
+
+for y_b, label, sublabel, color in components:
+    draw_box(ax, bx, y_b, bw, bh, label, sublabel, color)
+
+# ── Vertical arrows between boxes ──
+arrow_ys = [(comp[0] + bh, components[i+1][0]) for i, comp in enumerate(components[:-1])]
+for y_start, y_end in arrow_ys:
+    draw_arrow(ax, cx_box, y_start, cx_box, y_end - 0.02)
+
+# ── Autoregressive loop arrow (from output back to input) ──
+loop_x_right = bx + bw + 0.55
+loop_x_label = bx + bw + 0.80
+top_y    = 8.15 + bh * 0.5   # middle of "Sampled Next Token"
+bottom_y = 0.35 + bh * 0.5   # middle of "Input Tokens"
+
+ax.annotate('', xy=(bx + bw, bottom_y), xytext=(bx + bw, top_y),
+            arrowprops=dict(arrowstyle='->', color='#FF5722',
+                            lw=2.0,
+                            connectionstyle=f'arc3,rad=-0.0'))
+
+# Draw the right-side bracket of the loop manually
+ax.plot([cx_box + bw / 2, loop_x_right, loop_x_right, cx_box + bw / 2],
+        [top_y, top_y, bottom_y, bottom_y],
+        color='#FF5722', linewidth=2.0, linestyle='--')
+# Arrow tip at bottom
+draw_arrow(ax, loop_x_right, bottom_y + 0.05, bx + bw + 0.02, bottom_y,
+           color='#FF5722', lw=2.0)
+ax.text(loop_x_label + 0.15, (top_y + bottom_y) / 2,
+        'Autoregressive\nLoop\n(append &\nre-run)',
+        color='#FF5722', fontsize=8.5, ha='left', va='center',
+        fontweight='bold')
+
+# ── Left-side legend ──
+legend_items = [
+    ('#1976D2', 'Embedding layers'),
+    ('#2E7D32', 'Attention layers'),
+    ('#F57F17', 'Feed-forward layers'),
+    ('#7B1FA2', 'Output projection'),
+    ('#FF5722', 'Autoregressive loop'),
+]
+for i, (color, label) in enumerate(legend_items):
+    lx, ly = 0.25, 7.8 - i * 0.6
+    rect = FancyBboxPatch((lx, ly - 0.15), 0.35, 0.35, boxstyle="round,pad=0.05",
+                          facecolor=color, edgecolor='white', linewidth=1.0, alpha=0.9)
+    ax.add_patch(rect)
+    ax.text(lx + 0.55, ly + 0.02, label, color='white', fontsize=8, va='center')
+
+ax.text(1.20, 8.60, 'Legend', color='white', fontsize=9, fontweight='bold', va='center')
+
+plt.tight_layout()
+plt.savefig(os.path.join(VIS_DIR, '04_architecture_concept.png'), dpi=300,
+            bbox_inches='tight', facecolor=fig.get_facecolor())
+plt.close()
+print("  Saved: 04_architecture_concept.png")
+# ============= END CONCEPTUAL DIAGRAM =============
+
+print(f"\nAll 4 visualizations saved to: {VIS_DIR}")
 print("\n" + "="*70)
 print("MODULE 01 COMPLETE: How LLMs Work")
 print("="*70)

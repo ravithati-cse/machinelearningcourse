@@ -416,6 +416,92 @@ plt.close()
 print("   Saved: weight_heatmap.png")
 
 
+# ============= CONCEPTUAL DIAGRAM =============
+from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Circle
+fig, ax = plt.subplots(1, 1, figsize=(14, 8))
+fig.patch.set_facecolor('#0f0f1a')
+ax.set_facecolor('#0f0f1a')
+ax.set_xlim(0, 14)
+ax.set_ylim(0, 9)
+ax.axis('off')
+
+# Network architecture: 4-8-8-3
+layer_sizes = [4, 8, 8, 3]
+layer_labels = [
+    "Input Layer\n(4 features)",
+    "Hidden Layer 1\n(8 neurons, ReLU)",
+    "Hidden Layer 2\n(8 neurons, ReLU)",
+    "Output Layer\n(3 classes, Softmax)",
+]
+layer_colors = ['#3a7bd5', '#27ae60', '#27ae60', '#e07b39']
+layer_xs = [1.5, 4.5, 8.5, 12.5]
+neuron_radius = 0.28
+
+# Pre-compute neuron y-positions for each layer
+all_neuron_ys = []
+for n in layer_sizes:
+    total_span = (n - 1) * 0.9
+    center = 4.5
+    ys = [center - total_span / 2 + i * 0.9 for i in range(n)]
+    all_neuron_ys.append(ys)
+
+# Draw connections (lines behind neurons)
+for li in range(len(layer_sizes) - 1):
+    for yi in all_neuron_ys[li]:
+        for yj in all_neuron_ys[li + 1]:
+            ax.plot([layer_xs[li], layer_xs[li + 1]], [yi, yj],
+                    color='#2a2a4a', lw=0.5, zorder=1, alpha=0.7)
+
+# Draw neurons
+for li, (lx, color, ys) in enumerate(zip(layer_xs, layer_colors, all_neuron_ys)):
+    for yi in ys:
+        circ = Circle((lx, yi), neuron_radius, color=color,
+                      zorder=3, linewidth=1.2, edgecolor='white')
+        ax.add_patch(circ)
+
+# Layer label boxes below neurons
+for li, (lx, color, label) in enumerate(zip(layer_xs, layer_colors, layer_labels)):
+    ax.text(lx, 0.9, label, ha='center', va='top', color='white',
+            fontsize=8.5, fontweight='bold',
+            bbox=dict(boxstyle='round,pad=0.3', facecolor=color,
+                      edgecolor='white', lw=1.0, alpha=0.85))
+
+# Right-pointing arrows between layers (at mid-height)
+for li in range(len(layer_sizes) - 1):
+    mid_x_start = layer_xs[li] + neuron_radius + 0.05
+    mid_x_end = layer_xs[li + 1] - neuron_radius - 0.05
+    mid_y = 4.5
+    ax.annotate('', xy=(mid_x_end, mid_y), xytext=(mid_x_start, mid_y),
+                arrowprops=dict(arrowstyle='->', color='#aaaacc', lw=1.5))
+
+# Key insight text
+ax.text(7.0, 8.55, "Each layer learns increasingly abstract features",
+        ha='center', va='center', color='#f0c040', fontsize=11,
+        fontweight='bold',
+        bbox=dict(boxstyle='round,pad=0.35', facecolor='#1a1a2e',
+                  edgecolor='#f0c040', lw=1.5))
+
+# Forward pass formula at the bottom
+fwd = "x  →  z₁=W₁x+b₁  →  a₁=ReLU(z₁)  →  z₂=W₂a₁+b₂  →  a₂=ReLU(z₂)  →  ŷ=softmax(W₃a₂+b₃)"
+ax.text(7.0, 0.22, fwd, ha='center', va='center', color='#aaddff',
+        fontsize=8.5, family='monospace')
+
+# Color legend
+for lx, color, lbl in [(2.5, '#3a7bd5', 'Input'),
+                        (5.5, '#27ae60', 'Hidden (ReLU)'),
+                        (9.5, '#e07b39', 'Output (Softmax)')]:
+    ax.add_patch(Circle((lx - 0.25, 8.0), 0.2, color=color, zorder=5))
+    ax.text(lx + 0.1, 8.0, lbl, color='white', fontsize=9, va='center')
+
+fig.suptitle("Multi-Layer Perceptron Architecture  [4 → 8 → 8 → 3]",
+             color='white', fontsize=15, fontweight='bold', y=0.98)
+plt.tight_layout(rect=[0, 0.03, 1, 0.96])
+plt.savefig(os.path.join(VIS_DIR, '04_mlp_architecture_concept.png'),
+            dpi=300, bbox_inches='tight', facecolor=fig.get_facecolor())
+plt.close()
+print("   Saved: 04_mlp_architecture_concept.png")
+# ============= END CONCEPTUAL DIAGRAM =============
+
 print()
 print("=" * 70)
 print("ALGORITHM 2: MULTI-LAYER PERCEPTRON COMPLETE!")

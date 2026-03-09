@@ -366,6 +366,228 @@ plt.close()
 print("   ✅ Saved: conv_steps.png")
 
 
+
+# ======================================================================
+# SECTION 6: CONVOLUTION OPERATION CONCEPTUAL DIAGRAM (dark theme)
+# ======================================================================
+print("=" * 70)
+print("SECTION 6: CONVOLUTION OPERATION CONCEPTUAL DIAGRAM")
+print("=" * 70)
+print()
+print("📊 Generating: Convolution Operation diagram (dark theme)...")
+
+from matplotlib.patches import FancyBboxPatch, Rectangle as MplRectangle
+
+# ── Reusable helpers ─────────────────────────────────────────────────────
+def _draw_grid(ax, data, origin_x, origin_y, cell_size,
+               face_color='#1e2a3a', edge_color='#4488bb',
+               highlight_mask=None, highlight_color='#ff9900',
+               text_color='white', fontsize=9, alpha=1.0):
+    """Draw a numeric grid of data at given origin, return (rows, cols)."""
+    nrows, ncols = data.shape
+    for r in range(nrows):
+        for c in range(ncols):
+            x = origin_x + c * cell_size
+            y = origin_y - r * cell_size  # top-down
+            use_fc = (highlight_color
+                      if (highlight_mask is not None and highlight_mask[r, c])
+                      else face_color)
+            rect = MplRectangle((x, y - cell_size), cell_size, cell_size,
+                                 facecolor=use_fc, edgecolor=edge_color,
+                                 linewidth=0.8, alpha=alpha, zorder=3)
+            ax.add_patch(rect)
+            val = data[r, c]
+            txt = f"{int(val)}" if float(val) == int(val) else f"{val:.1f}"
+            ax.text(x + cell_size / 2, y - cell_size / 2, txt,
+                    ha='center', va='center', fontsize=fontsize,
+                    color=text_color, fontweight='bold', zorder=4)
+    return nrows, ncols
+
+
+# ── Build the figure ─────────────────────────────────────────────────────
+fig, (ax_top, ax_bot) = plt.subplots(2, 1, figsize=(16, 10))
+fig.patch.set_facecolor('#0f0f1a')
+for ax in (ax_top, ax_bot):
+    ax.set_facecolor('#0f0f1a')
+    ax.axis('off')
+
+# ────────────────────────────────────────────────────────────────────────
+# PANEL 1 (top): step-by-step convolution  (no padding, stride=1)
+# ────────────────────────────────────────────────────────────────────────
+ax = ax_top
+ax.set_xlim(0, 16)
+ax.set_ylim(0, 6)
+
+ax.text(8, 5.75, "Convolution Operation  —  Step-by-Step",
+        ha='center', va='center', fontsize=13, fontweight='bold', color='white')
+
+# Input 5×5
+input_data = img_5x5.copy()   # reuse the 5x5 array defined earlier
+# Mark the 3×3 kernel position at (0,0)
+kernel_pos_mask = np.zeros((5, 5), dtype=bool)
+kernel_pos_mask[0:3, 0:3] = True
+
+CELL = 0.65
+inp_ox, inp_oy = 0.4, 4.95   # origin of input grid (top-left cell starts here)
+_draw_grid(ax, input_data, inp_ox, inp_oy, CELL,
+           face_color='#1a2744', edge_color='#3366aa',
+           highlight_mask=kernel_pos_mask, highlight_color='#1a4a2a',
+           fontsize=8)
+# Dotted border around highlighted 3×3 region
+dot_rect = MplRectangle((inp_ox, inp_oy - 3 * CELL), 3 * CELL, 3 * CELL,
+                          facecolor='none', edgecolor='#ffdd00',
+                          linewidth=2, linestyle='--', zorder=5)
+ax.add_patch(dot_rect)
+ax.text(inp_ox + 5 * CELL / 2, inp_oy + 0.25, "Input (5×5)",
+        ha='center', va='bottom', fontsize=9, color='#88bbff', fontweight='bold')
+
+# × symbol
+ax.text(inp_ox + 5 * CELL + 0.3, inp_oy - 1.5 * CELL,
+        "×", ha='center', va='center', fontsize=22, color='#dddddd')
+
+# Kernel 3×3
+ker_ox = inp_ox + 5 * CELL + 0.75
+ker_oy = inp_oy - CELL          # vertically centred with input
+_draw_grid(ax, edge_filter, ker_ox, ker_oy, CELL,
+           face_color='#3a2200', edge_color='#ff9900',
+           fontsize=8, text_color='#ffcc66')
+ax.text(ker_ox + 3 * CELL / 2, ker_oy + 0.25, "Kernel (3×3)",
+        ha='center', va='bottom', fontsize=9, color='#ffaa44', fontweight='bold')
+
+# = symbol
+eq_x = ker_ox + 3 * CELL + 0.3
+ax.text(eq_x, inp_oy - 1.5 * CELL,
+        "=", ha='center', va='center', fontsize=22, color='#dddddd')
+
+# Output 3×3
+out_ox = eq_x + 0.45
+out_oy = inp_oy - CELL
+_draw_grid(ax, output, out_ox, out_oy, CELL,
+           face_color='#1a1a3a', edge_color='#7766dd',
+           fontsize=8, text_color='#ccccff')
+# highlight top-left cell of output (computed from highlighted kernel pos)
+first_val_rect = MplRectangle((out_ox, out_oy - CELL), CELL, CELL,
+                                facecolor='none', edgecolor='#ffdd00',
+                                linewidth=2, linestyle='--', zorder=5)
+ax.add_patch(first_val_rect)
+ax.text(out_ox + 3 * CELL / 2, out_oy + 0.25, "Output (3×3)",
+        ha='center', va='bottom', fontsize=9, color='#9988ff', fontweight='bold')
+
+# Explanation annotation: show the dot-product for position [0,0]
+patch_00 = img_5x5[0:3, 0:3]
+val_00   = int(np.sum(patch_00 * edge_filter))
+formula_x = out_ox + 3 * CELL + 0.2
+ax.text(formula_x, inp_oy - 0.55 * CELL,
+        "Output[0,0] =", ha='left', va='center',
+        fontsize=8.5, color='#ccccee')
+ax.text(formula_x, inp_oy - 1.05 * CELL,
+        "Σ  Input[i+m, j+n] × Kernel[m,n]",
+        ha='left', va='center', fontsize=8, color='#aaaacc', style='italic')
+ax.text(formula_x, inp_oy - 1.55 * CELL,
+        f"= {' + '.join(f'({int(patch_00[r,c])}×{int(edge_filter[r,c])})' for r in range(3) for c in range(3) if not (r == 2 and c == 2))}",
+        ha='left', va='center', fontsize=6.5, color='#8888bb')
+ax.text(formula_x, inp_oy - 2.05 * CELL,
+        f"= {val_00}",
+        ha='left', va='center', fontsize=10, color='#ffdd00', fontweight='bold')
+
+# Size formula strip
+ax.text(8, 0.35,
+        "Output size  =  (W − F + 2P) / S + 1   →   (5 − 3 + 0) / 1 + 1  =  3",
+        ha='center', va='center', fontsize=9, color='#88ffbb',
+        bbox=dict(facecolor='#101828', edgecolor='#336644', boxstyle='round,pad=0.4'))
+
+# ────────────────────────────────────────────────────────────────────────
+# PANEL 2 (bottom): Padding concept  (same padding, P=1)
+# ────────────────────────────────────────────────────────────────────────
+ax = ax_bot
+ax.set_xlim(0, 16)
+ax.set_ylim(0, 5.5)
+
+ax.text(8, 5.25, "Padding  —  'same' Padding Preserves Spatial Dimensions",
+        ha='center', va='center', fontsize=13, fontweight='bold', color='white')
+
+# Show padded 7×7 (5×5 + P=1)
+padded_display = np.pad(img_5x5, 1, mode='constant', constant_values=0)
+pad_mask = np.zeros_like(padded_display, dtype=bool)
+pad_mask[0, :] = True; pad_mask[-1, :] = True
+pad_mask[:, 0] = True; pad_mask[:, -1] = True
+
+CELL2 = 0.56
+pad_ox, pad_oy = 0.3, 4.65
+_draw_grid(ax, padded_display, pad_ox, pad_oy, CELL2,
+           face_color='#1a2744', edge_color='#3366aa',
+           highlight_mask=pad_mask, highlight_color='#2a1a1a',
+           fontsize=7.5, text_color='white')
+
+# Label zero-pad border cells differently
+for r in range(7):
+    for c in range(7):
+        if pad_mask[r, c]:
+            px = pad_ox + c * CELL2 + CELL2 / 2
+            py = pad_oy - r * CELL2 - CELL2 / 2
+            ax.text(px, py, "0", ha='center', va='center',
+                    fontsize=7, color='#ff5555', fontweight='bold', zorder=5)
+
+ax.text(pad_ox + 7 * CELL2 / 2, pad_oy + 0.22,
+        "Padded Input (7×7)  [zero border shown in red]",
+        ha='center', va='bottom', fontsize=8.5, color='#88bbff', fontweight='bold')
+
+# Kernel box shown hovering at position (0,0) of padded input
+ker2_x = pad_ox
+ker2_y = pad_oy
+ker_border = MplRectangle((ker2_x, ker2_y - 3 * CELL2), 3 * CELL2, 3 * CELL2,
+                            facecolor='none', edgecolor='#ffdd00',
+                            linewidth=2.5, linestyle='--', zorder=6)
+ax.add_patch(ker_border)
+ax.text(ker2_x + 1.5 * CELL2, pad_oy - 3 * CELL2 - 0.18,
+        "3×3 kernel position", ha='center', va='top',
+        fontsize=7.5, color='#ffdd00')
+
+# Arrow
+arrow_x0 = pad_ox + 7 * CELL2 + 0.25
+arrow_x1 = arrow_x0 + 0.4
+mid_y     = pad_oy - 3 * CELL2
+ax.annotate('', xy=(arrow_x1, mid_y), xytext=(arrow_x0, mid_y),
+            arrowprops=dict(arrowstyle='->', color='#dddddd', lw=1.5,
+                            mutation_scale=12), zorder=4)
+
+# Output 5×5 (same size as original input — this is the point)
+out2 = conv2d(img_5x5, edge_filter, stride=1, padding=1)
+out2_ox = arrow_x1 + 0.22
+out2_oy = pad_oy - CELL2        # align vertically
+_draw_grid(ax, out2, out2_ox, out2_oy, CELL2,
+           face_color='#1a1a3a', edge_color='#7766dd',
+           fontsize=7, text_color='#ccccff')
+ax.text(out2_ox + 5 * CELL2 / 2, out2_oy + 0.22,
+        "Output (5×5) — SAME as input!",
+        ha='center', va='bottom', fontsize=8.5, color='#9988ff', fontweight='bold')
+
+# Explanatory callouts on the right
+info_x = out2_ox + 5 * CELL2 + 0.4
+for i, line in enumerate([
+        "padding='valid'  →  output SHRINKS",
+        "   (5×5 input  +  3×3 filter  =  3×3 output)",
+        "",
+        "padding='same'   →  output = input size",
+        "   (5×5 input  +  P=1  +  3×3 filter  =  5×5 output)",
+        "",
+        "Most CNN hidden layers use padding='same'",
+        "so spatial dimensions are controlled by pooling only.",
+]):
+    col = ('#ff8866' if 'SHRINKS' in line
+           else '#88ffbb' if 'SAME' in line or 'same' in line
+           else '#aaaacc')
+    ax.text(info_x, 4.35 - i * 0.42, line, ha='left', va='center',
+            fontsize=7.5, color=col)
+
+plt.tight_layout(h_pad=0.5)
+plt.savefig(os.path.join(VIS_DIR, '04_convolution_operation_diagram.png'),
+            dpi=300, bbox_inches='tight', facecolor=fig.get_facecolor())
+plt.close()
+print("   Saved: 04_convolution_operation_diagram.png")
+print()
+
+
 print()
 print("=" * 70)
 print("✅ MODULE 2 COMPLETE!")

@@ -743,6 +743,185 @@ plt.close()
 print("   Saved: bow_vs_embeddings.png")
 
 
+# ============= CONCEPTUAL DIAGRAM =============
+from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
+print("Generating: Embedding concepts diagram...")
+
+fig, axes = plt.subplots(1, 3, figsize=(18, 8))
+fig.patch.set_facecolor('#0f0f1a')
+fig.suptitle("Word Embeddings — From Sparse to Dense Representations",
+             fontsize=15, fontweight='bold', color='white', y=1.01)
+
+# ---- LEFT PANEL: One-Hot Encoding (sparse) ----
+ax_l = axes[0]
+ax_l.set_facecolor('#0f0f1a')
+ax_l.set_xlim(0, 4)
+ax_l.set_ylim(-1, 12)
+ax_l.axis('off')
+ax_l.set_title("One-Hot Encoding\n(Sparse)", fontsize=12, fontweight='bold',
+               color='#e74c3c', pad=10)
+
+# Draw two tall one-hot vectors side by side
+VOCAB_SHOW = 10   # show 10 rows of the 10,000-dim vector
+words_oh   = ["king", "queen"]
+one_hot_pos = [2, 7]   # which row has the 1 (within shown rows; labeled specially)
+x_offsets  = [0.4, 2.1]
+cell_w_oh, cell_h_oh = 1.2, 0.72
+
+for wi, (word, hot_row, x_off) in enumerate(zip(words_oh, one_hot_pos, x_offsets)):
+    ax_l.text(x_off + cell_w_oh / 2, VOCAB_SHOW * cell_h_oh + 0.55,
+              f'"{word}"', ha='center', va='bottom',
+              fontsize=11, fontweight='bold',
+              color='#e74c3c' if wi == 0 else '#e67e22')
+    for row in range(VOCAB_SHOW):
+        is_one = (row == hot_row)
+        bg     = '#922b21' if is_one else '#1a1a2e'
+        border = '#e74c3c' if is_one else '#444466'
+        rect   = FancyBboxPatch((x_off, row * cell_h_oh), cell_w_oh, cell_h_oh - 0.06,
+                                boxstyle="round,pad=0.05",
+                                facecolor=bg, edgecolor=border, linewidth=1.2)
+        ax_l.add_patch(rect)
+        val_txt = "1" if is_one else "0"
+        ax_l.text(x_off + cell_w_oh / 2, row * cell_h_oh + (cell_h_oh - 0.06) / 2,
+                  val_txt, ha='center', va='center',
+                  fontsize=9, color='white' if is_one else '#555577',
+                  fontweight='bold' if is_one else 'normal')
+
+# Ellipsis annotation for "10,000 dimensions"
+ax_l.text(1.95, -0.55,
+          "... 10,000 dimensions total ...",
+          ha='center', va='center', fontsize=8,
+          color='#888888', style='italic')
+
+# Properties label
+ax_l.text(1.95, -0.88,
+          "10,000-dim  |  99.99% zeros\nno semantic meaning",
+          ha='center', va='center', fontsize=8.5,
+          color='#e74c3c', fontweight='bold',
+          bbox=dict(boxstyle='round,pad=0.3', facecolor='#2d0a0a', edgecolor='#e74c3c', alpha=0.8))
+
+# ---- CENTER PANEL: Word2Vec Dense Embedding ----
+ax_c = axes[1]
+ax_c.set_facecolor('#0f0f1a')
+ax_c.set_xlim(0, 5)
+ax_c.set_ylim(-1, 12)
+ax_c.axis('off')
+ax_c.set_title("Word2Vec Embedding\n(Dense)", fontsize=12, fontweight='bold',
+               color='#2ecc71', pad=10)
+
+# Show short (8-value) dense vectors for king and queen
+king_vec  = [ 0.23, -0.41,  0.78, -0.12,  0.55,  0.19, -0.33,  0.61]
+queen_vec = [ 0.21, -0.38,  0.76, -0.09,  0.52,  0.22, -0.29,  0.58]
+words_emb = [("king", king_vec, '#1e8449'), ("queen", queen_vec, '#27ae60')]
+x_offs_c  = [0.25, 2.65]
+cell_w_c, cell_h_c = 1.9, 0.72
+
+for wi, ((word, vec, color_e), x_off) in enumerate(zip(words_emb, x_offs_c)):
+    ax_c.text(x_off + cell_w_c / 2, len(vec) * cell_h_c + 0.55,
+              f'"{word}"', ha='center', va='bottom',
+              fontsize=11, fontweight='bold', color=color_e)
+    for row, val in enumerate(vec):
+        intensity = (val + 1) / 2   # map [-1,1] → [0,1]
+        bg = (
+            0.04 + intensity * 0.08,
+            0.04 + intensity * 0.54,
+            0.04 + intensity * 0.18,
+        )
+        rect = FancyBboxPatch((x_off, row * cell_h_c), cell_w_c, cell_h_c - 0.06,
+                              boxstyle="round,pad=0.05",
+                              facecolor=bg, edgecolor='#2ecc71', linewidth=0.8, alpha=0.85)
+        ax_c.add_patch(rect)
+        ax_c.text(x_off + cell_w_c / 2, row * cell_h_c + (cell_h_c - 0.06) / 2,
+                  f"{val:+.2f}", ha='center', va='center',
+                  fontsize=8.5, color='#ccffcc', fontweight='bold',
+                  fontfamily='monospace')
+
+ax_c.text(2.5, -0.55,
+          "... 300 dimensions total ...",
+          ha='center', va='center', fontsize=8, color='#888888', style='italic')
+ax_c.text(2.5, -0.88,
+          "300-dim  |  dense, all values meaningful\nencodes semantic similarity",
+          ha='center', va='center', fontsize=8.5,
+          color='#2ecc71', fontweight='bold',
+          bbox=dict(boxstyle='round,pad=0.3', facecolor='#0a2d18', edgecolor='#2ecc71', alpha=0.8))
+
+# ---- RIGHT PANEL: The Famous Analogy ----
+ax_r = axes[2]
+ax_r.set_facecolor('#0f0f1a')
+ax_r.set_title('The Famous Analogy\nking - man + woman ≈ queen', fontsize=12,
+               fontweight='bold', color='#3498db', pad=10)
+
+# 2D positions for four words (hand-crafted to make the parallelogram clear)
+pts = {
+    "king":  np.array([0.72, 0.75]),
+    "queen": np.array([0.30, 0.75]),
+    "man":   np.array([0.72, 0.32]),
+    "woman": np.array([0.30, 0.32]),
+}
+colors_r = {"king": '#f39c12', "queen": '#e74c3c', "man": '#3498db', "woman": '#9b59b6'}
+offsets_r = {"king": (0.03, 0.03), "queen": (-0.03, 0.03), "man": (0.03, -0.06), "woman": (-0.03, -0.06)}
+
+ax_r.set_facecolor('#0f0f1a')
+ax_r.set_xlim(0, 1)
+ax_r.set_ylim(0, 1.1)
+
+# Draw coordinate axes
+ax_r.axhline(y=0.08, color='#444466', linewidth=1.0, linestyle='--')
+ax_r.axvline(x=0.08, color='#444466', linewidth=1.0, linestyle='--')
+ax_r.text(0.95, 0.10, "dim 1", ha='right', va='bottom', fontsize=8, color='#666688')
+ax_r.text(0.10, 1.05, "dim 2", ha='left',  va='top',    fontsize=8, color='#666688')
+
+# Draw parallelogram arrows
+arrow_pairs = [
+    ("king",  "queen", '#e74c3c', 'solid',  'king → queen\n(gender)'),
+    ("man",   "woman", '#9b59b6', 'dashed', 'man → woman\n(same offset)'),
+    ("king",  "man",   '#3498db', 'solid',  'king → man\n(royalty)'),
+    ("queen", "woman", '#f39c12', 'dashed', 'queen → woman\n(same offset)'),
+]
+label_done = set()
+for w1, w2, col, ls, lbl in arrow_pairs:
+    p1, p2 = pts[w1], pts[w2]
+    ax_r.annotate("", xy=p2, xytext=p1,
+                  arrowprops=dict(arrowstyle='->', color=col, lw=2.2,
+                                  linestyle=ls, connectionstyle='arc3,rad=0.0'))
+
+# Word dots and labels
+for word, pos in pts.items():
+    ax_r.scatter(*pos, s=180, color=colors_r[word], zorder=5,
+                 edgecolors='white', linewidth=1.5)
+    ox, oy = offsets_r[word]
+    ax_r.text(pos[0] + ox, pos[1] + oy, word,
+              ha='center', va='center', fontsize=11,
+              fontweight='bold', color=colors_r[word])
+
+# Annotate the analogy equation
+ax_r.text(0.5, 0.01,
+          "king − man + woman  ≈  queen",
+          ha='center', va='bottom', fontsize=10, fontweight='bold',
+          color='white',
+          bbox=dict(boxstyle='round,pad=0.4', facecolor='#0a0f2a',
+                    edgecolor='#3498db', linewidth=1.5, alpha=0.92))
+
+# Legend for arrows
+legend_info = [
+    ('#e74c3c', 'Gender offset (king→queen)'),
+    ('#9b59b6', 'Gender offset (man→woman)'),
+    ('#3498db', 'Royalty axis'),
+    ('#f39c12', 'Royalty axis (parallel)'),
+]
+for i, (col, lbl) in enumerate(legend_info):
+    ax_r.plot([], [], color=col, lw=2, label=lbl)
+ax_r.legend(fontsize=7.5, loc='upper left', facecolor='#111133',
+            edgecolor='#3498db', labelcolor='white')
+
+plt.tight_layout(rect=[0, 0.02, 1, 0.98])
+plt.savefig(os.path.join(_VISUALS_DIR, '04_embedding_concepts_diagram.png'),
+            dpi=300, bbox_inches='tight', facecolor=fig.get_facecolor())
+plt.close()
+print("   Saved: 04_embedding_concepts_diagram.png")
+# ============= END CONCEPTUAL DIAGRAM =============
+
+
 print()
 print("=" * 70)
 print("NLP MATH FOUNDATION 3: WORD EMBEDDINGS COMPLETE!")

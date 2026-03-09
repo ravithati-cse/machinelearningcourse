@@ -462,6 +462,101 @@ plt.close()
 print("   ✅ Saved: image_to_features.png")
 
 
+
+# ============= CONCEPTUAL DIAGRAM =============
+print("📊 Generating: CNN layer stack concept diagram...")
+from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
+
+fig, axes = plt.subplots(2, 1, figsize=(16, 8),
+                         gridspec_kw={'height_ratios': [3, 1]})
+fig.patch.set_facecolor('#0f0f1a')
+for ax in axes:
+    ax.set_facecolor('#0f0f1a')
+
+# --- TOP row: CNN stage boxes ---
+ax_top = axes[0]
+ax_top.set_xlim(0, 16)
+ax_top.set_ylim(0, 6)
+ax_top.axis('off')
+ax_top.set_title("CNN Layer Stack — From Pixels to Features",
+                 fontsize=14, fontweight='bold', color='white', pad=10)
+
+stages = [
+    ("Input Image\n(H × W × 3)", "Raw pixels\n3 channels", '#1565c0', "H×W×3"),
+    ("Conv Layer\n(F filters, ReLU)", "Edges &\ntextures", '#2e7d32', "H×W×F"),
+    ("Max Pool\n(÷2 size)", "Condensed\nfeatures", '#e65100', "H/2×W/2×F"),
+    ("Conv Layer\n(2F filters, ReLU)", "Complex\npatterns", '#6a1b9a', "H/2×W/2×2F"),
+    ("FC + Softmax", "Class\nscores", '#b71c1c', "N classes"),
+]
+
+n_stages = len(stages)
+stage_w = 2.4
+stage_h = 3.2
+gap_x = 0.55
+total_w = n_stages * stage_w + (n_stages - 1) * gap_x
+start_x = (16 - total_w) / 2
+
+for idx, (label, feature_label, color, size_label) in enumerate(stages):
+    x = start_x + idx * (stage_w + gap_x)
+    # 3D-ish perspective offset
+    offset = 0.18 * (4 - idx)   # deeper layers get less offset
+    for layer_offset in [offset, offset * 0.5, 0]:
+        rect = FancyBboxPatch(
+            (x + layer_offset, 1.5 - layer_offset),
+            stage_w, stage_h,
+            boxstyle="round,pad=0.1",
+            facecolor=color,
+            edgecolor='white',
+            linewidth=1.3,
+            alpha=0.75 if layer_offset > 0 else 0.92
+        )
+        ax_top.add_patch(rect)
+
+    # Main label
+    ax_top.text(x + stage_w / 2, 1.5 + stage_h / 2 + 0.2, label,
+                ha='center', va='center', fontsize=8.5,
+                color='white', fontweight='bold')
+    # Size label
+    ax_top.text(x + stage_w / 2, 1.2, size_label,
+                ha='center', va='center', fontsize=7.5,
+                color='#ccddff', fontweight='bold')
+
+    # Arrow to next stage
+    if idx < n_stages - 1:
+        arrow_x_start = x + stage_w + 0.05
+        arrow_x_end = x + stage_w + gap_x - 0.05
+        ax_top.annotate('',
+                        xy=(arrow_x_end, 1.5 + stage_h / 2 + 0.2),
+                        xytext=(arrow_x_start, 1.5 + stage_h / 2 + 0.2),
+                        arrowprops=dict(arrowstyle='->', color='#aaaacc', lw=2.2))
+
+# --- BOTTOM row: feature description labels ---
+ax_bot = axes[1]
+ax_bot.set_xlim(0, 16)
+ax_bot.set_ylim(0, 2)
+ax_bot.axis('off')
+
+feature_labels = [s[1] for s in stages]
+colors_bot = [s[2] for s in stages]
+
+for idx, (feat, color) in enumerate(zip(feature_labels, colors_bot)):
+    x = start_x + idx * (stage_w + gap_x)
+    rect = FancyBboxPatch((x, 0.35), stage_w, 1.3,
+                          boxstyle="round,pad=0.1",
+                          facecolor=color, edgecolor='white',
+                          linewidth=1.0, alpha=0.60)
+    ax_bot.add_patch(rect)
+    ax_bot.text(x + stage_w / 2, 1.0, feat,
+                ha='center', va='center', fontsize=8,
+                color='white', fontweight='bold')
+
+plt.tight_layout(pad=1.2)
+plt.savefig(os.path.join(VIS_DIR, '04_cnn_layer_stack_concept.png'),
+            dpi=300, bbox_inches='tight', facecolor=fig.get_facecolor())
+plt.close()
+print("   ✅ Saved: 04_cnn_layer_stack_concept.png")
+# ============= END CONCEPTUAL DIAGRAM =============
+
 print()
 print("=" * 70)
 print("✅ ALGORITHM 1: CONV LAYER FROM SCRATCH COMPLETE!")

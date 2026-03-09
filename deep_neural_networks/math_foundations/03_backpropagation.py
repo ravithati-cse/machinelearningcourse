@@ -350,7 +350,196 @@ plt.close()
 print("   ✅ Saved: weight_changes.png")
 
 
+
+# ======================================================================
+# SECTION 5: CONCEPTUAL ARCHITECTURE DIAGRAM — Backpropagation Flow
+# ======================================================================
+# Shows a 3-layer network with forward pass (blue, left→right) and
+# backward pass (red, right→left) labeled with the chain rule terms.
+# ======================================================================
+print("📊 Generating: Backpropagation flow architecture diagram...")
+
+from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
+
+fig, axes = plt.subplots(1, 2, figsize=(14, 8))
+fig.patch.set_facecolor('#0f0f1a')
+
+# ---------- Helper: draw a neuron circle ----------
+def draw_neuron(ax, cx, cy, radius=0.32, color='#4a90d9', label='', fontsize=9):
+    circle = plt.Circle((cx, cy), radius, color=color, zorder=4, linewidth=1.5,
+                        ec='white', alpha=0.92)
+    ax.add_patch(circle)
+    if label:
+        ax.text(cx, cy, label, ha='center', va='center', fontsize=fontsize,
+                color='white', fontweight='bold', zorder=5)
+
+# ---------- LEFT PANEL: Forward Pass ----------
+ax = axes[0]
+ax.set_facecolor('#0f0f1a')
+ax.set_xlim(0, 7)
+ax.set_ylim(0, 8)
+ax.axis('off')
+ax.set_title('FORWARD PASS', color='#5ab4ff', fontsize=13,
+             fontweight='bold', pad=10)
+
+# Layer x-positions and neuron y-positions
+layer_x = [1.0, 3.5, 6.0]
+layer_neurons = [
+    [6.0, 4.5, 3.0],        # input layer: 3 neurons
+    [5.25, 4.0, 2.75],      # hidden layer: 3 neurons
+    [4.0],                  # output layer: 1 neuron
+]
+layer_colors = ['#2e6fa3', '#1b7a4e', '#8b3a3a']
+layer_labels_text = ['Input\nLayer', 'Hidden\nLayer', 'Output\nLayer']
+neuron_labels = [
+    ['x₁', 'x₂', 'x₃'],
+    ['h₁', 'h₂', 'h₃'],
+    ['ŷ'],
+]
+
+# Draw layer label boxes
+for lx, lbl, lc in zip(layer_x, layer_labels_text, layer_colors):
+    box = FancyBboxPatch((lx - 0.45, 1.05), 0.9, 0.55,
+                         boxstyle='round,pad=0.06', facecolor=lc,
+                         edgecolor='white', linewidth=0.8, alpha=0.85, zorder=3)
+    ax.add_patch(box)
+    ax.text(lx, 1.32, lbl, ha='center', va='center', fontsize=7.5,
+            color='white', fontweight='bold', zorder=4)
+
+# Draw forward connections with labels "w x a"
+for i_from, y_from in enumerate(layer_neurons[0]):
+    for i_to, y_to in enumerate(layer_neurons[1]):
+        ax.annotate('', xy=(layer_x[1] - 0.32, y_to),
+                    xytext=(layer_x[0] + 0.32, y_from),
+                    arrowprops=dict(arrowstyle='->', color='#5ab4ff',
+                                   lw=1.2, alpha=0.6),
+                    zorder=2)
+        # label one representative connection
+        if i_from == 0 and i_to == 0:
+            mid_x = (layer_x[0] + layer_x[1]) / 2
+            mid_y = (y_from + y_to) / 2 + 0.2
+            ax.text(mid_x, mid_y, 'w×a', ha='center', va='bottom',
+                    fontsize=7, color='#aad4ff', style='italic')
+
+for i_from, y_from in enumerate(layer_neurons[1]):
+    for i_to, y_to in enumerate(layer_neurons[2]):
+        ax.annotate('', xy=(layer_x[2] - 0.32, y_to),
+                    xytext=(layer_x[1] + 0.32, y_from),
+                    arrowprops=dict(arrowstyle='->', color='#5ab4ff',
+                                   lw=1.2, alpha=0.6),
+                    zorder=2)
+        if i_from == 0:
+            mid_x = (layer_x[1] + layer_x[2]) / 2
+            mid_y = (y_from + y_to) / 2 + 0.2
+            ax.text(mid_x, mid_y, 'w×a', ha='center', va='bottom',
+                    fontsize=7, color='#aad4ff', style='italic')
+
+# Draw neurons on top
+for l_idx, (lx, ys, lbls, lc) in enumerate(
+        zip(layer_x, layer_neurons, neuron_labels, layer_colors)):
+    for y, lbl in zip(ys, lbls):
+        draw_neuron(ax, lx, y, radius=0.32, color=lc, label=lbl, fontsize=9)
+
+# Loss box (right of output)
+loss_box = FancyBboxPatch((6.55, 3.65), 0.88, 0.7,
+                          boxstyle='round,pad=0.08', facecolor='#7a5c00',
+                          edgecolor='#ffd700', linewidth=1.5, alpha=0.95, zorder=3)
+ax.add_patch(loss_box)
+ax.text(6.99, 4.0, 'Loss', ha='center', va='center', fontsize=9,
+        color='#ffd700', fontweight='bold', zorder=4)
+ax.annotate('', xy=(6.55, 4.0), xytext=(6.32, 4.0),
+            arrowprops=dict(arrowstyle='->', color='#5ab4ff', lw=2), zorder=3)
+
+# Direction label
+ax.text(3.5, 7.45, 'Data flows LEFT  RIGHT', ha='center', fontsize=10,
+        color='#5ab4ff', fontweight='bold')
+ax.annotate('', xy=(5.2, 7.2), xytext=(1.8, 7.2),
+            arrowprops=dict(arrowstyle='->', color='#5ab4ff', lw=2))
+
+# ---------- RIGHT PANEL: Backward Pass ----------
+ax = axes[1]
+ax.set_facecolor('#0f0f1a')
+ax.set_xlim(0, 7)
+ax.set_ylim(0, 8)
+ax.axis('off')
+ax.set_title('BACKWARD PASS', color='#ff7070', fontsize=13,
+             fontweight='bold', pad=10)
+
+# Draw layer label boxes (same positions)
+for lx, lbl, lc in zip(layer_x, layer_labels_text, layer_colors):
+    box = FancyBboxPatch((lx - 0.45, 1.05), 0.9, 0.55,
+                         boxstyle='round,pad=0.06', facecolor=lc,
+                         edgecolor='white', linewidth=0.8, alpha=0.85, zorder=3)
+    ax.add_patch(box)
+    ax.text(lx, 1.32, lbl, ha='center', va='center', fontsize=7.5,
+            color='white', fontweight='bold', zorder=4)
+
+# Draw backward connections with labels "delta x w"
+for i_from, y_from in enumerate(layer_neurons[1]):
+    for i_to, y_to in enumerate(layer_neurons[0]):
+        ax.annotate('', xy=(layer_x[0] + 0.32, y_to),
+                    xytext=(layer_x[1] - 0.32, y_from),
+                    arrowprops=dict(arrowstyle='->', color='#ff7070',
+                                   lw=1.2, alpha=0.6),
+                    zorder=2)
+        if i_from == 0 and i_to == 0:
+            mid_x = (layer_x[0] + layer_x[1]) / 2
+            mid_y = (y_from + y_to) / 2 - 0.3
+            ax.text(mid_x, mid_y, 'delta×w', ha='center', va='top',
+                    fontsize=7, color='#ffaaaa', style='italic')
+
+for i_from, y_from in enumerate(layer_neurons[2]):
+    for i_to, y_to in enumerate(layer_neurons[1]):
+        ax.annotate('', xy=(layer_x[1] + 0.32, y_to),
+                    xytext=(layer_x[2] - 0.32, y_from),
+                    arrowprops=dict(arrowstyle='->', color='#ff7070',
+                                   lw=1.2, alpha=0.6),
+                    zorder=2)
+        if i_to == 0:
+            mid_x = (layer_x[1] + layer_x[2]) / 2
+            mid_y = (y_from + y_to) / 2 - 0.3
+            ax.text(mid_x, mid_y, 'delta×w', ha='center', va='top',
+                    fontsize=7, color='#ffaaaa', style='italic')
+
+# Draw neurons
+for l_idx, (lx, ys, lbls, lc) in enumerate(
+        zip(layer_x, layer_neurons, neuron_labels, layer_colors)):
+    for y, lbl in zip(ys, lbls):
+        draw_neuron(ax, lx, y, radius=0.32, color=lc, label=lbl, fontsize=9)
+
+# Loss box with dL/dw label
+loss_box2 = FancyBboxPatch((6.55, 3.65), 0.88, 0.7,
+                           boxstyle='round,pad=0.08', facecolor='#7a5c00',
+                           edgecolor='#ffd700', linewidth=1.5, alpha=0.95, zorder=3)
+ax.add_patch(loss_box2)
+ax.text(6.99, 4.0, 'Loss', ha='center', va='center', fontsize=9,
+        color='#ffd700', fontweight='bold', zorder=4)
+# dL/dw arrow flowing backwards from loss
+ax.annotate('', xy=(6.32, 4.0), xytext=(6.55, 4.0),
+            arrowprops=dict(arrowstyle='->', color='#ff7070', lw=2.2), zorder=3)
+ax.text(6.45, 4.28, 'dL/dw', ha='center', fontsize=8,
+        color='#ffd700', fontweight='bold')
+
+# Direction label
+ax.text(3.5, 7.45, 'Error flows RIGHT  LEFT', ha='center', fontsize=10,
+        color='#ff7070', fontweight='bold')
+ax.annotate('', xy=(1.8, 7.2), xytext=(5.2, 7.2),
+            arrowprops=dict(arrowstyle='->', color='#ff7070', lw=2))
+
+# Chain rule banner at bottom spanning both panels
+fig.text(0.5, 0.03,
+         'Chain Rule:  dL/dw  =  dL/da  x  da/dz  x  dz/dw',
+         ha='center', va='center', fontsize=11, color='#fffacd',
+         fontweight='bold',
+         bbox=dict(boxstyle='round,pad=0.5', facecolor='#1a1a2e',
+                   edgecolor='#ffd700', linewidth=1.5, alpha=0.95))
+
+plt.savefig(os.path.join(VIS_DIR, '04_backprop_flow_diagram.png'),
+            dpi=300, bbox_inches='tight', facecolor=fig.get_facecolor())
+plt.close()
+print("   Saved: 04_backprop_flow_diagram.png")
 print()
+
 print("=" * 70)
 print("✅ MODULE 3 COMPLETE!")
 print("=" * 70)

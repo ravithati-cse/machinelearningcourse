@@ -427,6 +427,123 @@ print("│ Linear      │ (-∞, ∞)      │ Regression OUTPUT only          
 print("└─────────────┴──────────────┴─────────────────────────────────────┘")
 print()
 
+# ============= CONCEPTUAL DIAGRAM =============
+# 04_neuron_anatomy_concept.png — A Single Artificial Neuron: Anatomy
+print("📊 Generating: Neuron anatomy concept diagram...")
+
+from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Circle as MplCircle
+import matplotlib.patheffects as pe
+
+fig_cd, ax_cd = plt.subplots(1, 1, figsize=(14, 8))
+fig_cd.patch.set_facecolor('#0f0f1a')
+ax_cd.set_facecolor('#0f0f1a')
+ax_cd.set_xlim(0, 14)
+ax_cd.set_ylim(0, 9)
+ax_cd.axis('off')
+
+ax_cd.text(7, 8.5, 'A Single Artificial Neuron — Anatomy',
+           ha='center', va='center', fontsize=16, fontweight='bold',
+           color='white')
+
+# --- Input circles (x1–x4) ---
+input_positions = [(1.2, 7.0), (1.2, 5.2), (1.2, 3.4), (1.2, 1.6)]
+input_labels    = ['x\u2081', 'x\u2082', 'x\u2083', 'x\u2084']
+weight_labels   = ['w\u2081', 'w\u2082', 'w\u2083', 'w\u2084']
+input_color     = '#4488ff'   # blue
+weight_color    = '#44dd88'   # green
+neuron_color    = '#ff8844'   # orange
+output_color    = '#bb44ff'   # purple
+
+for (ix, iy), lbl in zip(input_positions, input_labels):
+    circ_in = MplCircle((ix, iy), 0.42, color=input_color, zorder=4)
+    ax_cd.add_patch(circ_in)
+    ax_cd.text(ix, iy, lbl, ha='center', va='center', fontsize=13,
+               fontweight='bold', color='white', zorder=5)
+
+# --- Neuron body (large circle) ---
+neuron_cx, neuron_cy = 6.5, 4.3
+neuron_r = 1.5
+neuron_circ = MplCircle((neuron_cx, neuron_cy), neuron_r,
+                         color=neuron_color, alpha=0.92, zorder=4)
+ax_cd.add_patch(neuron_circ)
+ax_cd.text(neuron_cx, neuron_cy + 0.5, 'Neuron', ha='center', va='center',
+           fontsize=12, fontweight='bold', color='white', zorder=6)
+
+# Inner boxes inside neuron
+box1 = FancyBboxPatch((5.2, 3.75), 2.6, 0.5,
+                       boxstyle='round,pad=0.08', linewidth=1.2,
+                       edgecolor='white', facecolor='#3a2000', zorder=7)
+ax_cd.add_patch(box1)
+ax_cd.text(neuron_cx, 4.0, 'Weighted Sum  z = w\u00b7x + b',
+           ha='center', va='center', fontsize=7.5, color='#ffe0b0', zorder=8)
+
+box2 = FancyBboxPatch((5.2, 3.05), 2.6, 0.5,
+                       boxstyle='round,pad=0.08', linewidth=1.2,
+                       edgecolor='white', facecolor='#1a2a00', zorder=7)
+ax_cd.add_patch(box2)
+ax_cd.text(neuron_cx, 3.3, 'Activation  f(z)',
+           ha='center', va='center', fontsize=7.5, color='#c8ffb0', zorder=8)
+
+# --- Arrows: inputs → neuron ---
+for (ix, iy), wlbl in zip(input_positions, weight_labels):
+    ax_cd.annotate('',
+        xy=(neuron_cx - neuron_r, neuron_cy),
+        xytext=(ix + 0.42, iy),
+        arrowprops=dict(arrowstyle='->', color=weight_color, lw=2.0))
+    mid_x = (ix + 0.42 + neuron_cx - neuron_r) / 2
+    mid_y = (iy + neuron_cy) / 2
+    ax_cd.text(mid_x, mid_y + 0.22, wlbl, ha='center', va='center',
+               fontsize=10, fontweight='bold', color=weight_color,
+               bbox=dict(boxstyle='round,pad=0.2', facecolor='#0f0f1a',
+                         edgecolor=weight_color, alpha=0.9))
+
+# --- Output circle ---
+out_x, out_y = 12.0, 4.3
+out_circ = MplCircle((out_x, out_y), 0.55, color=output_color, zorder=4)
+ax_cd.add_patch(out_circ)
+ax_cd.text(out_x, out_y, 'Output', ha='center', va='center',
+           fontsize=8, fontweight='bold', color='white', zorder=5)
+
+# Arrow: neuron → output
+ax_cd.annotate('',
+    xy=(out_x - 0.55, out_y),
+    xytext=(neuron_cx + neuron_r, neuron_cy),
+    arrowprops=dict(arrowstyle='->', color=output_color, lw=2.5))
+
+# --- Formula bar at the bottom ---
+formula_box = FancyBboxPatch((0.5, 0.15), 13.0, 1.15,
+                              boxstyle='round,pad=0.12', linewidth=1.5,
+                              edgecolor='#555577', facecolor='#12122a', zorder=3)
+ax_cd.add_patch(formula_box)
+ax_cd.text(7.0, 0.88,
+           'z  =  w\u2081x\u2081 + w\u2082x\u2082 + w\u2083x\u2083 + w\u2084x\u2084 + b',
+           ha='center', va='center', fontsize=11, color='#ffe0b0',
+           fontfamily='monospace')
+ax_cd.text(7.0, 0.42,
+           'output  =  ReLU(z)  =  max(0, z)',
+           ha='center', va='center', fontsize=11, color='#c8ffb0',
+           fontfamily='monospace')
+
+# --- Legend ---
+legend_items = [
+    (input_color,  'Inputs (x)'),
+    (weight_color, 'Weights (w)'),
+    (neuron_color, 'Neuron body'),
+    (output_color, 'Output'),
+]
+for i, (col, lbl) in enumerate(legend_items):
+    lx = 0.9 + i * 3.3
+    ly = 8.45
+    ax_cd.add_patch(MplCircle((lx, ly), 0.15, color=col, zorder=5))
+    ax_cd.text(lx + 0.3, ly, lbl, va='center', fontsize=9, color='#cccccc')
+
+plt.tight_layout()
+plt.savefig(os.path.join(VIS_DIR, '04_neuron_anatomy_concept.png'),
+            dpi=300, bbox_inches='tight', facecolor=fig_cd.get_facecolor())
+plt.close()
+print("   Saved: 04_neuron_anatomy_concept.png")
+# ============= END CONCEPTUAL DIAGRAM =============
+
 print("=" * 70)
 print("✅ MODULE 1 COMPLETE!")
 print("=" * 70)

@@ -574,7 +574,134 @@ fig.savefig(os.path.join(VIS_DIR, "03_prompt_anatomy.png"), dpi=300, bbox_inches
 plt.close(fig)
 print("  Saved: 03_prompt_anatomy.png")
 
-print(f"\nAll 3 visualizations saved to: {VIS_DIR}")
+# ============= CONCEPTUAL DIAGRAM =============
+# Visualization 4: Prompting Strategy Comparison + Temperature Effect
+os.makedirs(VIS_DIR, exist_ok=True)
+
+fig = plt.figure(figsize=(16, 10))
+fig.patch.set_facecolor('#0f0f1a')
+
+# ── Top section: Three prompting strategies side-by-side (70% of height) ──
+ax_main = fig.add_axes([0.03, 0.30, 0.94, 0.65])
+ax_main.set_facecolor('#0f0f1a')
+ax_main.set_xlim(0, 16)
+ax_main.set_ylim(0, 6.5)
+ax_main.axis('off')
+ax_main.set_title('Prompting Strategy Comparison: Zero-Shot | Few-Shot | Chain-of-Thought',
+                  color='white', fontsize=14, fontweight='bold', pad=10)
+
+# Palette for each strategy
+STRATEGIES = [
+    {'name': 'Zero-Shot',         'x0': 0.3,  'color': '#1565C0', 'accent': '#42A5F5'},
+    {'name': 'Few-Shot',          'x0': 5.65, 'color': '#2E7D32', 'accent': '#66BB6A'},
+    {'name': 'Chain-of-Thought',  'x0': 11.0, 'color': '#6A1B9A', 'accent': '#CE93D8'},
+]
+
+col_width = 4.60   # width of each strategy column
+
+# Blocks per strategy: (label, height, offset_from_top)
+ZERO_SHOT_BLOCKS = [
+    ('System Prompt',  0.65, '#1976D2', '"You are a helpful assistant."'),
+    ('User Query',     0.65, '#0288D1', '"What is the capital of France?"'),
+    ('Answer',         0.65, '#01579B', 'Paris'),
+]
+
+FEW_SHOT_BLOCKS = [
+    ('System Prompt',  0.65, '#388E3C', '"You are a helpful assistant."'),
+    ('Example 1',      0.65, '#43A047', 'Q: Capital of Germany? → Berlin'),
+    ('Example 2',      0.65, '#43A047', 'Q: Capital of Italy?   → Rome'),
+    ('User Query',     0.65, '#1B5E20', '"What is the capital of France?"'),
+    ('Answer',         0.65, '#004D40', 'Paris'),
+]
+
+COT_BLOCKS = [
+    ('System Prompt',    0.65, '#7B1FA2', '"Think step by step."'),
+    ('Example (CoT)',    0.65, '#8E24AA', 'Q: 15% of 200?\nReason: 10%=20, 5%=10 → 30'),
+    ('User Query',       0.65, '#6A1B9A', '"What is 18% of 150?"'),
+    ('Model Reasoning',  0.85, '#4A148C', 'Step 1: 10% of 150 = 15\nStep 2: 8% of 150 = 12\nStep 3: 15+12 = 27'),
+    ('Answer',           0.65, '#311B92', '27'),
+]
+
+ALL_BLOCKS = [ZERO_SHOT_BLOCKS, FEW_SHOT_BLOCKS, COT_BLOCKS]
+
+for strat, blocks in zip(STRATEGIES, ALL_BLOCKS):
+    x0 = strat['x0']
+    # Strategy header
+    header = FancyBboxPatch((x0, 5.75), col_width, 0.60, boxstyle="round,pad=0.08",
+                            facecolor=strat['color'], edgecolor=strat['accent'],
+                            linewidth=2.0, alpha=0.95)
+    ax_main.add_patch(header)
+    ax_main.text(x0 + col_width / 2, 6.05, strat['name'],
+                 color='white', fontsize=12, ha='center', va='center', fontweight='bold')
+
+    # Draw blocks top-down
+    y_cursor = 5.60
+    for label, bh, bcolor, btext in blocks:
+        y_cursor -= (bh + 0.10)
+        rect = FancyBboxPatch((x0 + 0.05, y_cursor), col_width - 0.10, bh,
+                              boxstyle="round,pad=0.07",
+                              facecolor=bcolor, edgecolor='white',
+                              linewidth=1.2, alpha=0.85)
+        ax_main.add_patch(rect)
+        # Label tag on left
+        ax_main.text(x0 + 0.20, y_cursor + bh * 0.75, label,
+                     color=strat['accent'], fontsize=7, ha='left', va='center',
+                     fontweight='bold')
+        # Content text
+        ax_main.text(x0 + 0.20, y_cursor + bh * 0.35, btext,
+                     color='white', fontsize=7.2, ha='left', va='center',
+                     fontfamily='monospace', wrap=True)
+        # Arrow to next block
+        arrow_y_start = y_cursor
+        arrow = FancyArrowPatch((x0 + col_width / 2, arrow_y_start),
+                                (x0 + col_width / 2, arrow_y_start - 0.07),
+                                arrowstyle='->', color='white',
+                                mutation_scale=10, linewidth=1.0)
+        ax_main.add_patch(arrow)
+
+# ── Bottom section: Temperature effect (30% of height, 4 sub-axes) ──
+temp_colors_list = ['#2196F3', '#4CAF50', '#FF9800', '#F44336']
+temperatures_list = [0.1, 0.5, 1.0, 2.0]
+x_starts = [0.03, 0.27, 0.51, 0.75]
+
+np.random.seed(42)
+raw_logits_small = np.array([3.2, 2.0, 1.4, 0.7, 0.2, -0.4, -0.9, -1.5])
+n_tokens = len(raw_logits_small)
+tok_labels = [f'w{i+1}' for i in range(n_tokens)]
+
+# Title for the bottom panel (no sub-ax title — use fig text)
+fig.text(0.50, 0.285, 'Temperature Effect on Next-Token Probability Distribution',
+         color='white', fontsize=11, fontweight='bold', ha='center', va='bottom')
+
+for i, (T, tc, xs) in enumerate(zip(temperatures_list, temp_colors_list, x_starts)):
+    ax_t = fig.add_axes([xs, 0.04, 0.215, 0.22])
+    ax_t.set_facecolor('#0f0f1a')
+    scaled = raw_logits_small / T
+    exp_s  = np.exp(scaled - scaled.max())
+    probs  = exp_s / exp_s.sum()
+    ax_t.bar(tok_labels, probs, color=tc, alpha=0.85, edgecolor='#0f0f1a', linewidth=0.5)
+    ax_t.set_ylim(0, 1.05)
+    ax_t.set_title(f'T = {T}', color=tc, fontsize=10, fontweight='bold', pad=4)
+    entropy = float(-np.sum(probs * np.log(probs + 1e-10)))
+    desc = {0.1: 'Very peaked\n(deterministic)',
+            0.5: 'Moderate\nvariety',
+            1.0: 'Balanced\nsampling',
+            2.0: 'Very flat\n(creative/random)'}[T]
+    ax_t.text(0.5, 0.90, f'H={entropy:.2f}\n{desc}',
+              transform=ax_t.transAxes, ha='center', va='top',
+              color='white', fontsize=7.5,
+              bbox=dict(boxstyle='round,pad=0.2', facecolor='#1a1a2e', alpha=0.8))
+    ax_t.tick_params(colors='white', labelsize=7)
+    for spine in ax_t.spines.values():
+        spine.set_edgecolor('#444444')
+
+plt.savefig(os.path.join(VIS_DIR, '04_prompting_strategies_diagram.png'), dpi=300,
+            bbox_inches='tight', facecolor=fig.get_facecolor())
+plt.close()
+print("  Saved: 04_prompting_strategies_diagram.png")
+# ============= END CONCEPTUAL DIAGRAM =============
+
+print(f"\nAll 4 visualizations saved to: {VIS_DIR}")
 print("\n" + "="*70)
 print("MODULE 02 COMPLETE: Prompt Engineering")
 print("="*70)

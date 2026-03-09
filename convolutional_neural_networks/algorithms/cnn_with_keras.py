@@ -406,6 +406,162 @@ else:
     print("  [Skipping training-based plots — install TensorFlow to generate them]")
 
 
+
+# ============= CONCEPTUAL DIAGRAM =============
+print("📊 Generating: CNN Architecture concept diagram...")
+
+from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
+import matplotlib.patheffects as pe
+
+fig, ax = plt.subplots(1, 1, figsize=(16, 9))
+fig.patch.set_facecolor('#0f0f1a')
+ax.set_facecolor('#0f0f1a')
+ax.set_xlim(0, 16)
+ax.set_ylim(0, 9)
+ax.axis('off')
+ax.set_title('CNN Architecture for Image Classification',
+             color='white', fontsize=16, fontweight='bold', pad=18)
+
+# Helper: draw a 3D-ish stacked box block
+def draw_3d_block(ax, x, y, w, h, depth, face_color, edge_color, label_top, label_bot, fontsize=8):
+    # Shadow / depth offset layers (back to front)
+    for di in range(int(depth), 0, -1):
+        offset = di * 0.07
+        shade = FancyBboxPatch(
+            (x + offset, y - offset), w, h,
+            boxstyle="round,pad=0.05",
+            facecolor=face_color, edgecolor=edge_color,
+            linewidth=0.8, alpha=0.35, zorder=2
+        )
+        ax.add_patch(shade)
+    # Front face
+    front = FancyBboxPatch(
+        (x, y), w, h,
+        boxstyle="round,pad=0.05",
+        facecolor=face_color, edgecolor=edge_color,
+        linewidth=1.8, alpha=0.95, zorder=3
+    )
+    ax.add_patch(front)
+    # Top label
+    ax.text(x + w / 2, y + h + 0.18, label_top,
+            color='white', fontsize=fontsize, ha='center', va='bottom',
+            fontweight='bold', zorder=5)
+    # Bottom dim label
+    ax.text(x + w / 2, y - 0.22, label_bot,
+            color='#aaaaaa', fontsize=fontsize - 0.5, ha='center', va='top',
+            zorder=5)
+
+# Helper: draw arrow between two x-positions at a fixed y center
+def draw_arrow(ax, x_start, x_end, y_center, color='#888888'):
+    ax.annotate('', xy=(x_end, y_center), xytext=(x_start, y_center),
+                arrowprops=dict(arrowstyle='->', color=color, lw=2.0),
+                zorder=6)
+
+# ---- Stage definitions ----
+# (x_left, y_bottom, width, height, depth, face_color, edge_color, label_top, label_bottom)
+center_y = 3.5
+
+stages = [
+    # Input image
+    dict(x=0.4,  y=center_y - 1.0, w=1.2, h=2.0, depth=1,
+         fc='#1a5276', ec='#5dade2',
+         lt='Input\nImage', lb='32×32×3'),
+    # Conv2D + ReLU block 1
+    dict(x=2.3,  y=center_y - 1.3, w=0.8, h=2.6, depth=5,
+         fc='#1e8449', ec='#58d68d',
+         lt='Conv2D+ReLU\n(32 filters)', lb='32×32×32'),
+    # MaxPool 1
+    dict(x=4.1,  y=center_y - 0.9, w=0.7, h=1.8, depth=5,
+         fc='#117a65', ec='#48c9b0',
+         lt='MaxPool2D\n(2×2)', lb='16×16×32'),
+    # Conv2D + ReLU block 2
+    dict(x=5.9,  y=center_y - 1.5, w=0.8, h=3.0, depth=7,
+         fc='#7d6608', ec='#f4d03f',
+         lt='Conv2D+ReLU\n(64 filters)', lb='16×16×64'),
+    # MaxPool 2
+    dict(x=7.7,  y=center_y - 1.0, w=0.7, h=2.0, depth=7,
+         fc='#6e2f1a', ec='#e59866',
+         lt='MaxPool2D\n(2×2)', lb='8×8×64'),
+    # Flatten
+    dict(x=9.5,  y=center_y - 0.15, w=1.4, h=0.3, depth=1,
+         fc='#512e5f', ec='#c39bd3',
+         lt='Flatten', lb='4096\nneurons'),
+    # Dense + Softmax
+    dict(x=11.9, y=center_y - 0.5, w=1.2, h=1.0, depth=1,
+         fc='#922b21', ec='#f1948a',
+         lt='Dense +\nSoftmax', lb='10 classes'),
+]
+
+for s in stages:
+    draw_3d_block(ax, s['x'], s['y'], s['w'], s['h'], s['depth'],
+                  s['fc'], s['ec'], s['lt'], s['lb'])
+
+# Arrows between stages
+arrow_pairs = [
+    (0.4 + 1.2,        2.3,           center_y),   # Input → Conv1
+    (2.3 + 0.8 + 0.35, 4.1,           center_y),   # Conv1 → Pool1
+    (4.1 + 0.7,        5.9,           center_y),   # Pool1 → Conv2
+    (5.9 + 0.8 + 0.35, 7.7,           center_y),   # Conv2 → Pool2
+    (7.7 + 0.7,        9.5,           center_y),   # Pool2 → Flatten
+    (9.5 + 1.4,        11.9,          center_y),   # Flatten → Dense
+]
+arrow_colors = ['#5dade2', '#58d68d', '#48c9b0', '#f4d03f', '#e59866', '#c39bd3']
+for (xs, xe, yc), col in zip(arrow_pairs, arrow_colors):
+    draw_arrow(ax, xs, xe, yc, col)
+
+# ---- Operation labels below arrows ----
+op_labels = [
+    (1.85,  'detect\npatterns'),
+    (3.65,  'reduce\nsize ×2'),
+    (5.35,  'detect\ncomplex\nfeatures'),
+    (7.15,  'reduce\nsize ×2'),
+    (9.15,  'vectorize'),
+    (11.2,  'classify'),
+]
+for xm, lbl in op_labels:
+    ax.text(xm, center_y - 2.2, lbl, color='#cccccc', fontsize=7,
+            ha='center', va='top', fontstyle='italic', zorder=5)
+
+# ---- Two key insight rows ----
+ax.text(8.0, 1.05,
+        'Convolution extracts local features — edges, textures, shapes',
+        color='#5dade2', fontsize=10, ha='center', va='center',
+        fontweight='bold',
+        bbox=dict(boxstyle='round,pad=0.4', facecolor='#0d1b2a', edgecolor='#5dade2', linewidth=1.5),
+        zorder=6)
+
+ax.text(8.0, 0.35,
+        'Pooling progressively reduces spatial size — keeps the most important signal',
+        color='#58d68d', fontsize=10, ha='center', va='center',
+        fontweight='bold',
+        bbox=dict(boxstyle='round,pad=0.4', facecolor='#0d1b2a', edgecolor='#58d68d', linewidth=1.5),
+        zorder=6)
+
+# ---- Legend strip across top ----
+legend_items = [
+    ('#1e8449', '#58d68d', 'Conv2D + ReLU'),
+    ('#117a65', '#48c9b0', 'MaxPool2D'),
+    ('#512e5f', '#c39bd3', 'Flatten'),
+    ('#922b21', '#f1948a', 'Dense + Softmax'),
+]
+lx = 1.5
+for fc, ec, label in legend_items:
+    rect = FancyBboxPatch((lx, 8.1), 0.35, 0.5,
+                          boxstyle='round,pad=0.05',
+                          facecolor=fc, edgecolor=ec, linewidth=1.5, zorder=5)
+    ax.add_patch(rect)
+    ax.text(lx + 0.5, 8.35, label, color='white', fontsize=8,
+            va='center', zorder=5)
+    lx += 3.2
+
+plt.tight_layout()
+plt.savefig(os.path.join(VIS_DIR, '05_cnn_architecture_concept.png'),
+            dpi=300, bbox_inches='tight', facecolor=fig.get_facecolor())
+plt.close()
+print("   Saved: 05_cnn_architecture_concept.png")
+# ============= END CONCEPTUAL DIAGRAM =============
+
+
 print()
 print("=" * 70)
 print("✅ ALGORITHM 2: CNN WITH KERAS COMPLETE!")

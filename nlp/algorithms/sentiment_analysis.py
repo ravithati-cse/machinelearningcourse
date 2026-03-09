@@ -696,6 +696,180 @@ plt.close()
 print("   Saved: aspect_sentiment.png")
 
 
+
+# ============= CONCEPTUAL DIAGRAM =============
+print("Generating: Sentiment Analysis pipeline concept diagram...")
+
+from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
+
+fig, ax = plt.subplots(1, 1, figsize=(14, 9))
+fig.patch.set_facecolor('#0f0f1a')
+ax.set_facecolor('#0f0f1a')
+ax.set_xlim(0, 14)
+ax.set_ylim(0, 9)
+ax.axis('off')
+ax.set_title('Sentiment Analysis Pipeline — From Text to Emotion',
+             color='white', fontsize=15, fontweight='bold', pad=15)
+
+# ---- Layout constants ----
+# Two parallel columns: positive example (left) and negative example (right)
+col_pos = 3.5    # x-center of positive column
+col_neg = 10.5   # x-center of negative column
+box_w = 4.8
+box_h = 0.65
+box_half = box_w / 2
+
+# Stage y-positions (top to bottom)
+stage_ys = [8.0, 6.85, 5.7, 4.55, 3.4, 2.15]
+
+stage_labels = [
+    'Raw Text',
+    'Preprocessing',
+    'Feature Extraction',
+    'Model',
+    'Output Probability',
+    'Final Label',
+]
+
+# Colors per stage
+stage_colors = {
+    'Raw Text':            ('#1a3a5c', '#5dade2'),
+    'Preprocessing':       ('#1a4a2e', '#58d68d'),
+    'Feature Extraction':  ('#5d3a00', '#f0b84b'),
+    'Model':               ('#3b1f5e', '#c39bd3'),
+    'Output Probability':  ('#5c3a00', '#f4d03f'),
+    'Final Label':         ('#145a32', '#2ecc71'),
+}
+
+# Content for positive example
+pos_content = [
+    '"The movie was absolutely amazing!"',
+    'lowercase → remove punct → tokenize',
+    'TF-IDF: "amazing" +3.4, "absolutely" ×1.8',
+    'Logistic Regression / BERT',
+    'positive = 0.93   negative = 0.07',
+    'POSITIVE',
+]
+
+# Content for negative example
+neg_content = [
+    '"Totally boring. Worst film ever."',
+    'lowercase → remove punct → tokenize',
+    'TF-IDF: "boring" −1.8, "worst" −3.5',
+    'Logistic Regression / BERT',
+    'positive = 0.04   negative = 0.96',
+    'NEGATIVE',
+]
+
+def draw_pipeline_box(ax, x_center, y, width, height, text_top, text_body,
+                      fc, ec, body_color='white', top_color='#aaaaaa',
+                      is_label=False, label_color='white'):
+    rect = FancyBboxPatch(
+        (x_center - width / 2, y - height / 2),
+        width, height,
+        boxstyle='round,pad=0.07',
+        facecolor=fc, edgecolor=ec,
+        linewidth=2.0, alpha=0.92, zorder=3
+    )
+    ax.add_patch(rect)
+    # Stage name (small, above body text)
+    ax.text(x_center, y + height / 2 - 0.13, text_top,
+            color=top_color, fontsize=7.5, ha='center', va='top',
+            fontstyle='italic', zorder=4)
+    # Main body text
+    font_size = 11 if is_label else 8.5
+    font_weight = 'bold' if is_label else 'normal'
+    ax.text(x_center, y - 0.04, text_body,
+            color=label_color if is_label else body_color,
+            fontsize=font_size, ha='center', va='center',
+            fontweight=font_weight, zorder=4)
+
+def draw_down_arrow(ax, x_center, y_top, y_bottom, color='#666666'):
+    ax.annotate('', xy=(x_center, y_bottom + 0.02),
+                xytext=(x_center, y_top - 0.02),
+                arrowprops=dict(arrowstyle='->', color=color, lw=2.0),
+                zorder=5)
+
+# ---- Column headers ----
+ax.text(col_pos, 8.78, 'Positive Example',
+        color='#58d68d', fontsize=10, ha='center', va='center',
+        fontweight='bold', zorder=4,
+        bbox=dict(boxstyle='round,pad=0.3', facecolor='#0d2a1a', edgecolor='#58d68d', linewidth=1.5))
+ax.text(col_neg, 8.78, 'Negative Example',
+        color='#f1948a', fontsize=10, ha='center', va='center',
+        fontweight='bold', zorder=4,
+        bbox=dict(boxstyle='round,pad=0.3', facecolor='#2a0d0d', edgecolor='#f1948a', linewidth=1.5))
+
+# ---- Draw all stages for both columns ----
+for i, (stage, sy) in enumerate(zip(stage_labels, stage_ys)):
+    fc, ec = stage_colors[stage]
+
+    # Special label color for final label row
+    is_label_row = (stage == 'Final Label')
+    pos_lc = '#2ecc71' if pos_content[i] == 'POSITIVE' else '#f1948a'
+    neg_lc = '#f1948a' if neg_content[i] == 'NEGATIVE' else '#2ecc71'
+
+    # Positive column box
+    draw_pipeline_box(ax, col_pos, sy, box_w, box_h,
+                      text_top=stage, text_body=pos_content[i],
+                      fc=fc, ec=ec,
+                      is_label=is_label_row,
+                      label_color='#2ecc71' if is_label_row else 'white')
+
+    # Negative column box
+    draw_pipeline_box(ax, col_neg, sy, box_w, box_h,
+                      text_top=stage, text_body=neg_content[i],
+                      fc=fc, ec=ec,
+                      is_label=is_label_row,
+                      label_color='#f1948a' if is_label_row else 'white')
+
+    # Draw arrows downward (skip after last stage)
+    if i < len(stage_ys) - 1:
+        next_sy = stage_ys[i + 1]
+        arrow_color = stage_colors[stage_labels[i + 1]][1]
+        draw_down_arrow(ax, col_pos, sy - box_h / 2, next_sy + box_h / 2, arrow_color)
+        draw_down_arrow(ax, col_neg, sy - box_h / 2, next_sy + box_h / 2, arrow_color)
+
+# ---- Vertical divider ----
+ax.plot([7.0, 7.0], [1.75, 8.5], color='#333355', linewidth=1.5, linestyle='--', zorder=2)
+
+# ---- Stage legend on the right ----
+legend_data = [
+    ('#1a3a5c', '#5dade2', 'Raw Text input'),
+    ('#1a4a2e', '#58d68d', 'Preprocessing'),
+    ('#5d3a00', '#f0b84b', 'Feature Extraction (TF-IDF)'),
+    ('#3b1f5e', '#c39bd3', 'ML/DL Model'),
+    ('#5c3a00', '#f4d03f', 'Probability output'),
+    ('#145a32', '#2ecc71', 'Final predicted label'),
+]
+
+ax.text(13.5, 8.5, 'Stage\nKey', color='white', fontsize=8,
+        ha='center', va='top', fontweight='bold', zorder=5)
+
+for li, (fc, ec, lbl) in enumerate(legend_data):
+    ly = 8.0 - li * 0.72
+    rect = FancyBboxPatch((12.65, ly - 0.16), 0.38, 0.32,
+                          boxstyle='round,pad=0.04',
+                          facecolor=fc, edgecolor=ec, linewidth=1.5, zorder=5)
+    ax.add_patch(rect)
+    ax.text(13.1, ly, lbl, color='white', fontsize=7,
+            va='center', zorder=5)
+
+# ---- Bottom insight ----
+ax.text(7.0, 1.55,
+        'Rule-based: fast, no training needed   |   TF-IDF+LR: needs labels, very competitive   |   BERT: best accuracy, understands context',
+        color='#aaaaaa', fontsize=7.5, ha='center', va='center',
+        bbox=dict(boxstyle='round,pad=0.35', facecolor='#12121f', edgecolor='#444466', linewidth=1.2),
+        zorder=5)
+
+plt.tight_layout()
+plt.savefig(os.path.join(_VISUALS_DIR, '04_sentiment_pipeline_concept.png'),
+            dpi=300, bbox_inches='tight', facecolor=fig.get_facecolor())
+plt.close()
+print("   Saved: 04_sentiment_pipeline_concept.png")
+# ============= END CONCEPTUAL DIAGRAM =============
+
+
 print()
 print("=" * 70)
 print("NLP ALGORITHM 2: SENTIMENT ANALYSIS COMPLETE!")

@@ -352,6 +352,165 @@ plt.close()
 print("   ✅ Saved: mlp_vs_cnn.png")
 
 
+
+# ============= CONCEPTUAL DIAGRAM =============
+print("📊 Generating: Image data structure concept diagram...")
+from matplotlib.patches import FancyBboxPatch
+
+fig, axes = plt.subplots(1, 3, figsize=(16, 7))
+fig.patch.set_facecolor('#0f0f1a')
+for ax in axes:
+    ax.set_facecolor('#0f0f1a')
+fig.suptitle("Image as a Tensor — How Computers See Images",
+             fontsize=15, fontweight='bold', color='white', y=1.01)
+
+# ---- LEFT panel: Grayscale 5×5 grid ----
+ax = axes[0]
+ax.set_xlim(-0.5, 5.5)
+ax.set_ylim(-1.2, 6.0)
+ax.axis('off')
+ax.set_title("Grayscale Image\n2D: Height × Width\n(1 channel)",
+             fontsize=11, color='#aabbcc', fontweight='bold')
+
+pixel_vals = [
+    [12,  45,  80, 120, 200],
+    [30,  90, 150, 210, 240],
+    [60, 130, 180, 230, 250],
+    [20,  70, 130, 190, 220],
+    [ 8,  35,  75, 110, 170],
+]
+for row in range(5):
+    for col in range(5):
+        val = pixel_vals[row][col]
+        grey = val / 255.0
+        facecolor = (grey, grey, grey)
+        rect = FancyBboxPatch((col, 4 - row), 1.0, 1.0,
+                              boxstyle="square,pad=0.02",
+                              facecolor=facecolor,
+                              edgecolor='#555588', linewidth=1.0)
+        ax.add_patch(rect)
+        text_color = 'white' if grey < 0.55 else 'black'
+        ax.text(col + 0.5, 4 - row + 0.5, str(val),
+                ha='center', va='center',
+                fontsize=7.5, color=text_color, fontweight='bold')
+
+ax.text(2.5, -0.6, "Each cell = 1 pixel value (0–255)",
+        ha='center', va='center', fontsize=8.5, color='#99aacc',
+        style='italic')
+
+# ---- CENTER panel: RGB 3-channel stack ----
+ax = axes[1]
+ax.set_xlim(-0.5, 6.5)
+ax.set_ylim(-1.2, 7.5)
+ax.axis('off')
+ax.set_title("RGB Color Image\n3D: Height × Width × 3 channels",
+             fontsize=11, color='#aabbcc', fontweight='bold')
+
+channel_configs = [
+    ('R', '#cc2222', 0.0, 4.8),
+    ('G', '#22aa44', 0.5, 3.8),
+    ('B', '#2255cc', 1.0, 2.8),
+]
+
+grid_size = 4
+
+for ch_label, ch_color, x_off, y_off in channel_configs:
+    r, g, b = (
+        (0.7, 0.1, 0.1) if ch_label == 'R' else
+        (0.1, 0.6, 0.2) if ch_label == 'G' else
+        (0.1, 0.2, 0.8)
+    )
+    for row in range(grid_size):
+        for col in range(grid_size):
+            intensity = 0.3 + 0.5 * (col + row) / (2 * (grid_size - 1))
+            fc = (r * intensity, g * intensity, b * intensity)
+            rect = FancyBboxPatch(
+                (x_off + col, y_off + (grid_size - 1 - row)),
+                0.9, 0.9,
+                boxstyle="square,pad=0.02",
+                facecolor=fc,
+                edgecolor='#334466', linewidth=0.8, alpha=0.92
+            )
+            ax.add_patch(rect)
+    ax.text(x_off - 0.35, y_off + grid_size / 2, ch_label,
+            ha='center', va='center', fontsize=11,
+            color=ch_color, fontweight='bold')
+
+ax.text(3.0, -0.6, "3 full grids stacked → one color image",
+        ha='center', va='center', fontsize=8.5, color='#99aacc',
+        style='italic')
+
+ax.annotate('', xy=(4.8, 6.5), xytext=(4.1, 5.5),
+            arrowprops=dict(arrowstyle='->', color='#ff6644', lw=1.5))
+ax.text(5.1, 6.6, 'R', fontsize=9, color='#ff4422', fontweight='bold')
+ax.annotate('', xy=(5.3, 5.5), xytext=(4.6, 4.5),
+            arrowprops=dict(arrowstyle='->', color='#44cc44', lw=1.5))
+ax.text(5.6, 5.6, 'G', fontsize=9, color='#44cc44', fontweight='bold')
+ax.annotate('', xy=(5.8, 4.5), xytext=(5.1, 3.5),
+            arrowprops=dict(arrowstyle='->', color='#4488ff', lw=1.5))
+ax.text(6.1, 4.6, 'B', fontsize=9, color='#4488ff', fontweight='bold')
+
+# ---- RIGHT panel: Batch of 4 RGB "cubes" ----
+ax = axes[2]
+ax.set_xlim(-0.5, 7.0)
+ax.set_ylim(-1.5, 8.5)
+ax.axis('off')
+ax.set_title("Batch of Images\n4D tensor: Batch × H × W × C\n(how PyTorch/TensorFlow work)",
+             fontsize=11, color='#aabbcc', fontweight='bold')
+
+batch_colors = [
+    ('#1a3a6a', '#2255aa', '#3377cc'),
+    ('#1a4a2a', '#227733', '#33aa55'),
+    ('#4a2a1a', '#883311', '#cc5533'),
+    ('#3a1a4a', '#662288', '#9933bb'),
+]
+
+cube_w, cube_h = 2.5, 2.0
+x_gap, y_gap = 0.6, 0.5
+
+positions = [
+    (0.0, 5.2),
+    (3.0, 5.2),
+    (0.0, 2.2),
+    (3.0, 2.2),
+]
+
+for b_idx, ((bx, by), (c_dark, c_mid, c_light)) in enumerate(
+        zip(positions, batch_colors)):
+    # Draw 3 layers to simulate depth
+    for depth, fc in enumerate([c_dark, c_mid, c_light]):
+        off = depth * 0.18
+        rect = FancyBboxPatch(
+            (bx + off, by - off),
+            cube_w, cube_h,
+            boxstyle="round,pad=0.06",
+            facecolor=fc, edgecolor='white',
+            linewidth=0.8, alpha=0.85
+        )
+        ax.add_patch(rect)
+    ax.text(bx + cube_w / 2, by + cube_h / 2,
+            f"Image {b_idx + 1}\nH × W × C",
+            ha='center', va='center', fontsize=8.5,
+            color='white', fontweight='bold')
+
+ax.text(3.1, -0.7,
+        "N=4 images stacked into one 4D tensor\n"
+        "Shape: (4, H, W, C)",
+        ha='center', va='center', fontsize=8.5, color='#99aacc',
+        style='italic')
+
+ax.text(3.1, 1.3,
+        "batch[0] → Image 1    batch[1] → Image 2\n"
+        "batch[2] → Image 3    batch[3] → Image 4",
+        ha='center', va='center', fontsize=7.5, color='#ccddee')
+
+plt.tight_layout(pad=1.8)
+plt.savefig(os.path.join(VIS_DIR, '04_image_data_structure_concept.png'),
+            dpi=300, bbox_inches='tight', facecolor=fig.get_facecolor())
+plt.close()
+print("   ✅ Saved: 04_image_data_structure_concept.png")
+# ============= END CONCEPTUAL DIAGRAM =============
+
 print()
 print("=" * 70)
 print("✅ MODULE 1 COMPLETE!")

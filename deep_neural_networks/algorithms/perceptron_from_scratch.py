@@ -349,6 +349,125 @@ plt.close()
 print("   Saved: convergence.png")
 
 
+# ============= CONCEPTUAL DIAGRAM =============
+from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Circle
+fig, axes = plt.subplots(1, 2, figsize=(14, 8))
+fig.patch.set_facecolor('#0f0f1a')
+for ax in axes.flat:
+    ax.set_facecolor('#0f0f1a')
+    ax.set_xlim(0, 10)
+    ax.set_ylim(0, 10)
+    ax.axis('off')
+
+# --- LEFT PANEL: Perceptron Structure ---
+ax_left = axes[0]
+ax_left.set_title("The Perceptron Structure", color='white', fontsize=13,
+                   fontweight='bold', pad=10)
+
+# Input nodes: x1, x2, x3
+input_labels = ['x₁', 'x₂', 'x₃']
+weight_labels = ['w₁', 'w₂', 'w₃']
+input_ys = [7.5, 5.0, 2.5]
+input_x = 1.8
+
+for i, (label, iy) in enumerate(zip(input_labels, input_ys)):
+    circ = Circle((input_x, iy), 0.55, color='#3a7bd5', zorder=5)
+    ax_left.add_patch(circ)
+    ax_left.text(input_x, iy, label, ha='center', va='center',
+                 color='white', fontsize=12, fontweight='bold', zorder=6)
+
+# Step (activation) node
+step_x, step_y = 5.5, 5.0
+step_circ = Circle((step_x, step_y), 0.75, color='#e07b39', zorder=5)
+ax_left.add_patch(step_circ)
+ax_left.text(step_x, step_y + 0.05, 'STEP', ha='center', va='center',
+             color='white', fontsize=10, fontweight='bold', zorder=6)
+
+# Output node
+out_x, out_y = 8.5, 5.0
+out_circ = Circle((out_x, out_y), 0.55, color='#8e44ad', zorder=5)
+ax_left.add_patch(out_circ)
+ax_left.text(out_x, out_y, '0/1', ha='center', va='center',
+             color='white', fontsize=11, fontweight='bold', zorder=6)
+
+# Arrows from inputs to step node, labeled with weights
+for i, (iy, wlabel) in enumerate(zip(input_ys, weight_labels)):
+    ax_left.annotate('', xy=(step_x - 0.75, step_y + (iy - step_y) * 0.35),
+                     xytext=(input_x + 0.55, iy),
+                     arrowprops=dict(arrowstyle='->', color='#aaaacc',
+                                     lw=1.8, connectionstyle='arc3,rad=0.0'))
+    mid_x = (input_x + 0.55 + step_x - 0.75) / 2
+    mid_y = (iy + step_y + (iy - step_y) * 0.35) / 2
+    ax_left.text(mid_x - 0.1, mid_y + 0.25, wlabel, color='#f0c040',
+                 fontsize=10, fontweight='bold', ha='center')
+
+# Arrow from step to output
+ax_left.annotate('', xy=(out_x - 0.55, out_y),
+                 xytext=(step_x + 0.75, step_y),
+                 arrowprops=dict(arrowstyle='->', color='#aaaacc', lw=2.0))
+
+# Bias label
+ax_left.text(step_x, step_y - 1.25, '+b (bias)', ha='center', va='center',
+             color='#aaaacc', fontsize=9)
+
+# Formula
+ax_left.text(5.0, 0.7, 'z = Σ wᵢxᵢ + b', ha='center', va='center',
+             color='#f0c040', fontsize=12, fontweight='bold',
+             bbox=dict(boxstyle='round,pad=0.4', facecolor='#1a1a2e', edgecolor='#f0c040', lw=1.5))
+
+# Layer color legend
+for cx, cy, col, lbl in [(1.2, 9.2, '#3a7bd5', 'Input'),
+                          (4.8, 9.2, '#e07b39', 'Activation'),
+                          (8.2, 9.2, '#8e44ad', 'Output')]:
+    ax_left.add_patch(Circle((cx, cy), 0.25, color=col, zorder=5))
+    ax_left.text(cx + 0.45, cy, lbl, color='white', fontsize=9, va='center')
+
+# --- RIGHT PANEL: Historical Lineage ---
+ax_right = axes[1]
+ax_right.set_title("Neural Network Lineage", color='white', fontsize=13,
+                    fontweight='bold', pad=10)
+
+lineage = [
+    ('[Perceptron — 1957]',    '#3a7bd5', 'Rosenblatt: first learning machine'),
+    ('[MLP — 1985]',           '#27ae60', 'Rumelhart: backprop unlocks hidden layers'),
+    ('[Deep Learning — 2006]', '#e07b39', 'Hinton: deep nets beat shallow methods'),
+    ('[Transformers — 2017]',  '#8e44ad', 'Vaswani: attention is all you need'),
+    ('[LLMs — 2020+]',         '#e74c3c', 'GPT/BERT: language understood at scale'),
+]
+
+box_x0, box_w, box_h = 1.0, 8.0, 1.0
+start_y = 8.8
+gap = 1.55
+
+for i, (title, color, desc) in enumerate(lineage):
+    by = start_y - i * gap
+    rect = FancyBboxPatch((box_x0, by - box_h / 2), box_w, box_h,
+                          boxstyle='round,pad=0.15',
+                          facecolor=color, edgecolor='white',
+                          linewidth=1.2, alpha=0.88, zorder=4)
+    ax_right.add_patch(rect)
+    ax_right.text(box_x0 + box_w / 2, by + 0.18, title,
+                  ha='center', va='center', color='white',
+                  fontsize=10, fontweight='bold', zorder=5)
+    ax_right.text(box_x0 + box_w / 2, by - 0.22, desc,
+                  ha='center', va='center', color='#eeeeee',
+                  fontsize=8, style='italic', zorder=5)
+    if i < len(lineage) - 1:
+        arrow_y_top = by - box_h / 2
+        arrow_y_bot = arrow_y_top - (gap - box_h)
+        ax_right.annotate('', xy=(box_x0 + box_w / 2, arrow_y_bot),
+                          xytext=(box_x0 + box_w / 2, arrow_y_top),
+                          arrowprops=dict(arrowstyle='->', color='white', lw=2.0))
+
+fig.suptitle("The Perceptron — The Ancestor of All Neural Networks",
+             color='white', fontsize=15, fontweight='bold', y=0.97)
+plt.tight_layout(rect=[0, 0, 1, 0.95])
+plt.savefig(os.path.join(VIS_DIR, '04_perceptron_architecture.png'),
+            dpi=300, bbox_inches='tight', facecolor=fig.get_facecolor())
+plt.close()
+print("   Saved: 04_perceptron_architecture.png")
+# ============= END CONCEPTUAL DIAGRAM =============
+
 print()
 print("=" * 70)
 print("ALGORITHM 1: PERCEPTRON COMPLETE!")

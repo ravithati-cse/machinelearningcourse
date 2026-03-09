@@ -370,6 +370,108 @@ print("  He initialization (Keras uses this by default with ReLU)")
 print("  callbacks = [EarlyStopping(patience=10, restore_best_weights=True)]")
 print()
 
+# ============= CONCEPTUAL DIAGRAM =============
+print("Generating: Keras Sequential API concept diagram...")
+from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
+fig, axes = plt.subplots(1, 2, figsize=(14, 8))
+fig.patch.set_facecolor('#0f0f1a')
+for ax in axes:
+    ax.set_facecolor('#0f0f1a')
+
+# --- LEFT panel: Keras API building blocks ---
+ax = axes[0]
+ax.set_xlim(0, 10)
+ax.set_ylim(0, 10)
+ax.axis('off')
+ax.set_title("Keras Sequential API\n— Building Blocks", fontsize=13,
+             fontweight='bold', color='white', pad=12)
+
+api_steps = [
+    ("model = Sequential()", '#3a7bd5'),
+    ("model.add(Dense(64, activation='relu'))", '#2ecc71'),
+    ("model.add(Dense(64, activation='relu'))", '#2ecc71'),
+    ("model.add(Dense(1, activation='sigmoid'))", '#e67e22'),
+    ("model.compile(optimizer='adam',\n  loss='binary_crossentropy')", '#9b59b6'),
+    ("model.fit(X_train, y_train,\n  epochs=100)", '#e74c3c'),
+]
+
+box_h = 1.1
+gap = 0.25
+total_h = len(api_steps) * box_h + (len(api_steps) - 1) * gap
+start_y = (10 - total_h) / 2 + total_h
+
+for idx, (label, color) in enumerate(api_steps):
+    y_top = start_y - idx * (box_h + gap)
+    y_center = y_top - box_h / 2
+    rect = FancyBboxPatch((0.5, y_top - box_h), 9.0, box_h,
+                          boxstyle="round,pad=0.15",
+                          facecolor=color, edgecolor='white',
+                          linewidth=1.2, alpha=0.88)
+    ax.add_patch(rect)
+    ax.text(5.0, y_center, label, ha='center', va='center',
+            fontsize=8.5, color='white', fontweight='bold',
+            fontfamily='monospace')
+    if idx < len(api_steps) - 1:
+        arrow_y = y_top - box_h
+        ax.annotate('', xy=(5.0, arrow_y - gap + 0.04),
+                    xytext=(5.0, arrow_y - 0.04),
+                    arrowprops=dict(arrowstyle='->', color='#aaaacc',
+                                   lw=2.0))
+
+# --- RIGHT panel: resulting network architecture ---
+ax = axes[1]
+ax.set_xlim(0, 10)
+ax.set_ylim(0, 10)
+ax.axis('off')
+ax.set_title("Resulting Network Architecture\n— Layer by Layer", fontsize=13,
+             fontweight='bold', color='white', pad=12)
+
+arch_layers = [
+    ("Input Layer", "(2 features)", '#546e7a'),
+    ("Dense 64", "activation = ReLU", '#1565c0'),
+    ("Dense 64", "activation = ReLU", '#1565c0'),
+    ("Dense 1", "activation = Sigmoid", '#6a1b9a'),
+    ("Output", "P(class=1)", '#b71c1c'),
+]
+
+arch_box_h = 1.0
+arch_gap = 0.35
+arch_total = len(arch_layers) * arch_box_h + (len(arch_layers) - 1) * arch_gap
+arch_start_y = (10 - arch_total) / 2 + arch_total
+
+for idx, (layer_name, detail, color) in enumerate(arch_layers):
+    y_top = arch_start_y - idx * (arch_box_h + arch_gap)
+    y_center = y_top - arch_box_h / 2
+    rect = FancyBboxPatch((1.0, y_top - arch_box_h), 8.0, arch_box_h,
+                          boxstyle="round,pad=0.15",
+                          facecolor=color, edgecolor='white',
+                          linewidth=1.5, alpha=0.90)
+    ax.add_patch(rect)
+    ax.text(5.0, y_center + 0.18, layer_name, ha='center', va='center',
+            fontsize=10, color='white', fontweight='bold')
+    ax.text(5.0, y_center - 0.22, detail, ha='center', va='center',
+            fontsize=8.5, color='#ddddff', style='italic')
+    if idx < len(arch_layers) - 1:
+        arrow_y = y_top - arch_box_h
+        ax.annotate('', xy=(5.0, arrow_y - arch_gap + 0.06),
+                    xytext=(5.0, arrow_y - 0.06),
+                    arrowprops=dict(arrowstyle='->', color='#aaaacc',
+                                   lw=2.0))
+
+# Formula at the bottom
+ax.text(5.0, 0.3, "Layer output = activation(W · input + b)",
+        ha='center', va='center', fontsize=9, color='#99aaff',
+        style='italic',
+        bbox=dict(boxstyle='round,pad=0.4', facecolor='#1a1a2e',
+                  edgecolor='#4455aa', linewidth=1.2))
+
+plt.tight_layout(pad=1.5)
+plt.savefig(os.path.join(VIS_DIR, '03_keras_api_diagram.png'),
+            dpi=300, bbox_inches='tight', facecolor=fig.get_facecolor())
+plt.close()
+print("   Saved: 03_keras_api_diagram.png")
+# ============= END CONCEPTUAL DIAGRAM =============
+
 print("=" * 70)
 print("ALGORITHM 3: MLP WITH KERAS COMPLETE!")
 print("=" * 70)

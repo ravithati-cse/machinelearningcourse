@@ -423,6 +423,109 @@ plt.close()
 print("   Saved: architecture_comparison.png")
 
 
+# ============= CONCEPTUAL DIAGRAM =============
+from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Circle
+fig, axes = plt.subplots(1, 3, figsize=(15, 6))
+fig.patch.set_facecolor('#0f0f1a')
+for ax in axes.flat:
+    ax.set_facecolor('#0f0f1a')
+    ax.set_xlim(-0.5, 3.5)
+    ax.set_ylim(-0.5, 3.5)
+    ax.axis('off')
+
+grid_n = 4  # 4x4 grid
+dot_radius = 0.12
+
+# Shared helper: draw a faint grid of cell borders
+def draw_grid_background(ax):
+    for row in range(grid_n):
+        for col in range(grid_n):
+            rect = FancyBboxPatch((col - 0.45, row - 0.45), 0.9, 0.9,
+                                  boxstyle='square,pad=0.0',
+                                  facecolor='#1a1a2e', edgecolor='#2a2a4a',
+                                  linewidth=0.8, zorder=1)
+            ax.add_patch(rect)
+
+# --- LEFT: Grid Search ---
+ax = axes[0]
+draw_grid_background(ax)
+ax.set_title("Grid Search", color='white', fontsize=13, fontweight='bold', pad=8)
+
+for row in range(grid_n):
+    for col in range(grid_n):
+        circ = Circle((col, row), dot_radius, color='#3a7bd5', zorder=3)
+        ax.add_patch(circ)
+
+ax.text(1.5, -0.3, "All combinations", ha='center', va='center',
+        color='#aaddff', fontsize=9, style='italic')
+ax.text(1.5, 3.35, "O(n²) time", ha='center', va='center',
+        color='#f0c040', fontsize=10, fontweight='bold')
+
+# --- CENTER: Random Search ---
+ax = axes[1]
+draw_grid_background(ax)
+ax.set_title("Random Search", color='white', fontsize=13, fontweight='bold', pad=8)
+
+np.random.seed(7)
+# Same number of evaluations as grid (16), but placed randomly in continuous space
+rand_pts = np.random.uniform(0.0, grid_n - 1.0, size=(16, 2))
+for pt in rand_pts:
+    circ = Circle((pt[0], pt[1]), dot_radius, color='#27ae60', zorder=3)
+    ax.add_patch(circ)
+
+ax.text(1.5, -0.3, "Random samples", ha='center', va='center',
+        color='#aaddff', fontsize=9, style='italic')
+ax.text(1.5, 3.35, "O(n) time, better coverage", ha='center', va='center',
+        color='#f0c040', fontsize=10, fontweight='bold')
+
+# --- RIGHT: Bayesian Optimization ---
+ax = axes[2]
+draw_grid_background(ax)
+ax.set_title("Bayesian Optimization", color='white', fontsize=13, fontweight='bold', pad=8)
+
+# Promising region highlight (golden ellipse)
+from matplotlib.patches import Ellipse
+ellipse = Ellipse((2.2, 2.2), width=1.6, height=1.6,
+                  facecolor='#b8860b', edgecolor='#f0c040',
+                  linewidth=2.0, alpha=0.28, zorder=2)
+ax.add_patch(ellipse)
+ax.text(2.2, 2.2, 'promising\nregion', ha='center', va='center',
+        color='#f0c040', fontsize=7.5, fontweight='bold', zorder=4)
+
+# Dots: a few exploratory (spread out), most clustering toward the promising region
+explore_pts = [(0.3, 0.2), (0.5, 2.8), (2.9, 0.4), (0.1, 1.5)]
+cluster_pts = [(1.6, 1.8), (2.0, 2.4), (2.5, 1.9), (1.8, 2.6),
+               (2.3, 2.2), (2.7, 2.5), (1.5, 2.1), (2.1, 1.6),
+               (2.4, 2.7), (2.6, 2.0), (1.9, 2.9), (2.8, 1.7)]
+
+for pt in explore_pts:
+    circ = Circle(pt, dot_radius, color='#8e44ad', zorder=3, alpha=0.85)
+    ax.add_patch(circ)
+for pt in cluster_pts:
+    circ = Circle(pt, dot_radius, color='#e74c3c', zorder=3, alpha=0.95)
+    ax.add_patch(circ)
+
+ax.text(1.5, -0.3, "Intelligent search", ha='center', va='center',
+        color='#aaddff', fontsize=9, style='italic')
+ax.text(1.5, 3.35, "O(n), best efficiency", ha='center', va='center',
+        color='#f0c040', fontsize=10, fontweight='bold')
+
+# Bottom comparison bar spanning all three panels
+fig.text(0.5, 0.01,
+         "Grid: O(n²) time  |  Random: O(n) time, better coverage  |  Bayesian: O(n), best efficiency",
+         ha='center', va='bottom', color='#cccccc', fontsize=9.5,
+         bbox=dict(boxstyle='round,pad=0.4', facecolor='#1a1a2e',
+                   edgecolor='#444466', lw=1.2))
+
+fig.suptitle("Hyperparameter Tuning Strategies",
+             color='white', fontsize=15, fontweight='bold', y=0.97)
+plt.tight_layout(rect=[0, 0.06, 1, 0.95])
+plt.savefig(os.path.join(VIS_DIR, '04_hyperparameter_space_concept.png'),
+            dpi=300, bbox_inches='tight', facecolor=fig.get_facecolor())
+plt.close()
+print("   Saved: 04_hyperparameter_space_concept.png")
+# ============= END CONCEPTUAL DIAGRAM =============
+
 print()
 print("=" * 70)
 print("ALGORITHM 4: HYPERPARAMETER TUNING COMPLETE!")

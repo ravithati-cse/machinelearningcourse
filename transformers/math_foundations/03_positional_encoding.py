@@ -441,6 +441,260 @@ plt.close()
 print(f"  Saved: {VIS_DIR}/03_pe_in_action.png")
 
 # ══════════════════════════════════════════════════════════════════════════
+# SECTION 6: Positional Encoding Concept Diagram
+# ══════════════════════════════════════════════════════════════════════════
+print("\n" + "=" * 70)
+print("SECTION 6: Generating Positional Encoding Concept Diagram")
+print("=" * 70)
+
+from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Rectangle
+
+fig, (ax_l, ax_c, ax_r) = plt.subplots(1, 3, figsize=(14, 9),
+                                        gridspec_kw={"width_ratios": [1, 1.1, 0.9]})
+fig.patch.set_facecolor('#0f0f1a')
+for ax in (ax_l, ax_c, ax_r):
+    ax.set_facecolor('#0f0f1a')
+    ax.axis('off')
+
+fig.suptitle("Positional Encoding: Why It Matters and How It Works",
+             fontsize=14, fontweight='bold', color='white', y=0.97)
+
+# ── LEFT PANEL: "Why PE?" problem illustration ────────────────────────
+ax_l.set_xlim(0, 4.5)
+ax_l.set_ylim(0, 9)
+ax_l.set_title('Why Positional Encoding?', color='white',
+               fontsize=11, fontweight='bold', pad=8)
+
+# --- WITHOUT PE section ---
+ax_l.text(2.25, 8.55, 'WITHOUT PE', color='#FF6B6B', fontsize=9.5,
+          fontweight='bold', ha='center')
+
+# Three identical "cat" boxes (no position signal)
+cat_xs_no = [0.75, 2.25, 3.75]
+cat_y_no = 7.6
+for cx in cat_xs_no:
+    b = FancyBboxPatch((cx - 0.42, cat_y_no - 0.28), 0.84, 0.56,
+                       boxstyle="round,pad=0.06",
+                       facecolor='#3a2a2a', edgecolor='#FF6B6B',
+                       linewidth=1.8, zorder=4)
+    ax_l.add_patch(b)
+    ax_l.text(cx, cat_y_no, '"cat"', color='#ffaaaa', fontsize=9,
+              ha='center', va='center', fontweight='bold', zorder=5)
+
+# Labels showing positions but identical vectors
+for i, cx in enumerate(cat_xs_no):
+    ax_l.text(cx, cat_y_no - 0.55, f'pos {i}', color='#888888',
+              fontsize=7, ha='center', style='italic')
+
+# Arrow and problem text
+ax_l.annotate('', xy=(2.25, 6.25), xytext=(2.25, 7.32),
+              arrowprops=dict(arrowstyle='->', color='#FF6B6B', lw=2))
+prob_b = FancyBboxPatch((0.3, 5.5), 3.9, 0.72,
+                        boxstyle="round,pad=0.08",
+                        facecolor='#3a1111', edgecolor='#FF6B6B',
+                        linewidth=1.5, zorder=4)
+ax_l.add_patch(prob_b)
+ax_l.text(2.25, 5.86, 'Attention cannot distinguish\npositions — all "cat" are identical!',
+          color='#FF9999', fontsize=7.5, ha='center', va='center', zorder=5)
+
+# Divider line
+ax_l.plot([0.2, 4.3], [5.1, 5.1], color='#444466', linewidth=1.5, linestyle='--')
+
+# --- WITH PE section ---
+ax_l.text(2.25, 4.75, 'WITH PE', color='#6BFF9E', fontsize=9.5,
+          fontweight='bold', ha='center')
+
+cat_y_pe = 3.85
+sine_colors = ['#FF8C00', '#00BFFF', '#DA70D6']
+for i, (cx, sc) in enumerate(zip(cat_xs_no, sine_colors)):
+    # Word box
+    b = FancyBboxPatch((cx - 0.42, cat_y_pe - 0.28), 0.84, 0.56,
+                       boxstyle="round,pad=0.06",
+                       facecolor='#1a2e1a', edgecolor='#6BFF9E',
+                       linewidth=1.8, zorder=4)
+    ax_l.add_patch(b)
+    ax_l.text(cx, cat_y_pe, '"cat"', color='#aaffcc', fontsize=9,
+              ha='center', va='center', fontweight='bold', zorder=5)
+    # Sine wave badge underneath the word box
+    wave_x = np.linspace(cx - 0.38, cx + 0.38, 30)
+    wave_y = 3.05 + 0.18 * np.sin(np.linspace(0, (i + 1) * 2 * np.pi, 30))
+    ax_l.plot(wave_x, wave_y, color=sc, linewidth=2, zorder=5)
+    ax_l.text(cx, 2.7, f'pos {i}', color=sc, fontsize=7.5,
+              ha='center', fontweight='bold', style='italic')
+
+# Arrow and success text
+ax_l.annotate('', xy=(2.25, 2.0), xytext=(2.25, 2.42),
+              arrowprops=dict(arrowstyle='->', color='#6BFF9E', lw=2))
+succ_b = FancyBboxPatch((0.3, 1.25), 3.9, 0.72,
+                        boxstyle="round,pad=0.08",
+                        facecolor='#0d2b1a', edgecolor='#6BFF9E',
+                        linewidth=1.5, zorder=4)
+ax_l.add_patch(succ_b)
+ax_l.text(2.25, 1.61, 'Each position gets a unique\nsinusoidal fingerprint!',
+          color='#99ffcc', fontsize=7.5, ha='center', va='center', zorder=5)
+
+ax_l.text(2.25, 0.5,
+          'Sine waves at different frequencies\nencode unique positions without parameters',
+          color='#888899', fontsize=7, ha='center', style='italic')
+
+# ── CENTER PANEL: PE matrix heat-map using Rectangle patches ─────────
+ax_c.set_xlim(0, 5.6)
+ax_c.set_ylim(0, 9)
+ax_c.set_title('PE Matrix: Each Row = Position Fingerprint',
+               color='white', fontsize=11, fontweight='bold', pad=8)
+
+n_rows, n_cols = 8, 8
+pe_mini = sinusoidal_positional_encoding(n_rows, n_cols * 2)[:, :n_cols]
+
+cell_w = 0.5
+cell_h = 0.52
+grid_left = 0.45
+grid_bottom = 1.6
+
+for row in range(n_rows):
+    for col in range(n_cols):
+        val = pe_mini[row, col]
+        # Map [-1, 1] to color: blue (neg) → white (0) → red (pos)
+        if val >= 0:
+            r, g, b_ch = 1.0, 1.0 - val * 0.85, 1.0 - val * 0.85
+        else:
+            r, g, b_ch = 1.0 + val * 0.85, 1.0 + val * 0.85, 1.0
+        rect = Rectangle((grid_left + col * cell_w,
+                           grid_bottom + (n_rows - 1 - row) * cell_h),
+                          cell_w - 0.03, cell_h - 0.03,
+                          facecolor=(r, g, b_ch), edgecolor='#1a1a2e',
+                          linewidth=0.8, zorder=4)
+        ax_c.add_patch(rect)
+        ax_c.text(grid_left + col * cell_w + cell_w / 2,
+                  grid_bottom + (n_rows - 1 - row) * cell_h + cell_h / 2,
+                  f'{val:.2f}', color='#111111', fontsize=5,
+                  ha='center', va='center', zorder=5)
+
+# Row labels (position index)
+for row in range(n_rows):
+    ax_c.text(grid_left - 0.08,
+              grid_bottom + (n_rows - 1 - row) * cell_h + cell_h / 2,
+              f'pos {row}', color='#aaaacc', fontsize=7,
+              ha='right', va='center')
+
+# Column labels (dimension index)
+for col in range(n_cols):
+    ax_c.text(grid_left + col * cell_w + cell_w / 2,
+              grid_bottom + n_rows * cell_h + 0.08,
+              f'd{col}', color='#aaaacc', fontsize=6.5,
+              ha='center', va='bottom')
+
+# Axis labels
+ax_c.text(grid_left + n_cols * cell_w / 2, grid_bottom + n_rows * cell_h + 0.52,
+          'Encoding Dimensions \u2192', color='#ccccdd', fontsize=7.5, ha='center')
+ax_c.text(grid_left - 0.55, grid_bottom + n_rows * cell_h / 2,
+          'Positions \u2191', color='#ccccdd', fontsize=7.5, ha='center',
+          rotation=90, va='center')
+
+# Color legend bar
+legend_x = np.linspace(0.4, 5.2, 60)
+for k, lx in enumerate(legend_x):
+    frac = k / (len(legend_x) - 1)
+    val = frac * 2 - 1
+    if val >= 0:
+        r, g, b_ch = 1.0, 1.0 - val * 0.85, 1.0 - val * 0.85
+    else:
+        r, g, b_ch = 1.0 + val * 0.85, 1.0 + val * 0.85, 1.0
+    ax_c.add_patch(Rectangle((lx, 1.05), 0.09, 0.3,
+                              facecolor=(r, g, b_ch), linewidth=0))
+ax_c.text(0.4, 0.85, '-1.0 (min)', color='#8888bb', fontsize=6.5, ha='center')
+ax_c.text(2.8, 0.85, '0', color='#8888bb', fontsize=6.5, ha='center')
+ax_c.text(5.2, 0.85, '+1.0 (max)', color='#8888bb', fontsize=6.5, ha='center')
+ax_c.text(2.8, 0.5,
+          'Blue=negative   White=zero   Red=positive',
+          color='#888899', fontsize=7, ha='center', style='italic')
+
+ax_c.text(2.8, 8.55,
+          'sin/cos at decreasing frequencies\n'
+          'Low dims: high-freq (fast-changing)  |  High dims: low-freq (slow)',
+          color='#aaaacc', fontsize=7, ha='center', style='italic')
+
+# ── RIGHT PANEL: Embedding + PE = Final Transformer Input ────────────
+ax_r.set_xlim(0, 3.6)
+ax_r.set_ylim(0, 9)
+ax_r.set_title('How PE is Applied', color='white',
+               fontsize=11, fontweight='bold', pad=8)
+
+# Helper: draw a tall vector bar
+def draw_vector_bar(ax, x_center, y_bottom, height, color, label_top,
+                    label_bottom, bar_width=0.72):
+    b = FancyBboxPatch((x_center - bar_width / 2, y_bottom),
+                       bar_width, height,
+                       boxstyle="round,pad=0.06",
+                       facecolor=color, edgecolor='white',
+                       linewidth=1.8, zorder=4, alpha=0.88)
+    ax.add_patch(b)
+    # Mini horizontal stripes to suggest a vector
+    for k in range(6):
+        yk = y_bottom + (k + 1) * height / 7
+        stripe_val = np.sin(k * 1.3 + x_center * 2.1)
+        stripe_col = '#ffffff' if stripe_val > 0 else '#000000'
+        ax.plot([x_center - bar_width / 2 + 0.05,
+                 x_center + bar_width / 2 - 0.05],
+                [yk, yk], color=stripe_col, linewidth=0.9,
+                alpha=0.35, zorder=5)
+    ax.text(x_center, y_bottom + height + 0.18, label_top,
+            color='white', fontsize=8, ha='center', fontweight='bold', zorder=6)
+    ax.text(x_center, y_bottom - 0.22, label_bottom,
+            color='#aaaacc', fontsize=7, ha='center', style='italic', zorder=6)
+
+vec_x = 1.8
+bar_h = 2.1
+
+# Token Embedding vector
+draw_vector_bar(ax_r, vec_x, 6.05, bar_h, '#1a5276',
+                'Word Embedding', '"great"  \u2192  d-dim vector')
+
+# Plus symbol
+ax_r.text(vec_x, 5.65, '+', color='white', fontsize=26,
+          ha='center', va='center', fontweight='bold')
+
+# Positional Encoding vector
+draw_vector_bar(ax_r, vec_x, 3.2, bar_h, '#7d3c98',
+                'Positional Encoding', 'sin/cos at position t')
+
+# Equals symbol
+ax_r.text(vec_x, 2.82, '=', color='white', fontsize=26,
+          ha='center', va='center', fontweight='bold')
+
+# Final combined vector
+draw_vector_bar(ax_r, vec_x, 0.55, bar_h, '#1a6b3c',
+                'Final Input to Transformer', 'position-aware embedding')
+
+# Dimension annotation
+ax_r.annotate('', xy=(vec_x + 0.6, 6.05), xytext=(vec_x + 0.6, 6.05 + bar_h),
+              arrowprops=dict(arrowstyle='<->', color='#dddddd', lw=1.5))
+ax_r.text(vec_x + 0.82, 6.05 + bar_h / 2, 'd_model\ndimensions',
+          color='#cccccc', fontsize=6.5, va='center')
+
+# Same-shape annotation for PE bar
+ax_r.annotate('', xy=(vec_x + 0.6, 3.2), xytext=(vec_x + 0.6, 3.2 + bar_h),
+              arrowprops=dict(arrowstyle='<->', color='#dddddd', lw=1.5))
+ax_r.text(vec_x + 0.82, 3.2 + bar_h / 2, 'same\nshape',
+          color='#cccccc', fontsize=6.5, va='center')
+
+# Formula text
+ax_r.text(vec_x, 8.7,
+          'embed(x) + PE[:seq_len]',
+          color='#F0E68C', fontsize=9, ha='center', fontweight='bold',
+          bbox=dict(boxstyle='round,pad=0.4', facecolor='#1c1c30',
+                    edgecolor='#F0E68C', linewidth=1.5))
+
+ax_r.text(vec_x, 8.2,
+          'Element-wise addition\n(same shape required)',
+          color='#888899', fontsize=7, ha='center', style='italic')
+
+plt.savefig(os.path.join(VIS_DIR, '04_positional_encoding_concept.png'),
+            dpi=300, bbox_inches='tight', facecolor=fig.get_facecolor())
+plt.close()
+print(f"  Saved: {VIS_DIR}/04_positional_encoding_concept.png")
+
+# ══════════════════════════════════════════════════════════════════════════
 # SUMMARY
 # ══════════════════════════════════════════════════════════════════════════
 print("\n" + "=" * 70)
@@ -470,7 +724,8 @@ Next: 04_encoder_decoder_arch.py — combine attention + PE into full
   encoder and decoder blocks with LayerNorm, Feed-Forward Networks, and residuals.
 
 Visualizations saved to: visuals/03_positional_encoding/
-  01_sinusoidal_pe.png  — heatmap + individual waves + similarity matrix
-  02_pe_comparison.png  — sinusoidal vs learned vs RoPE
-  03_pe_in_action.png   — token embed + PE + combined
+  01_sinusoidal_pe.png              — heatmap + individual waves + similarity matrix
+  02_pe_comparison.png              — sinusoidal vs learned vs RoPE
+  03_pe_in_action.png               — token embed + PE + combined
+  04_positional_encoding_concept.png — concept diagram: why PE + matrix + addition
 """)

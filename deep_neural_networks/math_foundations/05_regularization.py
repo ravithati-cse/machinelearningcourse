@@ -401,6 +401,142 @@ plt.close()
 print("   ✅ Saved: early_stopping.png")
 
 
+# ============= CONCEPTUAL DIAGRAM =============
+# 04_regularization_techniques_concept.png — 4-panel comparison of regularization techniques
+print("📊 Generating: Regularization techniques concept diagram...")
+
+from matplotlib.patches import FancyBboxPatch, Circle as MplCircle2
+
+fig_reg, axes_reg = plt.subplots(1, 4, figsize=(20, 6))
+fig_reg.patch.set_facecolor('#0f0f1a')
+fig_reg.suptitle('Regularization Techniques — Side-by-Side Comparison',
+                 fontsize=15, fontweight='bold', color='white', y=1.01)
+
+for ax in axes_reg:
+    ax.set_facecolor('#0f0f1a')
+    for spine in ax.spines.values():
+        spine.set_edgecolor('#333355')
+
+# ------------------------------------------------------------------
+# Panel 1: L2 Regularization — Gaussian bell curve (prefer small weights)
+# ------------------------------------------------------------------
+ax1 = axes_reg[0]
+ax1.set_title('L2 Regularization', fontsize=12, fontweight='bold', color='#55ee88', pad=8)
+w_vals = np.linspace(-4, 4, 300)
+gaussian = np.exp(-0.5 * w_vals**2) / np.sqrt(2 * np.pi)
+ax1.fill_between(w_vals, gaussian, color='#55ee88', alpha=0.35)
+ax1.plot(w_vals, gaussian, color='#55ee88', linewidth=2.5)
+ax1.axvline(0, color='white', linewidth=1.0, linestyle='--', alpha=0.5)
+ax1.set_xlabel('Weight value', color='#aaaacc', fontsize=9)
+ax1.set_ylabel('Prior density', color='#aaaacc', fontsize=9)
+ax1.tick_params(colors='#888899')
+ax1.text(0, 0.18, 'Prefer\nsmall weights', ha='center', va='center',
+         fontsize=10, fontweight='bold', color='white',
+         bbox=dict(boxstyle='round,pad=0.3', facecolor='#1a2a1a', edgecolor='#55ee88'))
+ax1.set_ylim(0, 0.48)
+ax1.text(0, -0.07, 'Shrinks all weights\ntoward zero (Gaussian prior)',
+         ha='center', va='top', fontsize=8, color='#aaaacc',
+         transform=ax1.get_xaxis_transform())
+
+# ------------------------------------------------------------------
+# Panel 2: L1 Regularization — sparse bar chart
+# ------------------------------------------------------------------
+ax2 = axes_reg[1]
+ax2.set_title('L1 Regularization', fontsize=12, fontweight='bold', color='#ff8844', pad=8)
+np.random.seed(7)
+bar_weights = np.random.randn(12) * 2
+# Apply soft-thresholding to simulate L1 sparsity
+threshold = 1.5
+bar_weights_l1 = np.sign(bar_weights) * np.maximum(0, np.abs(bar_weights) - threshold)
+bar_colors = ['#ff8844' if w != 0 else '#333344' for w in bar_weights_l1]
+ax2.bar(range(12), bar_weights_l1, color=bar_colors, edgecolor='#555566', linewidth=0.8)
+ax2.axhline(0, color='white', linewidth=1.0, alpha=0.6)
+ax2.set_xlabel('Weight index', color='#aaaacc', fontsize=9)
+ax2.set_ylabel('Weight value', color='#aaaacc', fontsize=9)
+ax2.tick_params(colors='#888899')
+n_zeros = (bar_weights_l1 == 0).sum()
+ax2.text(5.5, max(bar_weights_l1) * 0.75 if max(bar_weights_l1) > 0 else 0.5,
+         f'Creates sparsity\n({n_zeros}/12 weights = 0)',
+         ha='center', va='center', fontsize=9, fontweight='bold', color='white',
+         bbox=dict(boxstyle='round,pad=0.3', facecolor='#2a1a0a', edgecolor='#ff8844'))
+
+# ------------------------------------------------------------------
+# Panel 3: Dropout — network with neurons X'd out
+# ------------------------------------------------------------------
+ax3 = axes_reg[2]
+ax3.set_title('Dropout', fontsize=12, fontweight='bold', color='#44aaff', pad=8)
+ax3.set_xlim(0, 10); ax3.set_ylim(0, 10); ax3.axis('off')
+
+layer_xs   = [1.5, 4.5, 7.5, 9.5]
+layer_sizes = [3, 4, 4, 2]
+# Which neurons in hidden layers are dropped (50% dropout)
+dropped = {1: {1, 3}, 2: {0, 2}}   # layer index → set of dropped node indices
+
+node_positions = {}
+for li, (lx, n_nodes) in enumerate(zip(layer_xs, layer_sizes)):
+    ys = np.linspace(2.5, 7.5, n_nodes)
+    for ni, ny in enumerate(ys):
+        node_positions[(li, ni)] = (lx, ny)
+        is_dropped = li in dropped and ni in dropped[li]
+        color = '#223344' if is_dropped else '#44aaff'
+        alpha = 0.3 if is_dropped else 0.9
+        circ = MplCircle2((lx, ny), 0.45, color=color, alpha=alpha, zorder=4)
+        ax3.add_patch(circ)
+        if is_dropped:
+            # Draw an X
+            ax3.text(lx, ny, 'X', ha='center', va='center', fontsize=14,
+                     fontweight='bold', color='#ff4444', zorder=5)
+
+# Draw connections (only between non-dropped neurons)
+for li in range(len(layer_xs) - 1):
+    for ni in range(layer_sizes[li]):
+        if li in dropped and ni in dropped[li]:
+            continue
+        for nj in range(layer_sizes[li + 1]):
+            if (li + 1) in dropped and nj in dropped[li + 1]:
+                continue
+            x0, y0 = node_positions[(li, ni)]
+            x1, y1 = node_positions[(li + 1, nj)]
+            ax3.plot([x0 + 0.45, x1 - 0.45], [y0, y1],
+                     color='#44aaff', alpha=0.35, linewidth=0.8, zorder=2)
+
+ax3.text(5.5, 1.4, 'Randomly disable 50% of neurons\neach training batch',
+         ha='center', va='center', fontsize=8.5, color='white',
+         bbox=dict(boxstyle='round,pad=0.3', facecolor='#0a1a2a', edgecolor='#44aaff'))
+
+# ------------------------------------------------------------------
+# Panel 4: Batch Normalization — before / after distribution
+# ------------------------------------------------------------------
+ax4 = axes_reg[3]
+ax4.set_title('Batch Normalization', fontsize=12, fontweight='bold', color='#cc44ff', pad=8)
+
+# Before: skewed/spread distribution
+np.random.seed(3)
+before = np.random.exponential(scale=3, size=600) + 5
+after  = (before - before.mean()) / (before.std() + 1e-8)
+
+ax4.hist(before / before.std() * 0.6 + 0.5, bins=35, color='#884422',
+         alpha=0.7, label='Before BatchNorm', density=True)
+ax4.hist(after, bins=35, color='#cc44ff',
+         alpha=0.7, label='After BatchNorm', density=True)
+ax4.axvline(0, color='white', linewidth=1.2, linestyle='--', alpha=0.7, label='mean=0')
+ax4.set_xlabel('Activation value', color='#aaaacc', fontsize=9)
+ax4.set_ylabel('Density', color='#aaaacc', fontsize=9)
+ax4.tick_params(colors='#888899')
+ax4.legend(fontsize=7.5, facecolor='#1a1a2a', edgecolor='#444466',
+           labelcolor='white', loc='upper right')
+ax4.text(0, ax4.get_ylim()[1] * 0.55 if ax4.get_ylim()[1] > 0 else 0.3,
+         'Normalize each\nlayer\'s inputs\n(mean=0, std=1)',
+         ha='center', va='center', fontsize=8.5, fontweight='bold', color='white',
+         bbox=dict(boxstyle='round,pad=0.3', facecolor='#1a0a2a', edgecolor='#cc44ff'))
+
+plt.tight_layout()
+plt.savefig(os.path.join(VIS_DIR, '04_regularization_techniques_concept.png'),
+            dpi=300, bbox_inches='tight', facecolor=fig_reg.get_facecolor())
+plt.close()
+print("   Saved: 04_regularization_techniques_concept.png")
+# ============= END CONCEPTUAL DIAGRAM =============
+
 print()
 print("=" * 70)
 print("✅ MODULE 5 COMPLETE! — Math Foundations Section DONE!")

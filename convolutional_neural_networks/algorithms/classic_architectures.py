@@ -520,6 +520,194 @@ if TF_AVAILABLE:
     print("   ✅ Saved: resnet_training.png")
 
 
+
+# ======================================================================
+# SECTION 8: ARCHITECTURE EVOLUTION TIMELINE DIAGRAM (conceptual)
+# ======================================================================
+print("=" * 70)
+print("SECTION 8: ARCHITECTURE EVOLUTION TIMELINE DIAGRAM")
+print("=" * 70)
+print()
+print("📊 Generating: Architecture Evolution Timeline (dark theme)...")
+
+from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
+
+fig, ax = plt.subplots(1, 1, figsize=(16, 8))
+fig.patch.set_facecolor('#0f0f1a')
+ax.set_facecolor('#0f0f1a')
+ax.set_xlim(0, 16)
+ax.set_ylim(0, 8)
+ax.axis('off')
+
+# Title
+ax.text(8, 7.55, "CNN Architecture Evolution Timeline",
+        ha='center', va='center', fontsize=15, fontweight='bold',
+        color='white')
+ax.text(8, 7.15, "From LeNet (1998) to ResNet (2015) — each architecture solved the previous one's limitations",
+        ha='center', va='center', fontsize=9, color='#aaaacc')
+
+# Color scheme
+COLOR_CONV   = '#2979ff'   # blue  — conv layers
+COLOR_POOL   = '#00c853'   # green — pooling
+COLOR_FC     = '#ff6d00'   # orange — fully connected
+COLOR_OUT    = '#d50000'   # red   — output
+COLOR_RES    = '#aa00ff'   # purple — residual blocks
+
+# Helper: draw a labeled box and return its right edge x
+def draw_box(ax, x, y, w, h, label, color, fontsize=6.5, text_color='white'):
+    box = FancyBboxPatch((x, y - h / 2), w, h,
+                         boxstyle="round,pad=0.04",
+                         facecolor=color, edgecolor='white',
+                         linewidth=0.8, alpha=0.92, zorder=3)
+    ax.add_patch(box)
+    ax.text(x + w / 2, y, label, ha='center', va='center',
+            fontsize=fontsize, color=text_color, fontweight='bold', zorder=4)
+    return x + w  # right edge
+
+# Helper: draw a thin arrow between two x positions on the same row y
+def draw_arrow(ax, x0, x1, y, color='#888899'):
+    ax.annotate('', xy=(x1, y), xytext=(x0, y),
+                arrowprops=dict(arrowstyle='->', color=color,
+                                lw=1.2, mutation_scale=10),
+                zorder=2)
+
+# Row y-centres and gap between boxes
+rows = {
+    'LeNet':  6.3,
+    'AlexNet': 4.9,
+    'VGG':    3.5,
+    'ResNet': 2.1,
+}
+GAP = 0.12   # gap between boxes on same row
+START_X = 1.7  # where each row starts
+
+# ── Year & name labels (left side) ──────────────────────────────────────
+year_info = [
+    ('LeNet',   '1998', rows['LeNet']),
+    ('AlexNet', '2012', rows['AlexNet']),
+    ('VGG-16',  '2014', rows['VGG']),
+    ('ResNet-50','2015', rows['ResNet']),
+]
+for arch_name, year, y in year_info:
+    ax.text(0.15, y + 0.22, year, ha='left', va='center',
+            fontsize=8, color='#ffcc44', fontweight='bold')
+    ax.text(0.15, y - 0.20, arch_name, ha='left', va='center',
+            fontsize=7.5, color='#ccccee')
+
+# ── ROW 1: LeNet ────────────────────────────────────────────────────────
+y = rows['LeNet']
+x = START_X
+boxes_lenet = [
+    ('Input\n32×32',    0.55, '#445566'),
+    ('Conv\n+Pool',     0.60, COLOR_CONV),
+    ('Conv\n+Pool',     0.60, COLOR_CONV),
+    ('FC\n120',         0.52, COLOR_FC),
+    ('FC\n84',          0.52, COLOR_FC),
+    ('Out\n10',         0.48, COLOR_OUT),
+]
+for label, w, col in boxes_lenet:
+    x_next = draw_box(ax, x, y, w, 0.52, label, col, fontsize=6.5)
+    draw_arrow(ax, x_next, x_next + GAP, y)
+    x = x_next + GAP
+# param count
+ax.text(x + 0.05, y, '60 K params', ha='left', va='center',
+        fontsize=7.5, color='#88ff88')
+
+# ── ROW 2: AlexNet ──────────────────────────────────────────────────────
+y = rows['AlexNet']
+x = START_X
+boxes_alex = [
+    ('Input\n227×227',  0.65, '#445566'),
+    ('Conv(96)\n→MaxPool', 0.78, COLOR_CONV),
+    ('Conv\n(256)',      0.60, COLOR_CONV),
+    ('Conv(384)\n×2→Pool',0.78, COLOR_CONV),
+    ('FC\n4096',         0.55, COLOR_FC),
+    ('FC\n4096',         0.55, COLOR_FC),
+    ('Out\n1000',        0.52, COLOR_OUT),
+]
+for label, w, col in boxes_alex:
+    x_next = draw_box(ax, x, y, w, 0.52, label, col, fontsize=6.2)
+    draw_arrow(ax, x_next, x_next + GAP, y)
+    x = x_next + GAP
+ax.text(x + 0.05, y, '62 M params', ha='left', va='center',
+        fontsize=7.5, color='#88ff88')
+
+# ── ROW 3: VGG-16 ───────────────────────────────────────────────────────
+y = rows['VGG']
+x = START_X
+boxes_vgg = [
+    ('Input',          0.46, '#445566'),
+    ('Conv×2\n→Pool',  0.60, COLOR_CONV),
+    ('Conv×2\n→Pool',  0.60, COLOR_CONV),
+    ('Conv×3\n→Pool',  0.60, COLOR_CONV),
+    ('Conv×3\n→Pool',  0.60, COLOR_CONV),
+    ('Conv×3\n→Pool',  0.60, COLOR_CONV),
+    ('FC×3\n4096',     0.58, COLOR_FC),
+    ('Out\n1000',      0.50, COLOR_OUT),
+]
+for label, w, col in boxes_vgg:
+    x_next = draw_box(ax, x, y, w, 0.52, label, col, fontsize=6.2)
+    draw_arrow(ax, x_next, x_next + GAP, y)
+    x = x_next + GAP
+ax.text(x + 0.05, y, '138 M params', ha='left', va='center',
+        fontsize=7.5, color='#ff8866')
+
+# ── ROW 4: ResNet-50 ────────────────────────────────────────────────────
+y = rows['ResNet']
+x = START_X
+boxes_resnet = [
+    ('Input\n224×224',    0.65, '#445566'),
+    ('Conv\n7×7',         0.55, COLOR_CONV),
+    ('MaxPool',           0.58, COLOR_POOL),
+    ('ResBlocks\n×3',     0.65, COLOR_RES),
+    ('ResBlocks\n×4',     0.65, COLOR_RES),
+    ('ResBlocks\n×6',     0.65, COLOR_RES),
+    ('ResBlocks\n×3',     0.65, COLOR_RES),
+    ('AvgPool',           0.56, COLOR_POOL),
+    ('FC\n1000',          0.50, COLOR_FC),
+    ('Out',               0.42, COLOR_OUT),
+]
+for label, w, col in boxes_resnet:
+    x_next = draw_box(ax, x, y, w, 0.52, label, col, fontsize=6.2)
+    draw_arrow(ax, x_next, x_next + GAP, y)
+    x = x_next + GAP
+ax.text(x + 0.05, y, '25 M params', ha='left', va='center',
+        fontsize=7.5, color='#88ff88')
+
+# ── Horizontal separator line ────────────────────────────────────────────
+for y_sep in [5.6, 4.2, 2.8]:
+    ax.axhline(y_sep, color='#333355', linewidth=0.6, linestyle='--', alpha=0.6)
+
+# ── Legend ───────────────────────────────────────────────────────────────
+legend_items = [
+    (COLOR_CONV, 'Conv layers'),
+    (COLOR_POOL, 'Pooling'),
+    (COLOR_FC,   'Fully Connected'),
+    (COLOR_OUT,  'Output'),
+    (COLOR_RES,  'Residual Blocks'),
+]
+for i, (col, label) in enumerate(legend_items):
+    lx = 1.7 + i * 2.6
+    leg_box = FancyBboxPatch((lx, 1.12), 0.28, 0.28,
+                              boxstyle="round,pad=0.03",
+                              facecolor=col, edgecolor='white',
+                              linewidth=0.6, zorder=3)
+    ax.add_patch(leg_box)
+    ax.text(lx + 0.38, 1.26, label, ha='left', va='center',
+            fontsize=7, color='white')
+
+ax.text(8, 0.62, 'Key insight: ResNet-50 (25M) beats VGG-16 (138M) with 5× fewer parameters — skip connections are that powerful',
+        ha='center', va='center', fontsize=7.5, color='#aaddff',
+        style='italic')
+
+plt.tight_layout()
+plt.savefig(os.path.join(VIS_DIR, '04_architecture_evolution_timeline.png'),
+            dpi=300, bbox_inches='tight', facecolor=fig.get_facecolor())
+plt.close()
+print("   Saved: 04_architecture_evolution_timeline.png")
+print()
+
+
 print()
 print("=" * 70)
 print("✅ ALGORITHM 3: CLASSIC ARCHITECTURES COMPLETE!")

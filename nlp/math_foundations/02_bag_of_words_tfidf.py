@@ -762,6 +762,171 @@ plt.close()
 print("   Saved: bow_limitations_ngrams.png")
 
 
+# ============= CONCEPTUAL DIAGRAM =============
+from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
+print("Generating: Text vectorization pipeline diagram...")
+
+fig, axes = plt.subplots(2, 1, figsize=(16, 10))
+fig.patch.set_facecolor('#0f0f1a')
+fig.suptitle("Text → Numbers: The Vectorization Pipeline",
+             fontsize=16, fontweight="bold", color="white", y=0.98)
+
+# ---- TOP ROW: Pipeline flow diagram ----
+ax_top = axes[0]
+ax_top.set_facecolor('#0f0f1a')
+ax_top.set_xlim(0, 16)
+ax_top.set_ylim(0, 4)
+ax_top.axis('off')
+
+# Step definitions: (x_center, label, example_text, color)
+steps = [
+    (1.3,  "Raw Text",         '"I love machine\nlearning"',    '#2471a3'),
+    (3.8,  "Tokenize",         '["I", "love",\n"machine",\n"learning"]', '#2471a3'),
+    (6.3,  "Remove\nStopwords", '["love",\n"machine",\n"learning"]',     '#2471a3'),
+    (8.8,  "Stem /\nLemmatize", '["love",\n"machin",\n"learn"]',         '#2471a3'),
+    (12.0, "BoW Vector",       '[0, 1, 0, 1, 1, ...]',                   '#1e8449'),
+    (14.5, "TF-IDF\nVector",   '[0, .42, 0, .67, .58, ...]',             '#d35400'),
+]
+
+box_w, box_h = 2.0, 1.6
+box_y = 1.2
+
+for x_c, label, example, color in steps:
+    # Draw the box
+    box = FancyBboxPatch((x_c - box_w / 2, box_y), box_w, box_h,
+                         boxstyle="round,pad=0.08",
+                         facecolor=color, edgecolor='white',
+                         linewidth=1.5, alpha=0.88,
+                         transform=ax_top.transData)
+    ax_top.add_patch(box)
+    # Step label at top of box
+    ax_top.text(x_c, box_y + box_h - 0.22, label,
+                ha='center', va='top', fontsize=9, fontweight='bold',
+                color='white', transform=ax_top.transData)
+    # Example value below label
+    ax_top.text(x_c, box_y + 0.55, example,
+                ha='center', va='center', fontsize=7.5,
+                color='#f0f0f0', transform=ax_top.transData,
+                fontfamily='monospace')
+
+# Arrows between preprocessing steps (steps 0-3)
+arrow_props = dict(arrowstyle='->', color='#85c1e9', lw=2.0)
+for i in range(3):
+    x_start = steps[i][0] + box_w / 2
+    x_end   = steps[i + 1][0] - box_w / 2
+    mid_y   = box_y + box_h / 2
+    ax_top.annotate("", xy=(x_end, mid_y), xytext=(x_start, mid_y),
+                    arrowprops=arrow_props)
+
+# After step 3 (Stem), split into BoW and TF-IDF
+x_split_start = steps[3][0] + box_w / 2
+mid_y = box_y + box_h / 2
+
+# Arrow to BoW (upper branch)
+ax_top.annotate("", xy=(steps[4][0] - box_w / 2, mid_y + 0.35),
+                xytext=(x_split_start, mid_y),
+                arrowprops=dict(arrowstyle='->', color='#52be80', lw=2.0))
+# Arrow to TF-IDF (lower branch)
+ax_top.annotate("", xy=(steps[5][0] - box_w / 2, mid_y - 0.35),
+                xytext=(x_split_start, mid_y),
+                arrowprops=dict(arrowstyle='->', color='#e59866', lw=2.0))
+
+# Split label
+ax_top.text(x_split_start + 0.55, mid_y + 0.42, "count",
+            fontsize=8, color='#52be80', fontweight='bold')
+ax_top.text(x_split_start + 0.55, mid_y - 0.42, "weight",
+            fontsize=8, color='#e59866', fontweight='bold')
+
+ax_top.text(8.0, 3.65, "Preprocessing (blue)  →  Representation (green = BoW, orange = TF-IDF)",
+            ha='center', va='center', fontsize=9, color='#aaaaaa',
+            style='italic')
+
+# ---- BOTTOM ROW: BoW vs TF-IDF heatmap grids for 3 documents ----
+ax_bot = axes[1]
+ax_bot.set_facecolor('#0f0f1a')
+ax_bot.set_xlim(0, 16)
+ax_bot.set_ylim(0, 5)
+ax_bot.axis('off')
+
+ax_bot.text(8, 4.65, "BoW vs TF-IDF — 3 Sample Documents, 6-Word Vocabulary",
+            ha='center', va='center', fontsize=11, fontweight='bold', color='white')
+
+vocab_demo   = ["love", "machin", "learn", "natur", "languag", "deep"]
+bow_demo     = np.array([
+    [2, 1, 1, 0, 0, 0],
+    [0, 1, 1, 1, 1, 0],
+    [0, 1, 1, 0, 0, 1],
+], dtype=float)
+tfidf_demo   = np.array([
+    [0.71, 0.26, 0.26, 0.00, 0.00, 0.00],
+    [0.00, 0.22, 0.22, 0.67, 0.67, 0.00],
+    [0.00, 0.33, 0.33, 0.00, 0.00, 0.88],
+])
+doc_labels_d = ["Doc 1\n(love learning)", "Doc 2\n(NLP focus)", "Doc 3\n(deep learning)"]
+
+cell_w, cell_h = 0.82, 0.55
+grid_gap = 0.08
+
+for grid_idx, (matrix, cmap_base, grid_title, x_offset) in enumerate([
+    (bow_demo,   '#2471a3', "Bag of Words (counts)",  1.0),
+    (tfidf_demo, '#1e8449', "TF-IDF (weights)",       8.8),
+]):
+    ax_bot.text(x_offset + (len(vocab_demo) * (cell_w + grid_gap)) / 2,
+                4.05, grid_title,
+                ha='center', va='center', fontsize=10, fontweight='bold',
+                color='#2471a3' if grid_idx == 0 else '#2ecc71')
+
+    # Column headers (vocab words)
+    for j, word in enumerate(vocab_demo):
+        cx = x_offset + j * (cell_w + grid_gap) + cell_w / 2
+        ax_bot.text(cx, 3.60, word, ha='center', va='center',
+                    fontsize=8, color='#cccccc', fontweight='bold')
+
+    # Row headers (docs) and cells
+    max_val = matrix.max() if matrix.max() > 0 else 1.0
+    for i in range(matrix.shape[0]):
+        row_y = 2.75 - i * (cell_h + grid_gap)
+        ax_bot.text(x_offset - 0.12, row_y + cell_h / 2,
+                    doc_labels_d[i], ha='right', va='center',
+                    fontsize=7.5, color='#aaaaaa')
+        for j in range(matrix.shape[1]):
+            val   = matrix[i, j]
+            intensity = val / max_val
+            # Parse hex to RGB
+            base_r = int(cmap_base[1:3], 16) / 255
+            base_g = int(cmap_base[3:5], 16) / 255
+            base_b = int(cmap_base[5:7], 16) / 255
+            cell_color = (
+                0.08 + intensity * (base_r - 0.08),
+                0.08 + intensity * (base_g - 0.08),
+                0.08 + intensity * (base_b - 0.08),
+            )
+            cx = x_offset + j * (cell_w + grid_gap)
+            rect = FancyBboxPatch((cx, row_y), cell_w, cell_h,
+                                  boxstyle="round,pad=0.04",
+                                  facecolor=cell_color,
+                                  edgecolor='#444444', linewidth=0.8)
+            ax_bot.add_patch(rect)
+            disp = f"{val:.0f}" if grid_idx == 0 else f"{val:.2f}"
+            txt_color = 'white' if intensity > 0.4 else '#aaaaaa'
+            ax_bot.text(cx + cell_w / 2, row_y + cell_h / 2,
+                        disp if val > 0 else "0",
+                        ha='center', va='center', fontsize=8,
+                        color=txt_color, fontweight='bold' if val > 0 else 'normal')
+
+ax_bot.text(8.0, 0.18,
+            "BoW: raw counts lose importance signal   |   "
+            "TF-IDF: rare, distinctive words get higher weight",
+            ha='center', va='center', fontsize=8.5, color='#888888', style='italic')
+
+plt.tight_layout(rect=[0, 0, 1, 0.97])
+plt.savefig(os.path.join(_VISUALS_DIR, '04_text_vectorization_pipeline.png'),
+            dpi=300, bbox_inches='tight', facecolor=fig.get_facecolor())
+plt.close()
+print("   Saved: 04_text_vectorization_pipeline.png")
+# ============= END CONCEPTUAL DIAGRAM =============
+
+
 print()
 print("=" * 70)
 print("NLP MATH FOUNDATION 2: BAG OF WORDS & TF-IDF COMPLETE!")
